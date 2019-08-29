@@ -79,13 +79,13 @@
 
 
 
-<meta name="description" content="Spring来实现Web模块，从而简化Web开发，下面时MVC的结构：     POJO:Plain Old Java Object 在Spring眼中的MVC是如下结构的：     配置结构SpringMVC的思想是有一个前端控制器能拦截所有请求，并智能派发，这个前端控制器是一个Servlet，应该在web.xml中配置这个servlet来拦截所有请求   其中url-pattern最好使用/，">
+<meta name="description" content="Spring来实现Web模块，从而简化Web开发，下面时MVC的结构：  POJO:Plain Old Java Object 在Spring眼中的MVC是如下结构的：  配置结构SpringMVC的思想是有一个前端控制器能拦截所有请求，并智能派发，这个前端控制器是一个Servlet，应该在web.xml中配置这个servlet来拦截所有请求  其中url-pattern最好使用/，因为/*的拦截">
 <meta name="keywords" content="Java,SSM框架,JavaWeb">
 <meta property="og:type" content="article">
 <meta property="og:title" content="SpringMVC的基本使用">
 <meta property="og:url" content="http://yoursite.com/2019/08/06/SpringMVC的基本使用/index.html">
 <meta property="og:site_name" content="Chen&#39;s Bolg">
-<meta property="og:description" content="Spring来实现Web模块，从而简化Web开发，下面时MVC的结构：     POJO:Plain Old Java Object 在Spring眼中的MVC是如下结构的：     配置结构SpringMVC的思想是有一个前端控制器能拦截所有请求，并智能派发，这个前端控制器是一个Servlet，应该在web.xml中配置这个servlet来拦截所有请求   其中url-pattern最好使用/，">
+<meta property="og:description" content="Spring来实现Web模块，从而简化Web开发，下面时MVC的结构：  POJO:Plain Old Java Object 在Spring眼中的MVC是如下结构的：  配置结构SpringMVC的思想是有一个前端控制器能拦截所有请求，并智能派发，这个前端控制器是一个Servlet，应该在web.xml中配置这个servlet来拦截所有请求  其中url-pattern最好使用/，因为/*的拦截">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://yoursite.com/2019/08/06/SpringMVC的基本使用/1.png">
 <meta property="og:image" content="http://yoursite.com/2019/08/06/SpringMVC的基本使用/2.png">
@@ -120,7 +120,7 @@
 <meta property="og:updated_time" content="2019-08-29T08:40:14.305Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="SpringMVC的基本使用">
-<meta name="twitter:description" content="Spring来实现Web模块，从而简化Web开发，下面时MVC的结构：     POJO:Plain Old Java Object 在Spring眼中的MVC是如下结构的：     配置结构SpringMVC的思想是有一个前端控制器能拦截所有请求，并智能派发，这个前端控制器是一个Servlet，应该在web.xml中配置这个servlet来拦截所有请求   其中url-pattern最好使用/，">
+<meta name="twitter:description" content="Spring来实现Web模块，从而简化Web开发，下面时MVC的结构：  POJO:Plain Old Java Object 在Spring眼中的MVC是如下结构的：  配置结构SpringMVC的思想是有一个前端控制器能拦截所有请求，并智能派发，这个前端控制器是一个Servlet，应该在web.xml中配置这个servlet来拦截所有请求  其中url-pattern最好使用/，因为/*的拦截">
 <meta name="twitter:image" content="http://yoursite.com/2019/08/06/SpringMVC的基本使用/1.png">
 
 
@@ -438,22 +438,14 @@
       
         <p>Spring来实现Web模块，从而简化Web开发，下面时MVC的结构：</p>
 <img src="/2019/08/06/SpringMVC的基本使用/1.png">
-
-
-
 <p>POJO:Plain Old Java Object</p>
 <p>在Spring眼中的MVC是如下结构的：</p>
 <img src="/2019/08/06/SpringMVC的基本使用/2.png">
-
-
-
 <h2 id="配置结构"><a href="#配置结构" class="headerlink" title="配置结构"></a>配置结构</h2><p>SpringMVC的思想是有一个前端控制器能拦截所有请求，并智能派发，这个前端控制器是一个Servlet，应该在web.xml中配置这个servlet来拦截所有请求</p>
 <img src="/2019/08/06/SpringMVC的基本使用/3.png">
-
 <p>其中url-pattern最好使用/，因为/*的拦截范围更大，还会拦截到.jsp页面，一旦拦截页面就没办法显示了</p>
 <p>同时写一个controller类，来处理请求</p>
 <img src="/2019/08/06/SpringMVC的基本使用/4.png">
-
 <p>因为返回的值太长了，我们可以配置一个视图解析器，那么我们返回的只要是文件名就可以了</p>
 <h2 id="HelloWorld细节"><a href="#HelloWorld细节" class="headerlink" title="HelloWorld细节"></a>HelloWorld细节</h2><h3 id="运行流程"><a href="#运行流程" class="headerlink" title="运行流程"></a>运行流程</h3><p>1.客户会点击链接发送请求<a href="http://localhost:8080/springmvc/hello" target="_blank" rel="noopener">http://localhost:8080/springmvc/hello</a></p>
 <p>2.来到Tomcat服务器</p>
@@ -470,7 +462,6 @@
 <p>method:限定请求方式（GET.POST）</p>
 <p>params:</p>
 <img src="/2019/08/06/SpringMVC的基本使用/5.png">
-
 <p>headers:规定请求同意必须包含什么内容</p>
 <p>consumes;只接受内容类型是哪种请求，规定请求头中的Content-Type</p>
 <p>produces:告诉浏览器返回的内容类型是什么，给响应头中加上Content-Type</p>
@@ -483,9 +474,7 @@
 <p>3.为什么jsp又能访问呢，因为我们没有覆盖服务器中的JspServlet</p>
 <p>4./*是直接拦截所有请求，而且我们写/也是为了迎合后来的Rest风格的URL地址</p>
 <h3 id="PathVariable"><a href="#PathVariable" class="headerlink" title="@PathVariable"></a>@PathVariable</h3><img src="/2019/08/06/SpringMVC的基本使用/6.png">
-
 <h3 id="REST风格"><a href="#REST风格" class="headerlink" title="REST风格"></a>REST风格</h3><img src="/2019/08/06/SpringMVC的基本使用/7.png">
-
 <p>系统希望以非常简洁的URL地址来发请求，怎么表示对一个资源的增删改查，用请求方式来区分</p>
 <p>以前的增删改查：</p>
 <p>/getBook?id=1:查询图书</p>
@@ -497,81 +486,48 @@
 <p>Spring提供了对REST风格的支持：</p>
 <p>1.SpringMVC中有一个Filter,他可以把普通的请求转化为规定的请求，配置这个filter</p>
 <img src="/2019/08/06/SpringMVC的基本使用/8.png">
-
 <p>2.如何发起其他形式请求：可以按照以下形式，1.创建一个POST表单 2.表单携带一个_method的参数 3.这个参数就是delete,put</p>
 <img src="/2019/08/06/SpringMVC的基本使用/9.png">
-
 <h3 id="SpringMVC如何获取请求带来的各种信息"><a href="#SpringMVC如何获取请求带来的各种信息" class="headerlink" title="SpringMVC如何获取请求带来的各种信息"></a>SpringMVC如何获取请求带来的各种信息</h3><p>@RequestParam:获取请求参数</p>
 <img src="/2019/08/06/SpringMVC的基本使用/10.png">
-
 <p>直接给方法入参上写一个和请求名字相同的变量，这个变量就来接受请求参数的值</p>
 <img src="/2019/08/06/SpringMVC的基本使用/11.png">
-
-
-
 <p>@RequestHandle:</p>
 <img src="/2019/08/06/SpringMVC的基本使用/12.png">
-
 <p>如果请求头中没有指定的参数就会报错</p>
 <p>@CookieValue:获取某个Cookie,以前的获取cookie是获取所有的cookie，并通过遍历寻找特定的值</p>
 <p>例子：@CookieValue(“JSESSIONID”)String jid</p>
 <h3 id="SpringMVC的自动封装-POJO"><a href="#SpringMVC的自动封装-POJO" class="headerlink" title="SpringMVC的自动封装-POJO"></a>SpringMVC的自动封装-POJO</h3><p>可以新建一个POJO下的类，这个类里面比如说定义了一个Book对象，并在里面定义了该对象所有参数的get和set方法。假如在前端浏览器发送过来一系列该Book的参数，则不需要一个个接受，直接传递一个Book对象就能进行自动接收</p>
 <img src="/2019/08/06/SpringMVC的基本使用/13.png">
-
 <p>如果我们的请求参数是一个自定义类型（POJO），SpringMVC会自动的为这个POJO进行赋值</p>
 <p>1.将POJO的每一个参数，从request参数中尝试获取出来，并封装即可</p>
 <p>2.还可以级联封装，也就是属性的属性</p>
 <p>假设address是book对象里的一个属性，可以在前端下面这样传递值</p>
 <img src="/2019/08/06/SpringMVC的基本使用/14.png">
-
-
-
 <h3 id="SpringMVC获取原生API"><a href="#SpringMVC获取原生API" class="headerlink" title="SpringMVC获取原生API"></a>SpringMVC获取原生API</h3><img src="/2019/08/06/SpringMVC的基本使用/15.png">
-
 <img src="/2019/08/06/SpringMVC的基本使用/16.png">
-
-
-
 <h3 id="出现乱码"><a href="#出现乱码" class="headerlink" title="出现乱码"></a>出现乱码</h3><img src="/2019/08/06/SpringMVC的基本使用/17.png">
-
-
-
 <h2 id="数据输出"><a href="#数据输出" class="headerlink" title="数据输出"></a>数据输出</h2><p>如何将数据带回给页面，除去在方法上传入原生的request和session外还能怎么样把数据带给页面</p>
 <p>1.可以在方法处传入Map或者Model或者ModelMap，给这些参数里面保存的所有数据都会放在域中，可以在页面获取</p>
 <img src="/2019/08/06/SpringMVC的基本使用/18.png">
-
 <p>这个参数会被放在请求域中，在JSP中通过${requestScope.msg}获取</p>
 <img src="/2019/08/06/SpringMVC的基本使用/19.png">
-
 <p>同样Model也会被放在request中</p>
 <img src="/2019/08/06/SpringMVC的基本使用/20.png">
-
 <p>以上三种方式都会被放在请求域中，因为三者的类都是一样的，都是BindingAwareModelMap在工作,相当于放在这个类中的东西都会被放在请求域当中</p>
 <img src="/2019/08/06/SpringMVC的基本使用/21.png">
-
 <p>2.方法的返回值可以变为ModelAndView类型，既包含视图信息（页面地址），也包含模型数据（给页面带的数据），而且数据也是放在请求域中的</p>
 <img src="/2019/08/06/SpringMVC的基本使用/22.png">
-
 <p>​    </p>
 <p>如果想把返回参数放在其他域中，就可以使用@SessionAttributes把数据放到HttpSession里</p>
 <img src="/2019/08/06/SpringMVC的基本使用/23.png">
-
 <h2 id="SpringMVC源码"><a href="#SpringMVC源码" class="headerlink" title="SpringMVC源码"></a>SpringMVC源码</h2><h3 id="前端控制器架构"><a href="#前端控制器架构" class="headerlink" title="前端控制器架构"></a>前端控制器架构</h3><img src="/2019/08/06/SpringMVC的基本使用/24.png">
-
 <img src="/2019/08/06/SpringMVC的基本使用/25.png">
-
 <img src="/2019/08/06/SpringMVC的基本使用/26.png">
-
-
-
 <h2 id="视图解析"><a href="#视图解析" class="headerlink" title="视图解析"></a>视图解析</h2><p>视图解析在前面进行处理的时候会在前后加上前后缀，因此在处理请求的时候要跳转到其他页面的时候，需要使用其他的方式，其中第一种方式是使用相对路径，另一种方式是使用forward，如下所示：</p>
 <img src="/2019/08/06/SpringMVC的基本使用/27.png">
-
 <p>forward的转发不会有我们的视图解析器拼串</p>
 <img src="/2019/08/06/SpringMVC的基本使用/28.png">
-
-
-
 <h2 id="SpringMVC的运行流程"><a href="#SpringMVC的运行流程" class="headerlink" title="SpringMVC的运行流程"></a>SpringMVC的运行流程</h2><p>1.对于所有的请求，前端控制器（DispatcherServlet）收到请求，调用doDispatch进行处理</p>
 <p>2.根据HandlerMapping中保存的请求映射信息找到，处理当前请求的，处理器执行链（包含拦截器）</p>
 <p>3.根据当前的处理器找到他的HandlerAdapter(适配器)</p>
@@ -595,11 +551,7 @@
 <p>​        2）视图对象调用render方法 </p>
 <p>​    3）执行拦截器的afterCompletion</p>
 <img src="/2019/08/06/SpringMVC的基本使用/29.png">
-
-
-
 <h2 id="Spring和SpringMVC的整合"><a href="#Spring和SpringMVC的整合" class="headerlink" title="Spring和SpringMVC的整合"></a>Spring和SpringMVC的整合</h2><img src="/2019/08/06/SpringMVC的基本使用/30.png">
-
 <p>可以在Spring中配置扫描除了controller外的其他路径，在Springmvc上配置值扫描controller上的路径，因为默认系统会将Spring作为父容器，SpringMVC会作为子容器，因此子容器可以取到父容器中的对象，但是相反却不行</p>
 
       

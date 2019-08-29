@@ -414,13 +414,10 @@
 <p>同时题目是通过POST的方式来传输账号和密码的，首先在POST报文中尝试提供信息为<code>username=1+&amp;+password=1</code>，发送后网页端返回<code>Login failed</code></p>
 <p>尝试使用<code>username=&#39; or 1=1 %23&amp;password=1</code>进行注入，网页端反馈Sql injection detected，因此可以推断出服务器端对SQL的注入命令进行了筛选，也就是加了WAF</p>
 <h2 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h2><p>使用BURP抓取POST包进行fuzz分析，分别对username和password的内容进行测试，测试发现两者屏蔽的值并不相同</p>
-<p>首先对于username，分析结果如下图所示：</p>
-<img src="/2019/07/04/CTF题目-加了料的报错注入/2.png">
-
+<p>首先对于username，分析结果如下图所示：<br><img src="/2019/07/04/CTF题目-加了料的报错注入/2.png"></p>
 <p>由返回长度可以知道信息，其中302是<code>Login failed</code>，238是<code>Sql injection detected</code>，235是<code>username unknow error</code>对于后两者相当于符号被屏蔽了，前者是可以使用的。因此可以看出在username字段不能使用#、-、=、(、)，但是最终要的是这里能用到exp和updatexml</p>
 <p>对于password，分析结果如下：</p>
 <img src="/2019/07/04/CTF题目-加了料的报错注入/1.png">
-
 <p>和前面相反，这里并没屏蔽()，因此可以选择在后面添加语句</p>
 <p>构造语句<code>username=&#39; or exp/*&amp;password=*/(~(select * from (select user()) a)) or &#39;</code>发现返回的语句并没有解析user()，而是原样报错返回了</p>
 <p>尝试使用updatexml构造语句<code>username=&#39; or updatexml/*&amp;password=*/(1,concat(0x3a,(select user())),1) or &#39;</code>，可以发现网页返回了用户名<code>web8@localhost</code></p>

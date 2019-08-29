@@ -423,11 +423,9 @@
 <p>形式：<br><code>www.xxxx.com/UploadFiles/image/1.jpg/1.php</code><br><code>www.xxxx.com/UploadFiles/image/1.jpg/.php</code></p>
 <h3 id="ashx上传"><a href="#ashx上传" class="headerlink" title="ashx上传"></a>ashx上传</h3><p>如果服务器过滤了asa,cer,cdx,htr,aspx,php,jsp等脚本，如果想要突破服务器，可以使用ashx脚本，用ashx来写一个asp的一句话到当前目录。</p>
 <img src="/2019/08/29/文件上传的简单介绍/1.png">
-
 <p>保存为ashx，然后调价一个ashx的上传类型，上传成功后访问<br><code>http://www.xxx.com/admin/eWebEditor/UploadFile/2010821235545.ashx</code><br>就会在当前目录生成一伙人root.asp的木马，用lake2的一句话链接就能见到<code>hello world!</code>了。因为网站再过滤常见脚本的时候把ashx给漏了…</p>
 <h3 id="htaccess上传"><a href="#htaccess上传" class="headerlink" title=".htaccess上传"></a>.htaccess上传</h3><p>再网站的目录下新建一个名为<code>.htaccess</code>的文件，并在文件中添加代码：</p>
 <figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">&lt;Files *.jpg&gt;</span></span><br><span class="line"><span class="attribute">ForceType</span> application/x-httpd-php</span><br><span class="line"><span class="attribute"><span class="nomarkup">SetHandler</span></span> application/x-httpd-php</span><br><span class="line"><span class="section">&lt;/Files&gt;</span></span><br></pre></td></tr></table></figure>
-
 <p>这样网页再访问当前目录下的文件的时候，所有的<code>jpg</code>文件都会被解析为<code>php</code></p>
 <h2 id="修补文件上传漏洞的一些建议"><a href="#修补文件上传漏洞的一些建议" class="headerlink" title="修补文件上传漏洞的一些建议"></a>修补文件上传漏洞的一些建议</h2><p>1.文件上传的目录设置为不可执行<br>2.结合使用MIME Type来判断文件的类型<br>3.使用随机数改写文件名和文件路径<br>4.单独设置文件服务器的域名</p>
 
