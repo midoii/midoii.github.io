@@ -1,6 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title><![CDATA[SQL注入的总结和小技巧]]></title>
+    <url>%2F2019%2F08%2F29%2FSQL%E6%B3%A8%E5%85%A5%E7%9A%84%E6%80%BB%E7%BB%93%E5%92%8C%E5%B0%8F%E6%8A%80%E5%B7%A7%2F</url>
+    <content type="text"><![CDATA[一些常用指令1.当前数据库的所有表select group_concat(table_name separator &#39;@&#39;) from information_schema.TABLES where TABLE_SCHEMA=database();2.获取表中的所有列的名字select group_concat(column_name separator &#39;@&#39;) from information_schema.columns where table_name=&#39;表名&#39; 布尔注入通常情况下可以使用mid和substring两个函数来进行布尔注入，哪个能用就使用哪个，另外在盲注的情况下可以使用ascii()来逐一判断表名列名等(ascii(subtring(database(),1,1))=104(ascii(mid(database(),1,1))=104 但是WAF屏蔽了逗号的使用，那么两种函数都是用不了了，这时候可以换一种表述方式来进行注入，语句如下所示：(ascii(substring(database() from 2))=111)(mid(database() from 1 for 1))=&#39;a&#39;(substring(database() from 1 for 1))=&#39;a&#39; 另外如果需要用到if语句，也可以将逻辑换一种表达方式，可以使用case when xxx then xxx else xxx end的逻辑，其具体语法如下所示 123456SELECT &lt;myColumnSpec&gt; = CASE WHEN &lt;A&gt; THEN &lt;somethingA&gt; WHEN &lt;B&gt; THEN &lt;somethingB&gt; ELSE &lt;somethingE&gt; END 举一个爆数据库名的例子：1&#39; and case when (substring((select database()) from 1 for 1)=&#39;w&#39;) then sleep(3) else sleep(0) end and &#39;1&#39;=&#39;1 select屏蔽绕过、1,：转换个别字母大小写2：输入SESELECTLECT之类的语句来代替SELECT3：用转义的URL编码来代替SELECT（不知道这么表述对不对，就是%后面跟上16进制的ascii码……）4：用/**/来隔开SELECT中的各个字母 PHP一些特性（漏洞）弱类型比较：在某些情况下，PHP会把类数值数据（如含有数字的字符串等）转换成数值处理，== 运算符就是其中之一。在使用 == 运算符对两个字符串进行松散比较时，PHP会把类数值的字符串转换为数值进行比较，如果参数是字符串，则返回字符串中第一个不是数字的字符之前的数字串所代表的整数值。比如: 3 == ‘3ascasd’结果为true。 以0为开头的MD5值只要找到一个字串加密后第一个字符为0即可，这里提供几个：240610708，aabg7XSs，aabC9RqS PHP布尔类型bool类型的true跟任意字符串可以弱类型相等。因此我们可以构造bool类型的序列化数据 ，无论比较的值是什么，结果都为true。 截断问题ereg函数漏洞：00截断 SHA1和MD5函数这两个PHP函数因为不能处理数组，所以在传入数组的时候会发生错误，在PHP中会直接返回一个False，因此在比较两者的hash值是否相等时，可以传入两个数组，因为false=false成立 jother编码如果在网页中出现一堆+!的东西就用jother解码 在console将那堆解码的东西复制过去 按回车即可解码 设置伪造的IP地址在包头添加Client-IP:可以用来伪造当前客户端的IP地址，从而欺骗服务器 Mysql的用户名和密码Mysql中可以直接使用username和password获取当前的用户名和密码（不知道对不对）]]></content>
+      <categories>
+        <category>安全</category>
+      </categories>
+      <tags>
+        <tag>Mysql</tag>
+        <tag>Web安全</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[文件上传的简单介绍]]></title>
+    <url>%2F2019%2F08%2F29%2F%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0%E7%9A%84%E7%AE%80%E5%8D%95%E4%BB%8B%E7%BB%8D%2F</url>
+    <content type="text"><![CDATA[文件上传首先我们通过一个网站上传一个非法格式的文件1.在浏览加载文件，但还未点击上传按钮时便弹出对话框，内容如：只允许上传.jpg/.jpeg/.png后缀名的文件，而此时并没有发送数据包。2.如果网页未弹窗，而在页面弹窗，则考虑后端验证 空字节的理解字符串以%00（空字节）作为结束符 文件上传的基本流程1.图片是否正常上传2.图片上传的内容是否被感染（内容替换）3.上传的域名是否是目标服务器4.如果域名不是目标服务器，那就判断解析图片的服务器是否解析（PHP,ASP,ASPX,JSP,CFM,SHRML）等5.上传的目录是否支持解析上述格式 JS验证JS验证时前端验证绕过的一种。对于那些在客户端网页上增加JS来验证的网站，只需要在console上写改成想要的逻辑，就能往服务器发送恶意的PHP文件。 截断上传由于服务器端PHP存在空字节漏洞，例如ereg()函数就存在空字节漏洞，如果通过抓包软件将发送到服务器的上传文件的包截获，并将文件名字改成a.jpg%00.php，在服务器端时通过以下语句来判断是否是jpg的：ereg(&#39;jpg$&#39;,urldecode($file[&#39;name&#39;]));该文件名经过该函数会判断成功，实际上空字节将jpg的后缀阶段了，从而上传的时一个php文件。 黑名单上传验证绕过黑名单上传验证的几种方法：1.将文件的后缀名大小写互换2.如果只解释PHP可以尝试将文件后缀改为php3,php4,php5,phtml 二次上传漏洞的简要分析二次上传 解析漏洞IIS解析漏洞使用iis5.x-6.x版本的服务器，大多为windows server 2003，网站比较古老，开发语句一般为asp；该解析漏洞也只能解析asp文件，而不能解析aspx文件。目录解析(6.0)形式：www.xxx.com/xx.asp/xx.jpg原理: 服务器默认会把.asp，.asa目录下的文件都解析成asp文件。文件解析形式：www.xxx.com/xx.asp;.jpg原理：服务器默认不解析;号后面的内容，因此xx.asp;.jpg便被解析成asp文件了。解析文件类型IIS6.0 默认的可执行文件除了asp还包含这三种 :/test.asa,/test.cer,/test.cdx IIS7.5的漏洞与nginx的类似，都是由于php配置文件中，开启了cgi.fix_pathinfo，而这并不是nginx或者iis7.5本身的漏洞。例如 a.aspx.a;.a.aspx.jpg..jpg Apache解析漏洞原理：Apache 解析文件的规则是从右到左开始判断解析,如果后缀名为不可识别文件解析,就再往左判断。比如test.php.owf.rar其中owf和rar 这两种后缀是apache不可识别解析,apache就会把wooyun.php.owf.rar解析成php。 形式：www.xxxx.xxx.com/test.php.php123 其余配置问题导致的漏洞：（1）如果在 Apache 的 conf 里有这样一行配置AddHandler php5-script .php 这时只要文件名里包含php， 即使文件名是 test2.php.jpg 也会以 php 来执行。（2）如果在 Apache 的 conf 里有这样一行配置AddType application/x-httpd-php .jpg即使扩展名是 jpg，一样能以 php 方式执行。 Nginx解析漏洞原理：Nginx默认是以CGI的方式支持PHP解析的，普遍的做法是在Nginx配置文件中通过正则匹配设置SCRIPT_FILENAME。当访问www.xx.com/phpinfo.jpg/1.php这个URL时，$fastcgi_script_name会被设置为phpinfo.jpg/1.php，然后构造成SCRIPT_FILENAME传递给PHP CGI，但是PHP为什么会接受这样的参数，并将phpinfo.jpg作为PHP文件解析呢?这就要说到fix_pathinfo这个选项了。 如果开启了这个选项，那么就会触发在PHP中的如下逻辑：PHP会认为SCRIPT_FILENAME是phpinfo.jpg，而1.php是PATH_INFO，所以就会将phpinfo.jpg作为PHP文件来解析了。 形式：www.xxxx.com/UploadFiles/image/1.jpg/1.phpwww.xxxx.com/UploadFiles/image/1.jpg/.php ashx上传如果服务器过滤了asa,cer,cdx,htr,aspx,php,jsp等脚本，如果想要突破服务器，可以使用ashx脚本，用ashx来写一个asp的一句话到当前目录。 保存为ashx，然后调价一个ashx的上传类型，上传成功后访问http://www.xxx.com/admin/eWebEditor/UploadFile/2010821235545.ashx就会在当前目录生成一伙人root.asp的木马，用lake2的一句话链接就能见到hello world!了。因为网站再过滤常见脚本的时候把ashx给漏了… .htaccess上传再网站的目录下新建一个名为.htaccess的文件，并在文件中添加代码： 1234&lt;Files *.jpg&gt;ForceType application/x-httpd-phpSetHandler application/x-httpd-php&lt;/Files&gt; 这样网页再访问当前目录下的文件的时候，所有的jpg文件都会被解析为php 修补文件上传漏洞的一些建议1.文件上传的目录设置为不可执行2.结合使用MIME Type来判断文件的类型3.使用随机数改写文件名和文件路径4.单独设置文件服务器的域名]]></content>
+      <categories>
+        <category>安全</category>
+      </categories>
+      <tags>
+        <tag>Web安全</tag>
+        <tag>文件上传</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[Hello World]]></title>
     <url>%2F2019%2F08%2F29%2Fhello-world%2F</url>
     <content type="text"><![CDATA[Welcome to Hexo! This is your very first post. Check documentation for more info. If you get any problems when using Hexo, you can find the answer in troubleshooting or you can ask me on GitHub. Quick StartCreate a new post1$ hexo new "My New Post" More info: Writing Run server1$ hexo server More info: Server Generate static files1$ hexo generate More info: Generating Deploy to remote sites1$ hexo deploy More info: Deployment]]></content>
