@@ -281,6 +281,217 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/07/02/SQL注入的总结和小技巧/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Chen DY">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Chen's Bolg">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/07/02/SQL注入的总结和小技巧/" itemprop="url">SQL注入的总结和小技巧</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-07-02T12:24:01+08:00">
+                2019-07-02
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/安全/" itemprop="url" rel="index">
+                    <span itemprop="name">安全</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  786字
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  3分钟
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="一些常用指令"><a class="markdownIt-Anchor" href="#一些常用指令"></a> 一些常用指令</h2>
+<p>1.当前数据库的所有表<br>
+<code>select group_concat(table_name separator '@') from information_schema.TABLES where TABLE_SCHEMA=database();</code><br>
+2.获取表中的所有列的名字<br>
+<code>select group_concat(column_name separator '@') from information_schema.columns where table_name='表名'</code></p>
+<h2 id="布尔注入"><a class="markdownIt-Anchor" href="#布尔注入"></a> 布尔注入</h2>
+<p>通常情况下可以使用mid和substring两个函数来进行布尔注入，哪个能用就使用哪个，另外在盲注的情况下可以使用ascii()来逐一判断表名列名等<br>
+<code>(ascii(subtring(database(),1,1))=104</code><br>
+<code>(ascii(mid(database(),1,1))=104</code></p>
+<p>但是WAF屏蔽了逗号的使用，那么两种函数都是用不了了，这时候可以换一种表述方式来进行注入，语句如下所示：<br>
+<code>(ascii(substring(database() from 2))=111)</code><br>
+<code>(mid(database() from 1 for 1))='a'</code><br>
+<code>(substring(database() from 1 for 1))='a'</code></p>
+<p>另外如果需要用到if语句，也可以将逻辑换一种表达方式，可以使用<code>case when xxx then xxx else xxx end</code>的逻辑，其具体语法如下所示</p>
+<figure class="highlight ada"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> &lt;myColumnSpec&gt; = </span><br><span class="line"><span class="keyword">CASE</span> </span><br><span class="line"><span class="keyword">WHEN</span> &lt;A&gt; <span class="keyword">THEN</span> &lt;somethingA&gt; </span><br><span class="line"><span class="keyword">WHEN</span> &lt;B&gt; <span class="keyword">THEN</span> &lt;somethingB&gt; </span><br><span class="line"><span class="keyword">ELSE</span> &lt;somethingE&gt; </span><br><span class="line"><span class="keyword">END</span></span><br></pre></td></tr></table></figure>
+<p>举一个爆数据库名的例子：<br>
+<code>1' and case when (substring((select database()) from 1 for 1)='w') then sleep(3) else sleep(0) end and '1'='1</code></p>
+<h2 id="select屏蔽绕过"><a class="markdownIt-Anchor" href="#select屏蔽绕过"></a> select屏蔽绕过、</h2>
+<p>1,：转换个别字母大小写<br>
+2：输入SESELECTLECT之类的语句来代替SELECT<br>
+3：用转义的URL编码来代替SELECT（不知道这么表述对不对，就是%后面跟上16进制的ascii码……）<br>
+4：用/**/来隔开SELECT中的各个字母</p>
+<h2 id="php一些特性漏洞"><a class="markdownIt-Anchor" href="#php一些特性漏洞"></a> PHP一些特性（漏洞）</h2>
+<p>弱类型比较：在某些情况下，PHP会把类数值数据（如含有数字的字符串等）转换成数值处理，== 运算符就是其中之一。在使用 == 运算符对两个字符串进行松散比较时，PHP会把类数值的字符串转换为数值进行比较，如果参数是字符串，则返回字符串中第一个不是数字的字符之前的数字串所代表的整数值。比如: 3 == '3ascasd’结果为true。</p>
+<h2 id="以0为开头的md5值"><a class="markdownIt-Anchor" href="#以0为开头的md5值"></a> 以0为开头的MD5值</h2>
+<p>只要找到一个字串加密后第一个字符为0即可，这里提供几个：240610708，aabg7XSs，aabC9RqS</p>
+<h2 id="php布尔类型"><a class="markdownIt-Anchor" href="#php布尔类型"></a> PHP布尔类型</h2>
+<p>bool类型的true跟任意字符串可以弱类型相等。因此我们可以构造bool类型的序列化数据 ，无论比较的值是什么，结果都为true。</p>
+<h2 id="截断问题"><a class="markdownIt-Anchor" href="#截断问题"></a> 截断问题</h2>
+<p>ereg函数漏洞：00截断</p>
+<h2 id="sha1和md5函数"><a class="markdownIt-Anchor" href="#sha1和md5函数"></a> SHA1和MD5函数</h2>
+<p>这两个PHP函数因为不能处理数组，所以在传入数组的时候会发生错误，在PHP中会直接返回一个False，因此在比较两者的hash值是否相等时，可以传入两个数组，因为false=false成立</p>
+<h2 id="jother编码"><a class="markdownIt-Anchor" href="#jother编码"></a> jother编码</h2>
+<p>如果在网页中出现一堆<a href></a>+!的东西就用jother解码</p>
+<p>在console将那堆解码的东西复制过去 按回车即可解码</p>
+<h2 id="设置伪造的ip地址"><a class="markdownIt-Anchor" href="#设置伪造的ip地址"></a> 设置伪造的IP地址</h2>
+<p>在包头添加<code>Client-IP:</code>可以用来伪造当前客户端的IP地址，从而欺骗服务器</p>
+<h2 id="mysql的用户名和密码"><a class="markdownIt-Anchor" href="#mysql的用户名和密码"></a> Mysql的用户名和密码</h2>
+<p>Mysql中可以直接使用username和password获取当前的用户名和密码（不知道对不对）</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/07/02/文件包含的简单介绍/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1318,7 +1529,7 @@ union可以用来连接两个信息，即增加一项select</p>
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">14</span>
+                  <span class="site-state-item-count">15</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -1340,7 +1551,7 @@ union可以用来连接两个信息，即增加一项select</p>
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">15</span>
+                  <span class="site-state-item-count">17</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
@@ -1391,7 +1602,7 @@ union可以用来连接两个信息，即增加一项select</p>
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">26.4k</span>
+    <span title="Site words total count">27.7k</span>
   
 </div>
 

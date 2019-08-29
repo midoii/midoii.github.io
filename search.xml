@@ -1,9 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title><![CDATA[用神经网络来实时检测密码强度]]></title>
+    <url>%2F2019%2F08%2F29%2F%E7%94%A8%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E6%9D%A5%E5%AE%9E%E6%97%B6%E6%A3%80%E6%B5%8B%E5%AF%86%E7%A0%81%E5%BC%BA%E5%BA%A6%2F</url>
+    <content type="text"><![CDATA[论文地址：https://www.usenix.org/conference/usenixsecurity16/technical-sessions/presentation/melicher 概览 论文中作者用神经网络设计了一个密码强度评估的系统。该系统分为服务端和客户端两部分，服务端采用规模比较大的神经网络，客户端采用规模比较小的神经网络，因为服务端的系统性能好，而且在客户端要使普通用户能够实时(反馈延时小于100ms)得到密码强度信息的反馈。经过作者的对比，神经网络的速度要快于目前最先进的几种算法：概率模型、马尔可夫模型、字母表搜索方式。最重要的是神经网络所占用的空间相比于其他方式特别小。 内部结构 神经网络的结构如下图所示： 这个系统有点类似于马尔可夫链，通过输入前面的字符，用来预测后一个字符的概率，其中这个网络中还有一个特殊的字符用来表示字符串的结束。最开始是以空白的输入开始的，也就是全部输入0，然后通过后续字符的概率来计算输出一个特定字符串的概率。 首先一个密码的强度可以通过需要猜解的次数体现出来，而且文中给出了一个计算猜解次数的方式，通过对一个测试集合的概率做统计，然后通过使用Monte Carlo simulation来画出尝试次数和概率的曲线，这是一个统计学方面的知识，具体还没了解过，类似于下面图片的东西： 所以可以根据这种方式来进行各种模型的性能对比，对比下来神经网络模型尤其在密码字符长而且更复杂(也就是采用字符数字大小写)的情况下性能更好，就是在相同尝试次数的情况下猜测出来的概率更高。 对于客户端的神经网络模型，作者对一系列参数进行了优化，优化的方面有权重的数字压缩、定点编码、Zigzag编码、Lossless压缩、存储常用密码。从而使得客户端的模型容量更小而且运行速度更快。]]></content>
+      <categories>
+        <category>机器学习</category>
+      </categories>
+      <tags>
+        <tag>深度学习</tag>
+        <tag>密码学</tag>
+        <tag>神经网络</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[中心化深度学习训练]]></title>
     <url>%2F2019%2F08%2F29%2F%E4%B8%AD%E5%BF%83%E5%8C%96%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E8%AE%AD%E7%BB%83%2F</url>
-    <content type="text"></content>
+    <content type="text"><![CDATA[论文地址：https://www.ijcai.org/proceedings/2018/547 论文提出的方法能够充分利用服务器的计算性能高的优点，最重要的是能够保证训练数据：也就是用户的隐私数据的保密性。 文章提出的方法是基于同态加密的，一般的同态加密算法的性质有加法同态和乘法同态，下面是这两者的性质： 加法同态：E(X+Y)=E(X)+E(Y)E(X+Y)=E(X)+E(Y)E(X+Y)=E(X)+E(Y)或者X+Y=D(E(X)+E(Y))X+Y=D(E(X)+E(Y))X+Y=D(E(X)+E(Y)) 乘法同态：E(X∗Y)=E(X)E(Y)E(X*Y)=E(X)E(Y)E(X∗Y)=E(X)E(Y)或者XY=D(E(X)E(Y))XY=D(E(X)E(Y))XY=D(E(X)E(Y)) 文章的大致思路是用户有自己的隐私数据想用来建立模型，但不想让服务器知道，用户可以使用一个叫做Paillier的加密算法来加密自己的数据，而这个算法是分公私钥的，用户拥有密钥对（PKc，SKc），通过公钥加密数据，用私钥解密数据，而公钥也同时公布给服务器，服务器在执行反向传播算法的时候会用到公钥。算法中假设所有的用户都共享这一对密钥，但是用户之间都是守信的，不会向服务器泄露自己的私钥，并且不会传输对抗性样本。 因为深度神经网络DNN在计算过程中只有激活层会使用非线性函数，而其他层均是线性网络，并且也是运算量最大的部分，因此可以放到服务器上运算，而每一层的激活层则回传给用户计算。具体的计算步骤如下图所示 在这里面，服务器运算时候的w和b都添加了噪声，目的是使得服务器无法从a和z的值推算出具体的激活函数，这也保证了数据的机密性。 ​ 而反向传播算法也是基于DNN的反向传播算法进行的，这里由用户来计算更新参数的差值，服务器来实现更新值。这里提到了服务器的训练参数不能被用户知道，所以和单个用户交流计算的次数最大不能超过m+2，这里m指的是各层中最多的参数个数，因为用户知道学习率η和每轮变化值，通过m+2个方程可以推算出m个参数的值 这篇文章不知道可以应用在哪里，因为这里的前提条件比较苛刻，需要各个用户之间相互信任，而且不存在泄密者，在现实下不知道能不能找到应用场景。]]></content>
+      <categories>
+        <category>机器学习</category>
+      </categories>
+      <tags>
+        <tag>机器学习</tag>
+        <tag>深度学习</tag>
+      </tags>
   </entry>
   <entry>
     <title><![CDATA[文件上传的简单介绍]]></title>
@@ -25,8 +45,8 @@
         <category>Java</category>
       </categories>
       <tags>
-        <tag>SSM框架</tag>
         <tag>Java</tag>
+        <tag>SSM框架</tag>
       </tags>
   </entry>
   <entry>
@@ -37,9 +57,9 @@
         <category>Java</category>
       </categories>
       <tags>
-        <tag>JavaWeb</tag>
-        <tag>SSM框架</tag>
         <tag>Java</tag>
+        <tag>SSM框架</tag>
+        <tag>JavaWeb</tag>
       </tags>
   </entry>
   <entry>
@@ -50,8 +70,8 @@
         <category>Java</category>
       </categories>
       <tags>
-        <tag>JavaWeb</tag>
         <tag>Java</tag>
+        <tag>JavaWeb</tag>
         <tag>Spring</tag>
       </tags>
   </entry>
@@ -63,8 +83,8 @@
         <category>安全</category>
       </categories>
       <tags>
-        <tag>Web安全</tag>
         <tag>Hash</tag>
+        <tag>Web安全</tag>
       </tags>
   </entry>
   <entry>
@@ -87,8 +107,8 @@
         <category>安全</category>
       </categories>
       <tags>
-        <tag>CTF</tag>
         <tag>Web安全</tag>
+        <tag>CTF</tag>
       </tags>
   </entry>
   <entry>
@@ -99,8 +119,8 @@
         <category>安全</category>
       </categories>
       <tags>
-        <tag>CTF</tag>
         <tag>Web安全</tag>
+        <tag>CTF</tag>
       </tags>
   </entry>
   <entry>
@@ -160,8 +180,8 @@
       </categories>
       <tags>
         <tag>机器学习</tag>
-        <tag>安全</tag>
         <tag>深度学习</tag>
+        <tag>安全</tag>
       </tags>
   </entry>
 </search>
