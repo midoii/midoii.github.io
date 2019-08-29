@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="Hexo, NexT">
+  <meta name="keywords" content="Web安全,Hash,">
 
 
 
@@ -79,13 +79,22 @@
 
 
 
-<meta property="og:type" content="website">
-<meta property="og:title" content="Chen&#39;s Bolg">
-<meta property="og:url" content="http://yoursite.com/tags/Web安全/index.html">
+<meta name="description" content="题目地址：http://www.shiyanbar.com/ctf/1848 Message authentication codes (MACs)是用于验证信息真实性的。一般的MAC算法是这样的：服务器把secret和message连接到一起，然后用消息摘要算法如MD5或SHA1取摘要。研究发现MD4、MD5、RIPEMD-160、SHA-0、SHA-1、SHA-256、SHA-512、WHIR">
+<meta name="keywords" content="Web安全,Hash">
+<meta property="og:type" content="article">
+<meta property="og:title" content="CTF题目-哈希长度拓展攻击">
+<meta property="og:url" content="http://yoursite.com/2019/07/09/CTF题目-哈希长度拓展攻击/index.html">
 <meta property="og:site_name" content="Chen&#39;s Bolg">
+<meta property="og:description" content="题目地址：http://www.shiyanbar.com/ctf/1848 Message authentication codes (MACs)是用于验证信息真实性的。一般的MAC算法是这样的：服务器把secret和message连接到一起，然后用消息摘要算法如MD5或SHA1取摘要。研究发现MD4、MD5、RIPEMD-160、SHA-0、SHA-1、SHA-256、SHA-512、WHIR">
 <meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://yoursite.com/2019/07/09/CTF题目-哈希长度拓展攻击/1.png">
+<meta property="og:image" content="http://yoursite.com/2019/07/09/CTF题目-哈希长度拓展攻击/2.png">
+<meta property="og:image" content="http://yoursite.com/2019/07/09/CTF题目-哈希长度拓展攻击/3.png">
+<meta property="og:updated_time" content="2019-08-29T08:03:02.383Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Chen&#39;s Bolg">
+<meta name="twitter:title" content="CTF题目-哈希长度拓展攻击">
+<meta name="twitter:description" content="题目地址：http://www.shiyanbar.com/ctf/1848 Message authentication codes (MACs)是用于验证信息真实性的。一般的MAC算法是这样的：服务器把secret和message连接到一起，然后用消息摘要算法如MD5或SHA1取摘要。研究发现MD4、MD5、RIPEMD-160、SHA-0、SHA-1、SHA-256、SHA-512、WHIR">
+<meta name="twitter:image" content="http://yoursite.com/2019/07/09/CTF题目-哈希长度拓展攻击/1.png">
 
 
 
@@ -115,13 +124,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/tags/Web安全/">
+  <link rel="canonical" href="http://yoursite.com/2019/07/09/CTF题目-哈希长度拓展攻击/">
 
 
 
 
 
-  <title>标签: Web安全 | Chen's Bolg</title>
+  <title>CTF题目-哈希长度拓展攻击 | Chen's Bolg</title>
   
 
 
@@ -140,7 +149,7 @@
     
   
 
-  <div class="container sidebar-position-left ">
+  <div class="container sidebar-position-left page-post-detail">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -266,234 +275,231 @@
           <div id="content" class="content">
             
 
+  <div id="posts" class="posts-expand">
+    
+
+  
+
   
   
   
-  <div class="post-block tag">
-
-    <div id="posts" class="posts-collapse">
-      <div class="collection-title">
-        <h1>Web安全<small>标签</small>
-        </h1>
-      </div>
-
-      
-        
 
   <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/07/09/CTF题目-哈希长度拓展攻击/">
 
-      <h2 class="post-title">
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Chen DY">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Chen's Bolg">
+    </span>
+
+    
+      <header class="post-header">
+
         
-            <a class="post-title-link" href="/2019/08/29/CTF题目-加了料的报错注入/" itemprop="url">
-              
-                <span itemprop="name">CTF题目-加了料的报错注入</span>
-              
-            </a>
         
-      </h2>
+          <h1 class="post-title" itemprop="name headline">CTF题目-哈希长度拓展攻击</h1>
+        
 
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2019-08-29T16:03:21+08:00" content="2019-08-29">
-          08-29
-        </time>
-      </div>
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-07-09T15:58:19+08:00">
+                2019-07-09
+              </time>
+            
 
-    </header>
-  </article>
+            
 
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/安全/" itemprop="url" rel="index">
+                    <span itemprop="name">安全</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  935字
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  4分钟
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
 
       
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2019/08/29/文件上传的简单介绍/" itemprop="url">
-              
-                <span itemprop="name">文件上传的简单介绍</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2019-08-29T15:20:39+08:00" content="2019-08-29">
-          08-29
-        </time>
-      </div>
-
-    </header>
-  </article>
-
+      
 
       
-        
+        <p>题目地址：<a href="http://www.shiyanbar.com/ctf/1848" target="_blank" rel="noopener">http://www.shiyanbar.com/ctf/1848</a></p>
+<p>Message authentication codes (MACs)是用于验证信息真实性的。一般的MAC算法是这样的：服务器把secret和message连接到一起，然后用消息摘要算法如MD5或SHA1取摘要。研究发现MD4、MD5、RIPEMD-160、SHA-0、SHA-1、SHA-256、SHA-512、WHIRLPOOL等摘要算法受此攻击，但MD2、SHA-224和SHA-384不受此攻击。</p>
+<img src="/2019/07/09/CTF题目-哈希长度拓展攻击/1.png">
 
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
+<p>这是一张MD5算法的流程图，根据这张图我们可以把MD5算法的流程，简单分为下面几步：</p>
+<p>1.把消息分为n个消息块。<br>2.对最后一个消息块进行消息填充。<br>3.每个消息块会和一个输入量做运算，把运算结果作为下一个输入量。</p>
+<p>计算消息摘要必须用补位已经补长度完成之后的消息来进行运算，拿出 512 bit 的消息（即64 byte ）。 计算消息摘要的时候，有一个初始的链变量，用来参与第一轮的运算。MD5 的初始链变量为：</p>
+<figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">A</span>=<span class="number">0</span>x67452301</span><br><span class="line"><span class="attr">B</span>=<span class="number">0</span>xefcdab89</span><br><span class="line"><span class="attr">C</span>=<span class="number">0</span>x98badcfe</span><br><span class="line"><span class="attr">D</span>=<span class="number">0</span>x10325476</span><br></pre></td></tr></table></figure>
 
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2019/07/09/CTF题目-哈希长度拓展攻击/" itemprop="url">
-              
-                <span itemprop="name">CTF题目-哈希长度拓展攻击</span>
-              
-            </a>
-        
-      </h2>
+<p>无需关心计算细节，我们只需要知道经过一次消息再要后，上面的链变量将会被新的值覆盖，而最后一轮产生的链变量经过高低位互换（如：aabbccdd -&gt; ddccbbaa）后就是我们计算出来的 md5 值。</p>
+<h1 id="拓展攻击的实现"><a href="#拓展攻击的实现" class="headerlink" title="拓展攻击的实现"></a>拓展攻击的实现</h1><p>下面是一道CTF题目中获取的服务器端PHP代码：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">&lt;html&gt;</span><br><span class="line">&lt;body&gt;</span><br><span class="line"></span><br><span class="line">&lt;pre&gt;</span><br><span class="line">$flag = <span class="string">"XXXXXXXXXXXXXXXXXXXXXXX"</span>;</span><br><span class="line">$secret = <span class="string">"XXXXXXXXXXXXXXX"</span>; <span class="comment">// This secret is 15 characters long for security!</span></span><br><span class="line"></span><br><span class="line">$username = $_POST[<span class="string">"username"</span>];</span><br><span class="line">$password = $_POST[<span class="string">"password"</span>];</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> (!<span class="keyword">empty</span>($_COOKIE[<span class="string">"getmein"</span>])) &#123;</span><br><span class="line">    <span class="keyword">if</span> (urldecode($username) === <span class="string">"admin"</span> &amp;&amp; urldecode($password) != <span class="string">"admin"</span>) &#123;<span class="comment"># ===俩边不管值还是类型都要一致</span></span><br><span class="line">        <span class="keyword">if</span> ($COOKIE[<span class="string">"getmein"</span>] === md5($secret . urldecode($username . $password))) &#123;</span><br><span class="line">            <span class="keyword">echo</span> <span class="string">"Congratulations! You are a registered user.\n"</span>;</span><br><span class="line">            <span class="keyword">die</span> (<span class="string">"The flag is "</span>. $flag);<span class="comment">#exit()/die() 函数输出一条消息，并退出当前脚本</span></span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="keyword">die</span> (<span class="string">"Your cookies don't match up! STOP HACKING THIS SITE."</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="keyword">die</span> (<span class="string">"You are not an admin! LEAVE."</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">setcookie(<span class="string">"sample-hash"</span>, md5($secret . urldecode(<span class="string">"admin"</span> . <span class="string">"admin"</span>)), time() + (<span class="number">60</span> * <span class="number">60</span> * <span class="number">24</span> * <span class="number">7</span>));</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> (<span class="keyword">empty</span>($_COOKIE[<span class="string">"source"</span>])) &#123;</span><br><span class="line">    setcookie(<span class="string">"source"</span>, <span class="number">0</span>, time() + (<span class="number">60</span> * <span class="number">60</span> * <span class="number">24</span> * <span class="number">7</span>));</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">else</span> &#123;</span><br><span class="line">    <span class="keyword">if</span> ($_COOKIE[<span class="string">"source"</span>] != <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="keyword">echo</span> <span class="string">""</span>; <span class="comment">// This source code is outputted here</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">    &lt;/pre&gt;</span><br><span class="line">&lt;h1&gt;Admins Only!&lt;/h1&gt;</span><br><span class="line">&lt;p&gt;<span class="keyword">If</span> you have the correct credentials, log in below. <span class="keyword">If</span> not, please LEAVE.&lt;/p&gt;</span><br><span class="line">&lt;form method=<span class="string">"POST"</span>&gt;</span><br><span class="line">    Username: &lt;input type=<span class="string">"text"</span> name=<span class="string">"username"</span>&gt; &lt;br&gt;</span><br><span class="line">    Password: &lt;input type=<span class="string">"password"</span> name=<span class="string">"password"</span>&gt; &lt;br&gt;</span><br><span class="line">    &lt;button type=<span class="string">"submit"</span>&gt;Submit&lt;/button&gt;</span><br><span class="line">&lt;/form&gt;</span><br><span class="line"></span><br><span class="line">&lt;/body&gt;</span><br><span class="line">&lt;/html&gt;</span><br><span class="line"></span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
 
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2019-07-09T15:58:19+08:00" content="2019-07-09">
-          07-09
-        </time>
-      </div>
+<p>flag获取的要求是：传进一个cookie使getmein等于md5($secret . urldecode($username . $password))且后面部分不能为adminadmin,<br>也就是说需要构造getmein的cookie和他那串字符相同就可以。</p>
+<p>我们已知当username和password都等于admin时得到的MD5摘要值，想要构造一个password，能够知道得到的MD5值</p>
+<p>已知$secret长度为15，先进行消息的填充，前面的A是随便写的，为了占15个字符。填充如下:</p>
+<img src="/2019/07/09/CTF题目-哈希长度拓展攻击/2.png">
 
-    </header>
-  </article>
+<p>然后在后面跟加附加值，随便写什么：</p>
+<img src="/2019/07/09/CTF题目-哈希长度拓展攻击/3.png">
 
-
-      
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2019/07/05/SQLMAP的使用/" itemprop="url">
-              
-                <span itemprop="name">SQLMAP的使用</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2019-07-05T16:34:08+08:00" content="2019-07-05">
-          07-05
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-      
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2019/07/02/SQL注入的总结和小技巧/" itemprop="url">
-              
-                <span itemprop="name">SQL注入的总结和小技巧</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2019-07-02T12:24:01+08:00" content="2019-07-02">
-          07-02
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-      
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2019/07/02/文件包含的简单介绍/" itemprop="url">
-              
-                <span itemprop="name">文件包含的简单介绍</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2019-07-02T11:16:25+08:00" content="2019-07-02">
-          07-02
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-      
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2019/06/30/XSS跨站脚本攻击/" itemprop="url">
-              
-                <span itemprop="name">XSS跨站脚本攻击</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2019-06-30T15:06:34+08:00" content="2019-06-30">
-          06-30
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-      
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2019/06/27/SQL注入总结/" itemprop="url">
-              
-                <span itemprop="name">SQL注入总结</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2019-06-27T14:23:53+08:00" content="2019-06-27">
-          06-27
-        </time>
-      </div>
-
-    </header>
-  </article>
-
+<p>然后去掉前面原本的username值，剩余的就是需要输入的password值：</p>
+<p><code>adminadmin\x80\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\xc8\x00\x00\x00\x00\x00\x00\x00dawn</code></p>
+<p>urlencode之后为:<br><code>adminadmin%80%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%c8%00%00%00%00%00%00%00dawn</code></p>
+<p>现在我们在不知道具体 $secret 的情况下，已经得知了md5(secert+adminadmin)的值为571580b26c65f306376d4f64e53cb5c7，以及​$sercret的位数。而我们得到的 hash 值正是下一轮摘要经过高地位互换的链变量。</p>
+<p>在网上找到计算MD5的代码，只要把初始向量变成已知的那个HASH值就可以了。</p>
 
       
     </div>
+    
+    
+    
 
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Web安全/" rel="tag"><i class="fa fa-tag"></i> Web安全</a>
+          
+            <a href="/tags/Hash/" rel="tag"><i class="fa fa-tag"></i> Hash</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/07/05/SQLMAP的使用/" rel="next" title="SQLMAP的使用">
+                <i class="fa fa-chevron-left"></i> SQLMAP的使用
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/08/29/文件上传的简单介绍/" rel="prev" title="文件上传的简单介绍">
+                文件上传的简单介绍 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
   </div>
   
   
   
+  </article>
 
-  
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
 
 
           </div>
@@ -501,6 +507,10 @@
 
 
           
+
+  
+
+
 
         </div>
         
@@ -521,8 +531,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -584,6 +603,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#拓展攻击的实现"><span class="nav-number">1.</span> <span class="nav-text">拓展攻击的实现</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
@@ -729,6 +764,10 @@
   
 
   
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
 
   
 
