@@ -83,17 +83,17 @@
 <meta name="keywords" content="机器学习,深度学习">
 <meta property="og:type" content="article">
 <meta property="og:title" content="中心化深度学习训练">
-<meta property="og:url" content="http://yoursite.com/2019/08/29/中心化深度学习训练/index.html">
+<meta property="og:url" content="http://yoursite.com/2019/06/22/中心化深度学习训练/index.html">
 <meta property="og:site_name" content="Chen&#39;s Bolg">
 <meta property="og:description" content="论文地址：https://www.ijcai.org/proceedings/2018/547 论文提出的方法能够充分利用服务器的计算性能高的优点，最重要的是能够保证训练数据：也就是用户的隐私数据的保密性。 文章提出的方法是基于同态加密的，一般的同态加密算法的性质有加法同态和乘法同态，下面是这两者的性质： 加法同态：E(X+Y)=E(X)+E(Y)E(X+Y)=E(X)+E(Y)E(X+Y)=E(">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://yoursite.com/2019/08/29/中心化深度学习训练/1.png">
-<meta property="og:image" content="http://yoursite.com/2019/08/29/中心化深度学习训练/2.png">
-<meta property="og:updated_time" content="2019-08-29T11:49:39.668Z">
+<meta property="og:image" content="http://yoursite.com/2019/06/22/中心化深度学习训练/1.png">
+<meta property="og:image" content="http://yoursite.com/2019/06/22/中心化深度学习训练/2.png">
+<meta property="og:updated_time" content="2019-08-29T12:03:00.721Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="中心化深度学习训练">
 <meta name="twitter:description" content="论文地址：https://www.ijcai.org/proceedings/2018/547 论文提出的方法能够充分利用服务器的计算性能高的优点，最重要的是能够保证训练数据：也就是用户的隐私数据的保密性。 文章提出的方法是基于同态加密的，一般的同态加密算法的性质有加法同态和乘法同态，下面是这两者的性质： 加法同态：E(X+Y)=E(X)+E(Y)E(X+Y)=E(X)+E(Y)E(X+Y)=E(">
-<meta name="twitter:image" content="http://yoursite.com/2019/08/29/中心化深度学习训练/1.png">
+<meta name="twitter:image" content="http://yoursite.com/2019/06/22/中心化深度学习训练/1.png">
 
 
 
@@ -123,7 +123,7 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2019/08/29/中心化深度学习训练/">
+  <link rel="canonical" href="http://yoursite.com/2019/06/22/中心化深度学习训练/">
 
 
 
@@ -288,7 +288,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/08/29/中心化深度学习训练/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/06/22/中心化深度学习训练/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Chen DY">
@@ -317,8 +317,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-08-29T19:25:23+08:00">
-                2019-08-29
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-06-22T19:25:23+08:00">
+                2019-06-22
               </time>
             
 
@@ -415,10 +415,10 @@
 <p>乘法同态：<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>E</mi><mo stretchy="false">(</mo><mi>X</mi><mo>∗</mo><mi>Y</mi><mo stretchy="false">)</mo><mo>=</mo><mi>E</mi><mo stretchy="false">(</mo><mi>X</mi><mo stretchy="false">)</mo><mi>E</mi><mo stretchy="false">(</mo><mi>Y</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">E(X*Y)=E(X)E(Y)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.05764em;">E</span><span class="mopen">(</span><span class="mord mathdefault" style="margin-right:0.07847em;">X</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">∗</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.22222em;">Y</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.05764em;">E</span><span class="mopen">(</span><span class="mord mathdefault" style="margin-right:0.07847em;">X</span><span class="mclose">)</span><span class="mord mathdefault" style="margin-right:0.05764em;">E</span><span class="mopen">(</span><span class="mord mathdefault" style="margin-right:0.22222em;">Y</span><span class="mclose">)</span></span></span></span>或者<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>X</mi><mi>Y</mi><mo>=</mo><mi>D</mi><mo stretchy="false">(</mo><mi>E</mi><mo stretchy="false">(</mo><mi>X</mi><mo stretchy="false">)</mo><mi>E</mi><mo stretchy="false">(</mo><mi>Y</mi><mo stretchy="false">)</mo><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">XY=D(E(X)E(Y))</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.07847em;">X</span><span class="mord mathdefault" style="margin-right:0.22222em;">Y</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.02778em;">D</span><span class="mopen">(</span><span class="mord mathdefault" style="margin-right:0.05764em;">E</span><span class="mopen">(</span><span class="mord mathdefault" style="margin-right:0.07847em;">X</span><span class="mclose">)</span><span class="mord mathdefault" style="margin-right:0.05764em;">E</span><span class="mopen">(</span><span class="mord mathdefault" style="margin-right:0.22222em;">Y</span><span class="mclose">)</span><span class="mclose">)</span></span></span></span></p>
 <p>文章的大致思路是用户有自己的隐私数据想用来建立模型，但不想让服务器知道，用户可以使用一个叫做Paillier的加密算法来加密自己的数据，而这个算法是分公私钥的，用户拥有密钥对（PKc，SKc），通过公钥加密数据，用私钥解密数据，而公钥也同时公布给服务器，服务器在执行反向传播算法的时候会用到公钥。算法中假设所有的用户都共享这一对密钥，但是用户之间都是守信的，不会向服务器泄露自己的私钥，并且不会传输对抗性样本。</p>
 <p>因为深度神经网络DNN在计算过程中只有激活层会使用非线性函数，而其他层均是线性网络，并且也是运算量最大的部分，因此可以放到服务器上运算，而每一层的激活层则回传给用户计算。具体的计算步骤如下图所示</p>
-<img src="/2019/08/29/中心化深度学习训练/1.png">
+<img src="/2019/06/22/中心化深度学习训练/1.png">
 <p>在这里面，服务器运算时候的w和b都添加了噪声，目的是使得服务器无法从a和z的值推算出具体的激活函数，这也保证了数据的机密性。</p>
 <p>​       而反向传播算法也是基于DNN的反向传播算法进行的，这里由用户来计算更新参数的差值，服务器来实现更新值。这里提到了服务器的训练参数不能被用户知道，所以和单个用户交流计算的次数最大不能超过m+2，这里m指的是各层中最多的参数个数，因为用户知道学习率η和每轮变化值，通过m+2个方程可以推算出m个参数的值</p>
-<img src="/2019/08/29/中心化深度学习训练/2.png">
+<img src="/2019/06/22/中心化深度学习训练/2.png">
 <p>这篇文章不知道可以应用在哪里，因为这里的前提条件比较苛刻，需要各个用户之间相互信任，而且不存在泄密者，在现实下不知道能不能找到应用场景。</p>
 
       
@@ -452,8 +452,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2019/08/29/文件上传的简单介绍/" rel="next" title="文件上传的简单介绍">
-                <i class="fa fa-chevron-left"></i> 文件上传的简单介绍
+              <a href="/2019/06/10/用神经网络来实时检测密码强度/" rel="next" title="用神经网络来实时检测密码强度">
+                <i class="fa fa-chevron-left"></i> 用神经网络来实时检测密码强度
               </a>
             
           </div>
@@ -462,8 +462,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2019/08/29/用神经网络来实时检测密码强度/" rel="prev" title="用神经网络来实时检测密码强度">
-                用神经网络来实时检测密码强度 <i class="fa fa-chevron-right"></i>
+              <a href="/2019/06/27/SQL注入总结/" rel="prev" title="SQL注入总结">
+                SQL注入总结 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>

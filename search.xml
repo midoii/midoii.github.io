@@ -1,31 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title><![CDATA[用神经网络来实时检测密码强度]]></title>
-    <url>%2F2019%2F08%2F29%2F%E7%94%A8%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E6%9D%A5%E5%AE%9E%E6%97%B6%E6%A3%80%E6%B5%8B%E5%AF%86%E7%A0%81%E5%BC%BA%E5%BA%A6%2F</url>
-    <content type="text"><![CDATA[论文地址：https://www.usenix.org/conference/usenixsecurity16/technical-sessions/presentation/melicher 概览 论文中作者用神经网络设计了一个密码强度评估的系统。该系统分为服务端和客户端两部分，服务端采用规模比较大的神经网络，客户端采用规模比较小的神经网络，因为服务端的系统性能好，而且在客户端要使普通用户能够实时(反馈延时小于100ms)得到密码强度信息的反馈。经过作者的对比，神经网络的速度要快于目前最先进的几种算法：概率模型、马尔可夫模型、字母表搜索方式。最重要的是神经网络所占用的空间相比于其他方式特别小。 内部结构 神经网络的结构如下图所示： 这个系统有点类似于马尔可夫链，通过输入前面的字符，用来预测后一个字符的概率，其中这个网络中还有一个特殊的字符用来表示字符串的结束。最开始是以空白的输入开始的，也就是全部输入0，然后通过后续字符的概率来计算输出一个特定字符串的概率。 首先一个密码的强度可以通过需要猜解的次数体现出来，而且文中给出了一个计算猜解次数的方式，通过对一个测试集合的概率做统计，然后通过使用Monte Carlo simulation来画出尝试次数和概率的曲线，这是一个统计学方面的知识，具体还没了解过，类似于下面图片的东西： 所以可以根据这种方式来进行各种模型的性能对比，对比下来神经网络模型尤其在密码字符长而且更复杂(也就是采用字符数字大小写)的情况下性能更好，就是在相同尝试次数的情况下猜测出来的概率更高。 对于客户端的神经网络模型，作者对一系列参数进行了优化，优化的方面有权重的数字压缩、定点编码、Zigzag编码、Lossless压缩、存储常用密码。从而使得客户端的模型容量更小而且运行速度更快。]]></content>
-      <categories>
-        <category>机器学习</category>
-      </categories>
-      <tags>
-        <tag>深度学习</tag>
-        <tag>密码学</tag>
-        <tag>神经网络</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title><![CDATA[中心化深度学习训练]]></title>
-    <url>%2F2019%2F08%2F29%2F%E4%B8%AD%E5%BF%83%E5%8C%96%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E8%AE%AD%E7%BB%83%2F</url>
-    <content type="text"><![CDATA[论文地址：https://www.ijcai.org/proceedings/2018/547 论文提出的方法能够充分利用服务器的计算性能高的优点，最重要的是能够保证训练数据：也就是用户的隐私数据的保密性。 文章提出的方法是基于同态加密的，一般的同态加密算法的性质有加法同态和乘法同态，下面是这两者的性质： 加法同态：E(X+Y)=E(X)+E(Y)E(X+Y)=E(X)+E(Y)E(X+Y)=E(X)+E(Y)或者X+Y=D(E(X)+E(Y))X+Y=D(E(X)+E(Y))X+Y=D(E(X)+E(Y)) 乘法同态：E(X∗Y)=E(X)E(Y)E(X*Y)=E(X)E(Y)E(X∗Y)=E(X)E(Y)或者XY=D(E(X)E(Y))XY=D(E(X)E(Y))XY=D(E(X)E(Y)) 文章的大致思路是用户有自己的隐私数据想用来建立模型，但不想让服务器知道，用户可以使用一个叫做Paillier的加密算法来加密自己的数据，而这个算法是分公私钥的，用户拥有密钥对（PKc，SKc），通过公钥加密数据，用私钥解密数据，而公钥也同时公布给服务器，服务器在执行反向传播算法的时候会用到公钥。算法中假设所有的用户都共享这一对密钥，但是用户之间都是守信的，不会向服务器泄露自己的私钥，并且不会传输对抗性样本。 因为深度神经网络DNN在计算过程中只有激活层会使用非线性函数，而其他层均是线性网络，并且也是运算量最大的部分，因此可以放到服务器上运算，而每一层的激活层则回传给用户计算。具体的计算步骤如下图所示 在这里面，服务器运算时候的w和b都添加了噪声，目的是使得服务器无法从a和z的值推算出具体的激活函数，这也保证了数据的机密性。 ​ 而反向传播算法也是基于DNN的反向传播算法进行的，这里由用户来计算更新参数的差值，服务器来实现更新值。这里提到了服务器的训练参数不能被用户知道，所以和单个用户交流计算的次数最大不能超过m+2，这里m指的是各层中最多的参数个数，因为用户知道学习率η和每轮变化值，通过m+2个方程可以推算出m个参数的值 这篇文章不知道可以应用在哪里，因为这里的前提条件比较苛刻，需要各个用户之间相互信任，而且不存在泄密者，在现实下不知道能不能找到应用场景。]]></content>
-      <categories>
-        <category>机器学习</category>
-      </categories>
-      <tags>
-        <tag>机器学习</tag>
-        <tag>深度学习</tag>
-      </tags>
-  </entry>
-  <entry>
     <title><![CDATA[文件上传的简单介绍]]></title>
     <url>%2F2019%2F08%2F29%2F%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0%E7%9A%84%E7%AE%80%E5%8D%95%E4%BB%8B%E7%BB%8D%2F</url>
     <content type="text"><![CDATA[文件上传 首先我们通过一个网站上传一个非法格式的文件 1.在浏览加载文件，但还未点击上传按钮时便弹出对话框，内容如：只允许上传.jpg/.jpeg/.png后缀名的文件，而此时并没有发送数据包。 2.如果网页未弹窗，而在页面弹窗，则考虑后端验证 空字节的理解 字符串以%00（空字节）作为结束符 文件上传的基本流程 1.图片是否正常上传 2.图片上传的内容是否被感染（内容替换） 3.上传的域名是否是目标服务器 4.如果域名不是目标服务器，那就判断解析图片的服务器是否解析（PHP,ASP,ASPX,JSP,CFM,SHRML）等 5.上传的目录是否支持解析上述格式 JS验证 JS验证时前端验证绕过的一种。 对于那些在客户端网页上增加JS来验证的网站，只需要在console上写改成想要的逻辑，就能往服务器发送恶意的PHP文件。 截断上传 由于服务器端PHP存在空字节漏洞，例如ereg()函数就存在空字节漏洞，如果通过抓包软件将发送到服务器的上传文件的包截获，并将文件名字改成a.jpg%00.php，在服务器端时通过以下语句来判断是否是jpg的： ereg('jpg$',urldecode($file['name'])); 该文件名经过该函数会判断成功，实际上空字节将jpg的后缀阶段了，从而上传的时一个php文件。 黑名单上传验证 绕过黑名单上传验证的几种方法： 1.将文件的后缀名大小写互换 2.如果只解释PHP可以尝试将文件后缀改为php3,php4,php5,phtml 二次上传漏洞的简要分析 二次上传 解析漏洞 IIS解析漏洞 使用iis5.x-6.x版本的服务器，大多为windows server 2003，网站比较古老，开发语句一般为asp；该解析漏洞也只能解析asp文件，而不能解析aspx文件。 目录解析(6.0) 形式：www.xxx.com/xx.asp/xx.jpg原理: 服务器默认会把.asp，.asa目录下的文件都解析成asp文件。 文件解析 形式：www.xxx.com/xx.asp;.jpg原理：服务器默认不解析;号后面的内容，因此xx.asp;.jpg便被解析成asp文件了。 解析文件类型 IIS6.0 默认的可执行文件除了asp还包含这三种 : /test.asa,/test.cer,/test.cdx IIS7.5的漏洞与nginx的类似，都是由于php配置文件中，开启了cgi.fix_pathinfo，而这并不是nginx或者iis7.5本身的漏洞。 例如 a.aspx.a;.a.aspx.jpg..jpg Apache解析漏洞 原理：Apache 解析文件的规则是从右到左开始判断解析,如果后缀名为不可识别文件解析,就再往左判断。比如test.php.owf.rar其中owf和rar 这两种后缀是apache不可识别解析,apache就会把wooyun.php.owf.rar解析成php。 形式：www.xxxx.xxx.com/test.php.php123 其余配置问题导致的漏洞： （1）如果在 Apache 的 conf 里有这样一行配置AddHandler php5-script .php 这时只要文件名里包含php， 即使文件名是 test2.php.jpg 也会以 php 来执行。 （2）如果在 Apache 的 conf 里有这样一行配置AddType application/x-httpd-php .jpg即使扩展名是 jpg，一样能以 php 方式执行。 Nginx解析漏洞 原理：Nginx默认是以CGI的方式支持PHP解析的，普遍的做法是在Nginx配置文件中通过正则匹配设置SCRIPT_FILENAME。当访问www.xx.com/phpinfo.jpg/1.php这个URL时，$fastcgi_script_name会被设置为phpinfo.jpg/1.php，然后构造成SCRIPT_FILENAME传递给PHP CGI，但是PHP为什么会接受这样的参数，并将phpinfo.jpg作为PHP文件解析呢?这就要说到fix_pathinfo这个选项了。 如果开启了这个选项，那么就会触发在PHP中的如下逻辑：PHP会认为SCRIPT_FILENAME是phpinfo.jpg，而1.php是PATH_INFO，所以就会将phpinfo.jpg作为PHP文件来解析了。 形式： www.xxxx.com/UploadFiles/image/1.jpg/1.php www.xxxx.com/UploadFiles/image/1.jpg/.php ashx上传 如果服务器过滤了asa,cer,cdx,htr,aspx,php,jsp等脚本，如果想要突破服务器，可以使用ashx脚本，用ashx来写一个asp的一句话到当前目录。 保存为ashx，然后调价一个ashx的上传类型，上传成功后访问 http://www.xxx.com/admin/eWebEditor/UploadFile/2010821235545.ashx 就会在当前目录生成一伙人root.asp的木马，用lake2的一句话链接就能见到hello world!了。因为网站再过滤常见脚本的时候把ashx给漏了… .htaccess上传 再网站的目录下新建一个名为.htaccess的文件，并在文件中添加代码： 1234&lt;Files *.jpg&gt;ForceType application/x-httpd-phpSetHandler application/x-httpd-php&lt;/Files&gt; 这样网页再访问当前目录下的文件的时候，所有的jpg文件都会被解析为php 修补文件上传漏洞的一些建议 1.文件上传的目录设置为不可执行 2.结合使用MIME Type来判断文件的类型 3.使用随机数改写文件名和文件路径 4.单独设置文件服务器的域名]]></content>
@@ -45,8 +20,8 @@
         <category>Java</category>
       </categories>
       <tags>
-        <tag>Java</tag>
         <tag>SSM框架</tag>
+        <tag>Java</tag>
       </tags>
   </entry>
   <entry>
@@ -57,9 +32,9 @@
         <category>Java</category>
       </categories>
       <tags>
-        <tag>Java</tag>
-        <tag>SSM框架</tag>
         <tag>JavaWeb</tag>
+        <tag>SSM框架</tag>
+        <tag>Java</tag>
       </tags>
   </entry>
   <entry>
@@ -70,8 +45,8 @@
         <category>Java</category>
       </categories>
       <tags>
-        <tag>Java</tag>
         <tag>JavaWeb</tag>
+        <tag>Java</tag>
         <tag>Spring</tag>
       </tags>
   </entry>
@@ -83,8 +58,8 @@
         <category>安全</category>
       </categories>
       <tags>
-        <tag>Hash</tag>
         <tag>Web安全</tag>
+        <tag>Hash</tag>
       </tags>
   </entry>
   <entry>
@@ -107,8 +82,8 @@
         <category>安全</category>
       </categories>
       <tags>
-        <tag>Web安全</tag>
         <tag>CTF</tag>
+        <tag>Web安全</tag>
       </tags>
   </entry>
   <entry>
@@ -119,8 +94,8 @@
         <category>安全</category>
       </categories>
       <tags>
-        <tag>Web安全</tag>
         <tag>CTF</tag>
+        <tag>Web安全</tag>
       </tags>
   </entry>
   <entry>
@@ -169,6 +144,31 @@
       <tags>
         <tag>Web安全</tag>
         <tag>Mysql</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[中心化深度学习训练]]></title>
+    <url>%2F2019%2F06%2F22%2F%E4%B8%AD%E5%BF%83%E5%8C%96%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E8%AE%AD%E7%BB%83%2F</url>
+    <content type="text"><![CDATA[论文地址：https://www.ijcai.org/proceedings/2018/547 论文提出的方法能够充分利用服务器的计算性能高的优点，最重要的是能够保证训练数据：也就是用户的隐私数据的保密性。 文章提出的方法是基于同态加密的，一般的同态加密算法的性质有加法同态和乘法同态，下面是这两者的性质： 加法同态：E(X+Y)=E(X)+E(Y)E(X+Y)=E(X)+E(Y)E(X+Y)=E(X)+E(Y)或者X+Y=D(E(X)+E(Y))X+Y=D(E(X)+E(Y))X+Y=D(E(X)+E(Y)) 乘法同态：E(X∗Y)=E(X)E(Y)E(X*Y)=E(X)E(Y)E(X∗Y)=E(X)E(Y)或者XY=D(E(X)E(Y))XY=D(E(X)E(Y))XY=D(E(X)E(Y)) 文章的大致思路是用户有自己的隐私数据想用来建立模型，但不想让服务器知道，用户可以使用一个叫做Paillier的加密算法来加密自己的数据，而这个算法是分公私钥的，用户拥有密钥对（PKc，SKc），通过公钥加密数据，用私钥解密数据，而公钥也同时公布给服务器，服务器在执行反向传播算法的时候会用到公钥。算法中假设所有的用户都共享这一对密钥，但是用户之间都是守信的，不会向服务器泄露自己的私钥，并且不会传输对抗性样本。 因为深度神经网络DNN在计算过程中只有激活层会使用非线性函数，而其他层均是线性网络，并且也是运算量最大的部分，因此可以放到服务器上运算，而每一层的激活层则回传给用户计算。具体的计算步骤如下图所示 在这里面，服务器运算时候的w和b都添加了噪声，目的是使得服务器无法从a和z的值推算出具体的激活函数，这也保证了数据的机密性。 ​ 而反向传播算法也是基于DNN的反向传播算法进行的，这里由用户来计算更新参数的差值，服务器来实现更新值。这里提到了服务器的训练参数不能被用户知道，所以和单个用户交流计算的次数最大不能超过m+2，这里m指的是各层中最多的参数个数，因为用户知道学习率η和每轮变化值，通过m+2个方程可以推算出m个参数的值 这篇文章不知道可以应用在哪里，因为这里的前提条件比较苛刻，需要各个用户之间相互信任，而且不存在泄密者，在现实下不知道能不能找到应用场景。]]></content>
+      <categories>
+        <category>机器学习</category>
+      </categories>
+      <tags>
+        <tag>机器学习</tag>
+        <tag>深度学习</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[用神经网络来实时检测密码强度]]></title>
+    <url>%2F2019%2F06%2F10%2F%E7%94%A8%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E6%9D%A5%E5%AE%9E%E6%97%B6%E6%A3%80%E6%B5%8B%E5%AF%86%E7%A0%81%E5%BC%BA%E5%BA%A6%2F</url>
+    <content type="text"><![CDATA[论文地址：https://www.usenix.org/conference/usenixsecurity16/technical-sessions/presentation/melicher 概览 论文中作者用神经网络设计了一个密码强度评估的系统。该系统分为服务端和客户端两部分，服务端采用规模比较大的神经网络，客户端采用规模比较小的神经网络，因为服务端的系统性能好，而且在客户端要使普通用户能够实时(反馈延时小于100ms)得到密码强度信息的反馈。经过作者的对比，神经网络的速度要快于目前最先进的几种算法：概率模型、马尔可夫模型、字母表搜索方式。最重要的是神经网络所占用的空间相比于其他方式特别小。 内部结构 神经网络的结构如下图所示： 这个系统有点类似于马尔可夫链，通过输入前面的字符，用来预测后一个字符的概率，其中这个网络中还有一个特殊的字符用来表示字符串的结束。最开始是以空白的输入开始的，也就是全部输入0，然后通过后续字符的概率来计算输出一个特定字符串的概率。 首先一个密码的强度可以通过需要猜解的次数体现出来，而且文中给出了一个计算猜解次数的方式，通过对一个测试集合的概率做统计，然后通过使用Monte Carlo simulation来画出尝试次数和概率的曲线，这是一个统计学方面的知识，具体还没了解过，类似于下面图片的东西： 所以可以根据这种方式来进行各种模型的性能对比，对比下来神经网络模型尤其在密码字符长而且更复杂(也就是采用字符数字大小写)的情况下性能更好，就是在相同尝试次数的情况下猜测出来的概率更高。 对于客户端的神经网络模型，作者对一系列参数进行了优化，优化的方面有权重的数字压缩、定点编码、Zigzag编码、Lossless压缩、存储常用密码。从而使得客户端的模型容量更小而且运行速度更快。]]></content>
+      <categories>
+        <category>机器学习</category>
+      </categories>
+      <tags>
+        <tag>深度学习</tag>
+        <tag>密码学</tag>
+        <tag>神经网络</tag>
       </tags>
   </entry>
   <entry>
